@@ -1,0 +1,142 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+
+const title = 'Regulamin — CalkaWood';
+const description = 'Regulamin korzystania ze strony CalkaWood i narzędzia wyceny online. Warunki użytkowania, zakres usług, proces wyceny.';
+---
+
+<PageLayout title={title} description={description}>
+  <section class="px-4 py-16 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-3xl">
+      <h1 class="text-3xl font-bold text-text sm:text-4xl">Regulamin</h1>
+      <p class="mt-4 text-sm text-text/60">Ostatnia aktualizacja: styczeń 2025</p>
+
+      <!-- 1. Postanowienia ogólne -->
+      <h2 class="mt-12 text-xl font-bold text-text">1. Postanowienia ogólne</h2>
+      <ol class="mt-4 list-inside list-decimal space-y-3 text-base leading-relaxed text-text/80">
+        <li>
+          Niniejszy regulamin określa zasady korzystania ze strony internetowej
+          calkawood.pl oraz udostępnionego na niej narzędzia wyceny online.
+        </li>
+        <li>
+          Właścicielem strony jest <strong>Wojciech Całka</strong>, prowadzący działalność
+          gospodarczą pod firmą <strong>CalkaWood</strong> (JDG), z siedzibą w województwie
+          podkarpackim.
+        </li>
+        <li>
+          Korzystanie ze strony oznacza akceptację niniejszego regulaminu.
+        </li>
+      </ol>
+
+      <!-- 2. Zakres usług -->
+      <h2 class="mt-12 text-xl font-bold text-text">2. Zakres usług</h2>
+      <ol class="mt-4 list-inside list-decimal space-y-3 text-base leading-relaxed text-text/80">
+        <li>
+          CalkaWood świadczy usługi stolarsko-budowlane na terenie województwa
+          podkarpackiego, w szczególności: stolarka na wymiar, budowa tarasów, montaż
+          podłóg i remonty wnętrz, budowa w technologii szkieletowej.
+        </li>
+        <li>
+          Strona calkawood.pl pełni funkcję informacyjną i umożliwia przesłanie
+          zapytania wycenowego za pośrednictwem formularza online.
+        </li>
+        <li>
+          Szczegółowy zakres prac, terminy i ceny ustalane są indywidualnie z każdym
+          klientem po kontakcie telefonicznym lub osobistym.
+        </li>
+      </ol>
+
+      <!-- 3. Proces wyceny online -->
+      <h2 class="mt-12 text-xl font-bold text-text">3. Proces wyceny online</h2>
+      <ol class="mt-4 list-inside list-decimal space-y-3 text-base leading-relaxed text-text/80">
+        <li>
+          Formularz wyceny online umożliwia przesłanie zapytania zawierającego: rodzaj
+          usługi, opis zlecenia, zdjęcia, wymiary oraz dane kontaktowe.
+        </li>
+        <li>
+          <strong>Wycena uzyskana za pośrednictwem formularza ma charakter wstępny
+          i orientacyjny.</strong> Nie stanowi oferty w rozumieniu Kodeksu cywilnego
+          i nie jest wiążąca dla żadnej ze stron.
+        </li>
+        <li>
+          Ostateczna wycena ustalana jest po szczegółowym omówieniu projektu
+          (telefonicznie lub na miejscu) i uwzględnia faktyczny zakres prac,
+          warunki lokalne oraz dostępność materiałów.
+        </li>
+        <li>
+          Przesłanie formularza nie zobowiązuje użytkownika do skorzystania z usługi
+          ani CalkaWood do realizacji zlecenia.
+        </li>
+        <li>
+          CalkaWood dokłada starań, aby odpowiedzieć na zapytania wycenowe w ciągu
+          48 godzin roboczych od otrzymania zgłoszenia.
+        </li>
+      </ol>
+
+      <!-- 4. Odpowiedzialność -->
+      <h2 class="mt-12 text-xl font-bold text-text">4. Odpowiedzialność</h2>
+      <ol class="mt-4 list-inside list-decimal space-y-3 text-base leading-relaxed text-text/80">
+        <li>
+          CalkaWood nie ponosi odpowiedzialności za przerwy w działaniu strony
+          wynikające z przyczyn technicznych, konserwacji lub siły wyższej.
+        </li>
+        <li>
+          Treści informacyjne na stronie (opisy usług, zdjęcia realizacji) mają
+          charakter poglądowy i nie stanowią oferty handlowej.
+        </li>
+        <li>
+          Użytkownik ponosi odpowiedzialność za prawdziwość danych podanych
+          w formularzu wyceny.
+        </li>
+      </ol>
+
+      <!-- 5. Dane osobowe -->
+      <h2 class="mt-12 text-xl font-bold text-text">5. Dane osobowe</h2>
+      <ol class="mt-4 list-inside list-decimal space-y-3 text-base leading-relaxed text-text/80">
+        <li>
+          Zasady przetwarzania danych osobowych określone są w
+          <a href="/polityka-prywatnosci" class="text-accent hover:text-primary-dark transition-colors underline">
+            Polityce prywatności</a>.
+        </li>
+        <li>
+          Wysłanie formularza wyceny wymaga wyrażenia zgody na przetwarzanie danych
+          osobowych w celu przygotowania wyceny i kontaktu zwrotnego.
+        </li>
+      </ol>
+
+      <!-- 6. Reklamacje -->
+      <h2 class="mt-12 text-xl font-bold text-text">6. Reklamacje</h2>
+      <ol class="mt-4 list-inside list-decimal space-y-3 text-base leading-relaxed text-text/80">
+        <li>
+          Reklamacje dotyczące działania strony lub formularza wyceny można zgłaszać
+          telefonicznie: <a href="tel:+48123456789" class="text-accent hover:text-primary-dark transition-colors">+48 123 456 789</a>.
+        </li>
+        <li>
+          Reklamacje dotyczące wykonanych usług rozpatrywane są indywidualnie,
+          zgodnie z warunkami ustalonymi przy zleceniu.
+        </li>
+        <li>
+          CalkaWood dokłada starań, aby rozpatrzyć reklamację w ciągu 14 dni
+          roboczych od jej zgłoszenia.
+        </li>
+      </ol>
+
+      <!-- 7. Postanowienia końcowe -->
+      <h2 class="mt-12 text-xl font-bold text-text">7. Postanowienia końcowe</h2>
+      <ol class="mt-4 list-inside list-decimal space-y-3 text-base leading-relaxed text-text/80">
+        <li>
+          CalkaWood zastrzega sobie prawo do zmiany niniejszego regulaminu.
+          Zmiany wchodzą w życie z chwilą publikacji na stronie.
+        </li>
+        <li>
+          W sprawach nieuregulowanych niniejszym regulaminem zastosowanie mają
+          przepisy prawa polskiego, w szczególności Kodeksu cywilnego.
+        </li>
+        <li>
+          Spory wynikające z korzystania ze strony będą rozstrzygane przez sąd
+          właściwy dla siedziby administratora.
+        </li>
+      </ol>
+    </div>
+  </section>
+</PageLayout>

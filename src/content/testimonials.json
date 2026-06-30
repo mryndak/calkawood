@@ -1,0 +1,23 @@
+[
+  {
+    "id": "jan-kowalski",
+    "author": "Jan Kowalski",
+    "content": "Zamawiałem altanę ogrodową i jestem bardzo zadowolony z efektu. Pan Wojciech podszedł do tematu profesjonalnie — od doradztwa przy wyborze drewna, przez projekt, aż po montaż. Wszystko terminowo i starannie wykończone. Polecam każdemu, kto szuka solidnego rzemieślnika na Podkarpaciu.",
+    "rating": 5,
+    "date": "2024-09-02"
+  },
+  {
+    "id": "anna-nowak",
+    "author": "Anna Nowak",
+    "content": "Zleciliśmy wykonanie tarasu kompozytowego przy domu. Realizacja przebiegła sprawnie, ekipa przyjechała punktualnie i zostawiła po sobie porządek. Taras wygląda pięknie i jest bardzo praktyczny. Widać, że firma ma doświadczenie i dba o każdy detal.",
+    "rating": 5,
+    "date": "2024-07-15"
+  },
+  {
+    "id": "marek-wisniewski",
+    "author": "Marek Wiśniewski",
+    "content": "Podłoga dębowa w salonie wyszła bardzo dobrze. Fachowe doradztwo przy wyborze wykończenia, rzetelna wycena bez ukrytych kosztów. Jedyny minus — termin przesunął się o tydzień z powodu opóźnienia dostawy materiału, ale finalny efekt rekompensuje oczekiwanie.",
+    "rating": 4,
+    "date": "2024-05-20"
+  }
+]

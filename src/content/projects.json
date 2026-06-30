@@ -1,0 +1,39 @@
+[
+  {
+    "id": "altana-brzozow",
+    "title": "Altana ogrodowa na wymiar — Brzozów",
+    "category": "stolarka-na-wymiar",
+    "description": "Altana ogrodowa z drewna sosnowego impregnowanego ciśnieniowo, wymiary 4×3 m. Konstrukcja z belek 12×12 cm, dach dwuspadowy kryty gontem bitumicznym. Realizacja obejmowała przygotowanie fundamentów punktowych, montaż konstrukcji oraz wykończenie detalami ozdobnymi.",
+    "images": [
+      { "src": "/images/projects/altana-brzozow-1.jpg", "alt": "Altana ogrodowa z drewna — widok z przodu" },
+      { "src": "/images/projects/altana-brzozow-2.jpg", "alt": "Altana ogrodowa — detal połączenia ciesielskiego" },
+      { "src": "/images/projects/altana-brzozow-3.jpg", "alt": "Altana ogrodowa — widok od wewnątrz" }
+    ],
+    "date": "2024-08-15",
+    "featured": true
+  },
+  {
+    "id": "taras-kompozytowy-rzeszow",
+    "title": "Taras kompozytowy z podświetleniem LED — Rzeszów",
+    "category": "tarasy",
+    "description": "Taras z desek kompozytowych WPC w kolorze orzech, powierzchnia 28 m². Podkonstrukcja aluminiowa na legarach regulowanych. Wykończenie listwami obwodowymi i oświetleniem LED wbudowanym w stopnie. Realizacja w 5 dni roboczych.",
+    "images": [
+      { "src": "/images/projects/taras-rzeszow-1.jpg", "alt": "Taras kompozytowy — widok ogólny z ogrodem" },
+      { "src": "/images/projects/taras-rzeszow-2.jpg", "alt": "Taras kompozytowy — detal wykończenia krawędzi" }
+    ],
+    "date": "2024-06-20",
+    "featured": true
+  },
+  {
+    "id": "podloga-debowa-krosno",
+    "title": "Podłoga dębowa olejowana — Krosno",
+    "category": "podlogi-i-wnetrza",
+    "description": "Montaż podłogi z litego dębu europejskiego, klasa rustyk, grubość 20 mm. Powierzchnia 45 m² w salonie i korytarzu. Deski olejowane naturalnym olejem twardym. Przygotowanie podłoża obejmowało wyrównanie wylewki i ułożenie izolacji akustycznej.",
+    "images": [
+      { "src": "/images/projects/podloga-krosno-1.jpg", "alt": "Podłoga dębowa olejowana — salon" },
+      { "src": "/images/projects/podloga-krosno-2.jpg", "alt": "Podłoga dębowa — detal rysunku słojów" }
+    ],
+    "date": "2024-04-10",
+    "featured": false
+  }
+]

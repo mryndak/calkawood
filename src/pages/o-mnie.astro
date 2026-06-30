@@ -1,0 +1,97 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+
+const title = 'O mnie — CalkaWood';
+const description = 'Wojciech Całka — stolarz i budowniczy z Podkarpacia. Ponad 5 lat doświadczenia w stolarce na wymiar, tarasach i budowie szkieletowej.';
+---
+
+<PageLayout title={title} description={description}>
+  <section class="px-4 py-16 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-3xl">
+      <h1 class="text-3xl font-bold text-text sm:text-4xl">O mnie</h1>
+
+      <p class="mt-6 text-lg leading-relaxed text-text/80">
+        Nazywam się <strong>Wojciech Całka</strong> i prowadzę firmę <strong>CalkaWood</strong> —
+        jednoosobową działalność stolarsko-budowlaną na Podkarpaciu. Od ponad 5 lat realizuję
+        projekty z drewna i nie tylko, łącząc rzemiosło z nowoczesnym podejściem do materiałów
+        i technologii.
+      </p>
+
+      <h2 class="mt-12 text-2xl font-bold text-text">Doświadczenie zawodowe</h2>
+
+      <p class="mt-4 text-base leading-relaxed text-text/80">
+        Przez lata zdobywałem doświadczenie pracując przy różnorodnych projektach — od
+        niewielkich elementów stolarki na wymiar, przez tarasy i podłogi, aż po budowę
+        domów w technologii szkieletowej. Każde zlecenie traktuję indywidualnie, dobierając
+        materiały i rozwiązania do potrzeb klienta.
+      </p>
+
+      <ul class="mt-6 space-y-3 text-base text-text/80">
+        <li class="flex items-start gap-3">
+          <span class="mt-1 inline-block h-2 w-2 flex-shrink-0 rounded-full bg-accent" aria-hidden="true"></span>
+          <span><strong>Stolarka na wymiar</strong> — altany, pergole, wiaty, zadaszenia, drzwi, blaty, antresole</span>
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="mt-1 inline-block h-2 w-2 flex-shrink-0 rounded-full bg-accent" aria-hidden="true"></span>
+          <span><strong>Tarasy</strong> — drewniane, kompozytowe, betonowe, kamienne</span>
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="mt-1 inline-block h-2 w-2 flex-shrink-0 rounded-full bg-accent" aria-hidden="true"></span>
+          <span><strong>Podłogi i wnętrza</strong> — montaż paneli, renowacja podłóg, remonty</span>
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="mt-1 inline-block h-2 w-2 flex-shrink-0 rounded-full bg-accent" aria-hidden="true"></span>
+          <span><strong>Budowa szkieletowa</strong> — domy i budynki gospodarcze w technologii kanadyjskiej</span>
+        </li>
+      </ul>
+
+      <h2 class="mt-12 text-2xl font-bold text-text">Wartości, którymi się kieruję</h2>
+
+      <div class="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-3">
+        <div class="rounded-lg border border-accent/20 bg-accent/5 p-6">
+          <h3 class="text-lg font-semibold text-text">Sumienność</h3>
+          <p class="mt-2 text-sm text-text/70">
+            Każdy projekt realizuję terminowo i z pełnym zaangażowaniem. Traktuję zlecenia
+            klientów tak, jakbym budował dla siebie.
+          </p>
+        </div>
+
+        <div class="rounded-lg border border-accent/20 bg-accent/5 p-6">
+          <h3 class="text-lg font-semibold text-text">Rzetelność</h3>
+          <p class="mt-2 text-sm text-text/70">
+            Jasna komunikacja, uczciwa wycena i dotrzymywanie ustaleń. Nie obiecuję tego,
+            czego nie jestem w stanie wykonać.
+          </p>
+        </div>
+
+        <div class="rounded-lg border border-accent/20 bg-accent/5 p-6">
+          <h3 class="text-lg font-semibold text-text">Dbałość o detale</h3>
+          <p class="mt-2 text-sm text-text/70">
+            Wykończenie ma znaczenie. Dbam o precyzję, estetykę i trwałość każdego elementu
+            — od fundamentu po ostatnie szlify.
+          </p>
+        </div>
+      </div>
+
+      <h2 class="mt-12 text-2xl font-bold text-text">Region działania</h2>
+
+      <p class="mt-4 text-base leading-relaxed text-text/80">
+        Działam na terenie województwa podkarpackiego — Rzeszów, Krosno i okoliczne powiaty
+        (brzozowski, dębicki, jasielski, łańcucki, ropczycko-sędziszowski, rzeszowski,
+        strzyżowski). W przypadku większych projektów dojadę dalej — wystarczy zadzwonić
+        i ustalić szczegóły.
+      </p>
+
+      <div class="mt-10 rounded-xl border border-accent/20 bg-accent/5 p-6 text-center">
+        <p class="text-base font-medium text-text">Masz projekt do omówienia?</p>
+        <a
+          href="tel:+48123456789"
+          class="mt-3 inline-flex items-center gap-2 rounded-lg bg-cta px-6 py-3 text-base font-semibold text-white transition-colors hover:bg-cta-hover focus:outline-none focus:ring-2 focus:ring-cta/50 focus:ring-offset-2"
+          aria-label="Zadzwoń pod numer +48 123 456 789"
+        >
+          📞 Zadzwoń: +48 123 456 789
+        </a>
+      </div>
+    </div>
+  </section>
+</PageLayout>

@@ -1,17 +1,45 @@
 ---
+import PageLayout from '@/layouts/PageLayout.astro';
+import Hero from '@/components/sections/Hero.astro';
+import ServicesOverview from '@/components/sections/ServicesOverview.astro';
+import TrustSection from '@/components/sections/TrustSection.astro';
+import PortfolioSlider from '@/components/sections/PortfolioSlider.astro';
+import QuoteCTA from '@/components/sections/QuoteCTA.astro';
+import Testimonials from '@/components/sections/Testimonials.astro';
+import ServiceAreaMap from '@/components/sections/ServiceAreaMap.astro';
+import ContactSection from '@/components/sections/ContactSection.astro';
 
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "CalkaWood",
+  "description": "Usługi stolarsko-budowlane na Podkarpaciu",
+  "telephone": "+48123456789",
+  "areaServed": {
+    "@type": "State",
+    "name": "podkarpackie"
+  },
+  "serviceType": [
+    "Stolarka na wymiar",
+    "Tarasy",
+    "Podłogi i wnętrza",
+    "Budowa szkieletowa"
+  ],
+  "url": "https://calkawood.pl"
+};
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<PageLayout
+  title="Strona główna"
+  description="CalkaWood — stolarka na wymiar, tarasy, podłogi, budowa szkieletowa. Solidne usługi stolarsko-budowlane na Podkarpaciu."
+  structuredData={structuredData}
+>
+  <Hero />
+  <ServicesOverview />
+  <TrustSection />
+  <PortfolioSlider />
+  <QuoteCTA />
+  <Testimonials />
+  <ServiceAreaMap />
+  <ContactSection />
+</PageLayout>

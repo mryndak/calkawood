@@ -1,0 +1,298 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getQuoteRequests, getQuoteRequestsCount } from '@/lib/db';
+import { isAuthenticated } from '@/lib/admin-auth';
+import type { QuoteStatus } from '@/lib/types';
+import i18n from '@/i18n/pl.json';
+
+// Kontrola dostępu — tylko zalogowany administrator.
+// Bez tego strona renderowałaby dane osobowe klientów publicznie.
+if (!isAuthenticated(Astro.request)) {
+  return Astro.redirect('/admin/login');
+}
+
+// Paginacja
+const url = new URL(Astro.request.url);
+const page = Math.max(1, parseInt(url.searchParams.get('page') ?? '1', 10) || 1);
+const limit = 20;
+const offset = (page - 1) * limit;
+
+const [quotes, total] = await Promise.all([
+  getQuoteRequests({ limit, offset }),
+  getQuoteRequestsCount(),
+]);
+
+const totalPages = Math.ceil(total / limit);
+
+// Mapowanie statusów na kolory (Tailwind)
+const statusColors: Record<QuoteStatus, string> = {
+  'nowe': 'bg-blue-100 text-blue-800',
+  'w trakcie': 'bg-yellow-100 text-yellow-800',
+  'wycenione': 'bg-green-100 text-green-800',
+  'odrzucone': 'bg-red-100 text-red-800',
+};
+
+// Dozwolone przejścia statusów
+const statusTransitions: Record<QuoteStatus, QuoteStatus[]> = {
+  'nowe': ['w trakcie'],
+  'w trakcie': ['wycenione', 'odrzucone'],
+  'wycenione': [],
+  'odrzucone': [],
+};
+
+function formatDate(date: Date): string {
+  return new Date(date).toLocaleDateString('pl-PL', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+}
+
+function getServiceLabel(usluga: string): string {
+  const labels: Record<string, string> = {
+    'stolarka-na-wymiar': i18n.services.stolarka,
+    'tarasy': i18n.services.tarasy,
+    'podlogi-i-wnetrza': i18n.services.podlogi,
+    'budowa-szkieletowa': i18n.services.budowa,
+  };
+  return labels[usluga] ?? usluga;
+}
+---
+
+<BaseLayout title={`${i18n.admin.panel.title} — CalkaWood`} description="Panel administracyjny CalkaWood">
+  <main class="min-h-screen bg-stone-50">
+    <!-- Header -->
+    <header class="bg-white border-b border-stone-200 sticky top-0 z-10">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+        <h1 class="text-xl font-bold text-stone-800">{i18n.admin.panel.title}</h1>
+        <div class="flex items-center gap-4">
+          <span class="text-sm text-stone-500">
+            {total} zapytań łącznie
+          </span>
+          <form method="POST" action="/api/admin/logout">
+            <button
+              type="submit"
+              class="px-3 py-1.5 text-sm bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-md transition-colors"
+            >
+              {i18n.admin.panel.logout}
+            </button>
+          </form>
+        </div>
+      </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+      {quotes.length === 0 ? (
+        <div class="text-center py-12 bg-white rounded-lg border border-stone-200">
+          <p class="text-stone-500">{i18n.admin.table.noResults}</p>
+        </div>
+      ) : (
+        <>
+          <!-- Tabela -->
+          <div class="bg-white rounded-lg border border-stone-200 overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead>
+                  <tr class="bg-stone-50 border-b border-stone-200">
+                    <th class="text-left px-4 py-3 font-medium text-stone-600">{i18n.admin.table.date}</th>
+                    <th class="text-left px-4 py-3 font-medium text-stone-600">{i18n.admin.table.name}</th>
+                    <th class="text-left px-4 py-3 font-medium text-stone-600">{i18n.admin.table.phone}</th>
+                    <th class="text-left px-4 py-3 font-medium text-stone-600">{i18n.admin.table.service}</th>
+                    <th class="text-left px-4 py-3 font-medium text-stone-600">{i18n.admin.table.status}</th>
+                    <th class="text-left px-4 py-3 font-medium text-stone-600">{i18n.admin.table.actions}</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-stone-100">
+                  {quotes.map((quote) => (
+                    <tr class="hover:bg-stone-50 group" data-quote-id={quote.id}>
+                      <td class="px-4 py-3 text-stone-600 whitespace-nowrap">
+                        {formatDate(quote.created_at)}
+                      </td>
+                      <td class="px-4 py-3 text-stone-800 font-medium">
+                        {quote.imie}
+                      </td>
+                      <td class="px-4 py-3">
+                        <a href={`tel:${quote.telefon}`} class="text-amber-700 hover:text-amber-900 underline">
+                          {quote.telefon}
+                        </a>
+                      </td>
+                      <td class="px-4 py-3 text-stone-700">
+                        {getServiceLabel(quote.usluga)}
+                      </td>
+                      <td class="px-4 py-3">
+                        <span class={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${statusColors[quote.status]}`}>
+                          {i18n.admin.status[quote.status === 'w trakcie' ? 'w_trakcie' : quote.status]}
+                        </span>
+                      </td>
+                      <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                          {statusTransitions[quote.status].length > 0 && (
+                            <select
+                              class="status-select text-xs border border-stone-300 rounded px-2 py-1 bg-white focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
+                              data-id={quote.id}
+                              data-current={quote.status}
+                            >
+                              <option value="">{i18n.admin.details.changeStatus}</option>
+                              {statusTransitions[quote.status].map((nextStatus) => (
+                                <option value={nextStatus}>
+                                  {i18n.admin.status[nextStatus === 'w trakcie' ? 'w_trakcie' : nextStatus]}
+                                </option>
+                              ))}
+                            </select>
+                          )}
+                          <button
+                            type="button"
+                            class="details-toggle text-xs text-amber-700 hover:text-amber-900 underline"
+                            data-id={quote.id}
+                            aria-expanded="false"
+                            aria-controls={`details-${quote.id}`}
+                          >
+                            {i18n.admin.table.details}
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <!-- Szczegóły (ukryte) -->
+                    <tr id={`details-${quote.id}`} class="details-row hidden">
+                      <td colspan="6" class="px-4 py-4 bg-stone-50 border-t border-stone-100">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                          <div>
+                            <h4 class="font-medium text-stone-700 mb-1">{i18n.admin.details.description}</h4>
+                            <p class="text-stone-600 whitespace-pre-wrap">{quote.opis}</p>
+                          </div>
+                          <div class="space-y-3">
+                            {quote.wymiary && (
+                              <div>
+                                <h4 class="font-medium text-stone-700 mb-1">{i18n.admin.details.dimensions}</h4>
+                                <p class="text-stone-600">{quote.wymiary}</p>
+                              </div>
+                            )}
+                            <div>
+                              <h4 class="font-medium text-stone-700 mb-1">{i18n.admin.details.contact}</h4>
+                              <ul class="text-stone-600 space-y-1">
+                                <li><span class="text-stone-500">Imię:</span> {quote.imie}</li>
+                                <li>
+                                  <span class="text-stone-500">Tel:</span>{' '}
+                                  <a href={`tel:${quote.telefon}`} class="text-amber-700 hover:underline">{quote.telefon}</a>
+                                </li>
+                                <li>
+                                  <span class="text-stone-500">Email:</span>{' '}
+                                  <a href={`mailto:${quote.email}`} class="text-amber-700 hover:underline">{quote.email}</a>
+                                </li>
+                                {quote.powiat && (
+                                  <li><span class="text-stone-500">{i18n.admin.details.county}:</span> {quote.powiat}</li>
+                                )}
+                              </ul>
+                            </div>
+                            {quote.zdjecia && quote.zdjecia.length > 0 && (
+                              <div>
+                                <h4 class="font-medium text-stone-700 mb-1">{i18n.admin.details.photos}</h4>
+                                <ul class="text-stone-600 space-y-0.5">
+                                  {quote.zdjecia.map((path: string) => (
+                                    <li class="text-xs font-mono text-stone-500 truncate">{path}</li>
+                                  ))}
+                                </ul>
+                              </div>
+                            )}
+                            <div class="text-xs text-stone-400">
+                              <span>{i18n.admin.details.createdAt}: {formatDate(quote.created_at)}</span>
+                              {quote.updated_at && (
+                                <span class="ml-3">{i18n.admin.details.updatedAt}: {formatDate(quote.updated_at)}</span>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Paginacja -->
+          {totalPages > 1 && (
+            <nav class="mt-4 flex items-center justify-between" aria-label="Paginacja">
+              <p class="text-sm text-stone-600">
+                Strona {page} z {totalPages} ({total} wyników)
+              </p>
+              <div class="flex gap-2">
+                {page > 1 && (
+                  <a
+                    href={`/admin?page=${page - 1}`}
+                    class="px-3 py-1.5 text-sm bg-white border border-stone-300 rounded-md hover:bg-stone-50 text-stone-700"
+                  >
+                    ← Poprzednia
+                  </a>
+                )}
+                {page < totalPages && (
+                  <a
+                    href={`/admin?page=${page + 1}`}
+                    class="px-3 py-1.5 text-sm bg-white border border-stone-300 rounded-md hover:bg-stone-50 text-stone-700"
+                  >
+                    Następna →
+                  </a>
+                )}
+              </div>
+            </nav>
+          )}
+        </>
+      )}
+    </div>
+  </main>
+
+  <!-- Inline skrypt: toggle szczegółów i zmiana statusu -->
+  <script is:inline>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Toggle szczegółów
+      document.querySelectorAll('.details-toggle').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const id = btn.dataset.id;
+          const row = document.getElementById(`details-${id}`);
+          if (!row) return;
+
+          const isHidden = row.classList.contains('hidden');
+          row.classList.toggle('hidden');
+          btn.setAttribute('aria-expanded', String(isHidden));
+        });
+      });
+
+      // Zmiana statusu
+      document.querySelectorAll('.status-select').forEach((select) => {
+        select.addEventListener('change', async (e) => {
+          const target = e.target;
+          const id = target.dataset.id;
+          const newStatus = target.value;
+
+          if (!newStatus) return;
+
+          target.disabled = true;
+
+          try {
+            const response = await fetch(`/api/admin/quotes/${id}`, {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ status: newStatus }),
+            });
+
+            if (response.ok) {
+              // Przeładuj stronę po zmianie statusu
+              window.location.reload();
+            } else {
+              const data = await response.json();
+              alert(data.error || 'Wystąpił błąd przy zmianie statusu.');
+              target.value = '';
+              target.disabled = false;
+            }
+          } catch {
+            alert('Błąd połączenia. Spróbuj ponownie.');
+            target.value = '';
+            target.disabled = false;
+          }
+        });
+      });
+    });
+  </script>
+</BaseLayout>

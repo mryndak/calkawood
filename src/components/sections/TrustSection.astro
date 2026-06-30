@@ -1,0 +1,48 @@
+---
+const trustItems = [
+  {
+    icon: '✅',
+    title: 'Sumienność',
+    description: 'Każde zlecenie traktujemy z pełnym zaangażowaniem. Dotrzymujemy terminów i dbamy o jakość na każdym etapie.',
+  },
+  {
+    icon: '🤝',
+    title: 'Rzetelność',
+    description: 'Jasne warunki, uczciwe ceny, bez ukrytych kosztów. Komunikacja bez zbędnego owijania w bawełnę.',
+  },
+  {
+    icon: '🏆',
+    title: 'Doświadczenie',
+    description: 'Ponad 5 lat praktyki na Podkarpaciu. Dziesiątki zrealizowanych projektów i zadowolonych klientów.',
+  },
+];
+---
+
+<section class="bg-white px-4 py-16 sm:px-6 lg:px-8" aria-labelledby="trust-heading">
+  <div class="mx-auto max-w-5xl">
+    <h2 id="trust-heading" class="text-center text-2xl font-bold text-text sm:text-3xl">
+      Dlaczego my?
+    </h2>
+
+    <div class="mt-10 grid grid-cols-1 gap-8 sm:grid-cols-3">
+      {trustItems.map((item) => (
+        <article class="flex flex-col items-center text-center">
+          <div
+            class="flex h-14 w-14 items-center justify-center rounded-full bg-accent/10 text-3xl"
+            aria-hidden="true"
+          >
+            {item.icon}
+          </div>
+
+          <h3 class="mt-4 text-lg font-semibold text-text">
+            {item.title}
+          </h3>
+
+          <p class="mt-2 text-sm leading-relaxed text-text/70">
+            {item.description}
+          </p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

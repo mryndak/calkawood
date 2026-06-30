@@ -1,0 +1,39 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+  ogImage?: string;
+  structuredData?: object;
+}
+
+const { title, description, canonical, ogImage, structuredData } = Astro.props;
+
+const pageTitle = `${title} | CalkaWood`;
+const pageUrl = canonical || Astro.url.href;
+---
+
+<title>{pageTitle}</title>
+<meta name="description" content={description} />
+
+{canonical && <link rel="canonical" href={canonical} />}
+
+<!-- Open Graph -->
+<meta property="og:title" content={pageTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:type" content="website" />
+<meta property="og:url" content={pageUrl} />
+{ogImage && <meta property="og:image" content={ogImage} />}
+<meta property="og:locale" content="pl_PL" />
+<meta property="og:site_name" content="CalkaWood" />
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
+<meta name="twitter:title" content={pageTitle} />
+<meta name="twitter:description" content={description} />
+{ogImage && <meta name="twitter:image" content={ogImage} />}
+
+<!-- JSON-LD Structured Data -->
+{structuredData && (
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+)}

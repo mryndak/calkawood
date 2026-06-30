@@ -1,0 +1,43 @@
+@import "tailwindcss";
+
+/* CalkaWood — Design Tokens */
+@theme {
+  --color-primary: #C8915A;
+  --color-primary-dark: #7A4E2A;
+  --color-accent: #4A7C59;
+  --color-background: #FDFBF7;
+  --color-text: #2D2D2D;
+  --color-cta: #E07B39;
+  --color-cta-hover: #C96A2F;
+
+  --font-sans: "Inter", system-ui, sans-serif;
+}
+
+/* Base reset */
+@layer base {
+  body {
+    @apply bg-background text-text font-sans antialiased;
+  }
+
+  a {
+    @apply text-primary-dark hover:text-primary transition-colors;
+  }
+
+  /* Default focus indicator for keyboard navigation (a11y) */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-primary;
+  }
+}
+
+/* Screen reader only utility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}

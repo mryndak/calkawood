@@ -1,0 +1,49 @@
+---
+import ServiceCard from '@/components/ui/ServiceCard.astro';
+
+const services = [
+  {
+    title: 'Stolarka na wymiar',
+    description: 'Altany, pergole, wiaty, drzwi i blaty — wszystko dopasowane do Twoich potrzeb.',
+    href: '/uslugi/stolarka-na-wymiar',
+    icon: '🪵',
+  },
+  {
+    title: 'Tarasy',
+    description: 'Tarasy drewniane, kompozytowe, betonowe i kamienne. Trwałość i estetyka.',
+    href: '/uslugi/tarasy',
+    icon: '🏗️',
+  },
+  {
+    title: 'Podłogi i wnętrza',
+    description: 'Montaż podłóg, paneli i remonty wnętrz z dbałością o każdy detal.',
+    href: '/uslugi/podlogi-i-wnetrza',
+    icon: '🪜',
+  },
+  {
+    title: 'Budowa szkieletowa',
+    description: 'Domy i obiekty w technologii szkieletowej — szybko, solidnie, energooszczędnie.',
+    href: '/uslugi/budowa-szkieletowa',
+    icon: '🏠',
+  },
+];
+---
+
+<section class="bg-background px-4 py-16 sm:px-6 lg:px-8" aria-labelledby="services-heading">
+  <div class="mx-auto max-w-6xl">
+    <h2 id="services-heading" class="text-center text-2xl font-bold text-text sm:text-3xl">
+      Nasze usługi
+    </h2>
+
+    <div class="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      {services.map((service) => (
+        <ServiceCard
+          title={service.title}
+          description={service.description}
+          href={service.href}
+          icon={service.icon}
+        />
+      ))}
+    </div>
+  </div>
+</section>

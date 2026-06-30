@@ -1,0 +1,55 @@
+---
+import { getCollection } from 'astro:content';
+import PageLayout from '@/layouts/PageLayout.astro';
+import GalleryLightbox from '@/components/islands/GalleryLightbox.tsx';
+
+const allProjects = await getCollection('projects');
+
+// Sort by date descending (newest first)
+const projects = allProjects.sort(
+  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
+
+// Flatten all project images into the GalleryLightbox format
+const images = projects.flatMap((project) =>
+  project.data.images.map((img) => ({
+    src: img.src,
+    alt: img.alt,
+    caption: project.data.title,
+    category: project.data.category,
+  }))
+);
+
+const categories = [
+  'stolarka-na-wymiar',
+  'tarasy',
+  'podlogi-i-wnetrza',
+  'budowa-szkieletowa',
+];
+---
+
+<PageLayout
+  title="Realizacje"
+  description="Zobacz nasze realizacje: altany, tarasy, podłogi i budowy szkieletowe na Podkarpaciu."
+>
+  <section class="py-16 sm:py-20">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <h1 class="text-3xl font-bold text-primary-dark sm:text-4xl">
+        Realizacje
+      </h1>
+      <p class="mt-4 max-w-2xl text-lg text-text/70">
+        Przeglądaj nasze projekty — od altan i tarasów po podłogi i budowę
+        szkieletową. Filtruj po kategorii, aby znaleźć inspirację do swojego
+        projektu.
+      </p>
+
+      <div class="mt-10">
+        <GalleryLightbox
+          client:visible
+          images={images}
+          categories={categories}
+        />
+      </div>
+    </div>
+  </section>
+</PageLayout>

@@ -1,0 +1,32 @@
+---
+import Button from '@/components/ui/Button.astro';
+---
+
+<section
+  class="relative flex min-h-[70vh] items-center justify-center overflow-hidden bg-primary-dark"
+  aria-label="Sekcja powitalna"
+>
+  <!-- TODO: Zamienić gradient na background-image z realizacji, np.:
+       style={`background-image: url('/images/hero.webp')`}
+       + dodać <Image /> z astro:assets dla optymalizacji -->
+  <div class="absolute inset-0 bg-gradient-to-br from-primary-dark/90 via-primary-dark/70 to-primary/40" aria-hidden="true"></div>
+
+  <div class="relative z-10 mx-auto max-w-3xl px-4 py-16 text-center sm:px-6 lg:px-8">
+    <h1 class="text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-5xl">
+      Stolarka na wymiar. Solidnie od 5 lat.
+    </h1>
+
+    <p class="mx-auto mt-4 max-w-xl text-lg text-white/85 sm:text-xl">
+      Altany, tarasy, podłogi — rzemiosło z pasją na Podkarpaciu
+    </p>
+
+    <div class="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+      <Button href="tel:+48123456789" variant="cta" size="lg" aria-label="Zadzwoń do CalkaWood">
+        📞 Zadzwoń
+      </Button>
+      <Button href="/wycena" variant="primary" size="lg" aria-label="Przejdź do wyceny online">
+        Wyceń online
+      </Button>
+    </div>
+  </div>
+</section>

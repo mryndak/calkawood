@@ -1,0 +1,44 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import QuoteForm from '@/components/islands/QuoteForm.tsx';
+import { MAX_FILES, MAX_FILE_SIZE } from '@/lib/upload';
+
+const services = [
+  { id: 'stolarka-na-wymiar', label: 'Stolarka na wymiar' },
+  { id: 'tarasy', label: 'Tarasy' },
+  { id: 'podlogi-i-wnetrza', label: 'Podłogi i wnętrza' },
+  { id: 'budowa-szkieletowa', label: 'Budowa szkieletowa' },
+];
+---
+
+<PageLayout
+  title="Wycena online"
+  description="Wypełnij formularz wyceny online. Opisz zlecenie, dodaj zdjęcia — odpowiemy w ciągu 24 godzin."
+>
+  <section class="py-16 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
+    <div class="text-center mb-12">
+      <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+        Wycena online
+      </h1>
+      <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+        Opisz swoje zlecenie, dodaj zdjęcia — odpowiemy z wyceną w ciągu 24 godzin.
+        Wycena jest bezpłatna i niezobowiązująca.
+      </p>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 sm:p-8">
+      <QuoteForm
+        client:visible
+        services={services}
+        maxFiles={MAX_FILES}
+        maxFileSize={MAX_FILE_SIZE}
+      />
+    </div>
+
+    <div class="mt-8 text-center text-sm text-gray-500">
+      <p>
+        Wolisz porozmawiać? Zadzwoń: <a href="tel:+48123456789" class="text-green-700 font-medium hover:underline">+48 123 456 789</a>
+      </p>
+    </div>
+  </section>
+</PageLayout>

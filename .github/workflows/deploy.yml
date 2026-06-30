@@ -1,0 +1,84 @@
+# Deploy CalkaWood to MyDevil.net
+#
+# Po push do `main`: build na runnerze → wysyłka build output na MyDevil →
+# instalacja zależności produkcyjnych NA SERWERZE → restart aplikacji.
+#
+# ═══════════════════════════════════════════════════════════════
+# WYMAGANE SEKRETY (GitHub → Settings → Secrets and variables → Actions):
+#
+#   MYDEVIL_SSH_KEY   - Klucz PRYWATNY SSH (ed25519) do logowania na MyDevil.
+#                       Wygeneruj: ssh-keygen -t ed25519 -f calkawood-deploy
+#                       Klucz publiczny dodaj na MyDevil (panel DevilWEB lub authorized_keys).
+#
+#   MYDEVIL_HOST      - Hostname serwera SSH MyDevil (np. s0.mydevil.net).
+#
+#   MYDEVIL_USER      - Login SSH na MyDevil.
+#
+#   MYDEVIL_PATH      - Ścieżka docelowa na serwerze, np.
+#                       /usr/home/LOGIN/domains/calkawood.pl/public_nodejs
+#
+#   DATABASE_URL      - Connection string PostgreSQL (przekazywany przy build).
+#
+#   RESEND_API_KEY    - Klucz API Resend (przekazywany przy build).
+# ═══════════════════════════════════════════════════════════════
+
+name: Deploy to MyDevil
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: # umożliwia ręczne uruchomienie z zakładki Actions
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24' # zgodnie z runtime na MyDevil (node24)
+          cache: 'npm'
+
+      # Pełna instalacja (z devDependencies) — build wymaga narzędzi deweloperskich.
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Astro
+        run: npm run build
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.MYDEVIL_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H ${{ secrets.MYDEVIL_HOST }} >> ~/.ssh/known_hosts
+
+      # Wgrywamy TYLKO build output + manifesty zależności i entry point.
+      # node_modules NIE jest kopiowane — instalujemy je na serwerze (FreeBSD),
+      # by binaria natywne (np. sharp) pasowały do platformy serwera.
+      - name: Deploy build output via rsync
+        env:
+          SSH_CMD: ssh -i ~/.ssh/deploy_key
+          REMOTE: ${{ secrets.MYDEVIL_USER }}@${{ secrets.MYDEVIL_HOST }}:${{ secrets.MYDEVIL_PATH }}
+        run: |
+          rsync -avz --delete -e "$SSH_CMD" dist/ "${REMOTE}/dist/"
+          rsync -avz -e "$SSH_CMD" \
+            app.js package.json package-lock.json \
+            "${REMOTE}/"
+
+      - name: Install production deps & restart on server
+        run: |
+          ssh -i ~/.ssh/deploy_key \
+            ${{ secrets.MYDEVIL_USER }}@${{ secrets.MYDEVIL_HOST }} \
+            'source ~/.bash_profile && cd ${{ secrets.MYDEVIL_PATH }} && npm install --omit=dev && devil www restart calkawood.pl'
+
+      - name: Cleanup SSH key
+        if: always()
+        run: rm -f ~/.ssh/deploy_key

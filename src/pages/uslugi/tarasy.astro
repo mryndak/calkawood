@@ -1,0 +1,41 @@
+---
+import { getEntry, render } from 'astro:content';
+import ServiceLayout from '@/layouts/ServiceLayout.astro';
+
+const entry = await getEntry('services', 'tarasy');
+if (!entry) throw new Error('Service entry not found: tarasy');
+
+const { Content } = await render(entry);
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": entry.data.title,
+  "description": entry.data.description,
+  "provider": {
+    "@type": "LocalBusiness",
+    "name": "CalkaWood"
+  },
+  "areaServed": {
+    "@type": "State",
+    "name": "podkarpackie"
+  }
+};
+
+const breadcrumbs = [
+  { label: "Strona główna", href: "/" },
+  { label: "Usługi", href: "#" },
+  { label: entry.data.title }
+];
+---
+
+<ServiceLayout
+  title={entry.data.title}
+  description={entry.data.description}
+  structuredData={structuredData}
+  breadcrumbs={breadcrumbs}
+>
+  <div class="prose prose-lg max-w-none">
+    <Content />
+  </div>
+</ServiceLayout>

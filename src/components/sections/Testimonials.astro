@@ -1,0 +1,29 @@
+---
+import { getCollection } from 'astro:content';
+import TestimonialCard from '@/components/ui/TestimonialCard.astro';
+
+const allTestimonials = await getCollection('testimonials');
+
+// Sort by date descending
+const testimonials = allTestimonials.sort(
+  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
+---
+
+<section class="py-16 sm:py-20 bg-background" aria-labelledby="testimonials-heading">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <h2 id="testimonials-heading" class="text-2xl font-bold text-primary-dark sm:text-3xl">
+      Opinie klientów
+    </h2>
+
+    <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {testimonials.map((testimonial) => (
+        <TestimonialCard
+          author={testimonial.data.author}
+          content={testimonial.data.content}
+          rating={testimonial.data.rating}
+        />
+      ))}
+    </div>
+  </div>
+</section>

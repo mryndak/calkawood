@@ -1,0 +1,334 @@
+{
+  "site": {
+    "name": "CalkaWood",
+    "tagline": "Stolarka na wymiar. Solidnie od 5 lat."
+  },
+  "nav": {
+    "home": "Strona główna",
+    "services": "Usługi",
+    "portfolio": "Realizacje",
+    "quote": "Wycena online",
+    "about": "O mnie",
+    "contact": "Kontakt"
+  },
+  "cta": {
+    "call": "Zadzwoń",
+    "quote": "Wyceń online",
+    "quoteDescription": "Opisz zlecenie, dodaj zdjęcia — wycenimy w 24h.",
+    "callNow": "Zadzwoń teraz",
+    "freeQuote": "Bezpłatna wycena"
+  },
+  "hero": {
+    "headline": "Stolarka na wymiar. Solidnie od 5 lat.",
+    "subheadline": "Altany, tarasy, podłogi i budowa szkieletowa — Podkarpacie."
+  },
+  "sections": {
+    "services": "Nasze usługi",
+    "trust": "Dlaczego my?",
+    "portfolio": "Nasze realizacje",
+    "testimonials": "Opinie klientów",
+    "serviceArea": "Obszar działania",
+    "contact": "Kontakt",
+    "quote": "Wycena online"
+  },
+  "services": {
+    "stolarka": "Stolarka na wymiar",
+    "stolarkaDesc": "Altany, pergole, wiaty, zadaszenia, drzwi, blaty, antresole.",
+    "tarasy": "Tarasy",
+    "tarasyDesc": "Tarasy drewniane, kompozytowe, betonowe i kamienne.",
+    "podlogi": "Podłogi i wnętrza",
+    "podlogiDesc": "Układanie paneli, podłóg drewnianych, remonty wnętrz.",
+    "budowa": "Budowa szkieletowa",
+    "budowaDesc": "Domy i obiekty w technologii szkieletu drewnianego."
+  },
+  "trust": {
+    "sumiennosc": "Sumienność",
+    "sumiennoscDesc": "Każde zlecenie traktujemy z pełnym zaangażowaniem — od wyceny po wykończenie.",
+    "rzetelnosc": "Rzetelność",
+    "rzetelenoscDesc": "Dotrzymujemy ustaleń. Realny termin i uczciwa cena bez ukrytych kosztów.",
+    "doswiadczenie": "Doświadczenie",
+    "doswiadczenieDesc": "Ponad 5 lat pracy na Podkarpaciu. Setki zrealizowanych projektów."
+  },
+  "quote_form": {
+    "title": "Wycena online",
+    "subtitle": "Opisz swoje zlecenie — odpowiemy w ciągu 24 godzin.",
+    "steps": {
+      "service": "Usługa",
+      "description": "Opis",
+      "photos": "Zdjęcia",
+      "dimensions": "Wymiary",
+      "contact": "Dane kontaktowe",
+      "summary": "Podsumowanie"
+    },
+    "stepTitles": {
+      "service": "Wybierz rodzaj usługi",
+      "description": "Opisz swoje zlecenie",
+      "photos": "Dodaj zdjęcia (opcjonalnie)",
+      "dimensions": "Podaj wymiary (opcjonalnie)",
+      "contact": "Twoje dane kontaktowe",
+      "summary": "Sprawdź i wyślij"
+    },
+    "labels": {
+      "usluga": "Rodzaj usługi",
+      "opis": "Opis zlecenia",
+      "telefon": "Numer telefonu",
+      "imie": "Imię",
+      "email": "Adres e-mail",
+      "powiat": "Powiat",
+      "wymiary": "Wymiary / parametry",
+      "zgoda_rodo": "Zgadzam się na przetwarzanie danych osobowych",
+      "zdjecia": "Zdjęcia"
+    },
+    "placeholders": {
+      "opis": "Np. Chcę postawić altanę 4x3m z dachem dwuspadowym w ogrodzie...",
+      "telefon": "+48 123 456 789",
+      "imie": "Jan",
+      "email": "jan@example.pl",
+      "powiat": "Wybierz powiat (opcjonalnie)",
+      "wymiary": "Np. szerokość 4m, głębokość 3m, wysokość 2.5m"
+    },
+    "validation": {
+      "uslugaRequired": "Wybierz rodzaj usługi.",
+      "opisMin": "Opis musi mieć minimum 20 znaków.",
+      "opisRequired": "Podaj opis zlecenia.",
+      "telefonInvalid": "Nieprawidłowy numer telefonu.",
+      "telefonRequired": "Podaj numer telefonu.",
+      "imieMin": "Imię musi mieć minimum 2 znaki.",
+      "imieRequired": "Podaj imię.",
+      "emailInvalid": "Nieprawidłowy adres e-mail.",
+      "emailRequired": "Podaj adres e-mail.",
+      "zgodaRequired": "Wymagana zgoda na przetwarzanie danych."
+    },
+    "navigation": {
+      "next": "Dalej",
+      "prev": "Wstecz",
+      "submit": "Wyślij zapytanie",
+      "stepOf": "Krok {current} z {total}"
+    },
+    "success": "Dziękujemy! Odpowiemy w ciągu 24 godzin.",
+    "gdprLink": "Polityka prywatności"
+  },
+  "form": {
+    "required": "Pole wymagane",
+    "send": "Wyślij zapytanie",
+    "success": "Dziękujemy! Odpowiemy w ciągu 24 godzin.",
+    "error": "Wystąpił błąd. Spróbuj ponownie lub zadzwoń."
+  },
+  "gallery": {
+    "all": "Wszystkie",
+    "stolarka": "Stolarka na wymiar",
+    "tarasy": "Tarasy",
+    "podlogi": "Podłogi i wnętrza",
+    "budowa": "Budowa szkieletowa",
+    "lightbox": {
+      "close": "Zamknij",
+      "prev": "Poprzednie zdjęcie",
+      "next": "Następne zdjęcie",
+      "of": "z"
+    },
+    "noResults": "Brak realizacji w wybranej kategorii.",
+    "loadMore": "Załaduj więcej"
+  },
+  "footer": {
+    "company": "CalkaWood — Wojciech Całka",
+    "phone": "Telefon",
+    "email": "E-mail",
+    "address": "Adres",
+    "copyright": "© {year} CalkaWood. Wszelkie prawa zastrzeżone.",
+    "privacy": "Polityka prywatności",
+    "terms": "Regulamin",
+    "serviceArea": "Działamy na Podkarpaciu: Rzeszów, Krosno i okolice."
+  },
+  "errors": {
+    "generic": "Wystąpił błąd. Spróbuj ponownie lub zadzwoń.",
+    "rateLimit": "Zbyt wiele zapytań. Spróbuj ponownie za kilka minut.",
+    "validation": "Formularz zawiera błędy. Popraw zaznaczone pola.",
+    "network": "Brak połączenia z internetem. Sprawdź połączenie i spróbuj ponownie.",
+    "serverError": "Błąd serwera. Spróbuj ponownie później lub zadzwoń.",
+    "fileUpload": {
+      "tooLarge": "Plik jest za duży. Maksymalny rozmiar to 10 MB.",
+      "tooMany": "Można przesłać maksymalnie 5 plików.",
+      "invalidType": "Niedozwolony typ pliku. Dozwolone: JPG, PNG, WebP, HEIC.",
+      "uploadFailed": "Nie udało się przesłać pliku. Spróbuj ponownie."
+    },
+    "notFound": "Strona nie została znaleziona.",
+    "forbidden": "Brak dostępu."
+  },
+  "upload": {
+    "dragDrop": "Przeciągnij i upuść zdjęcia tutaj",
+    "or": "lub",
+    "browse": "Wybierz pliki",
+    "maxSize": "Maks. rozmiar pliku: 10 MB",
+    "maxFiles": "Maks. liczba plików: 5",
+    "allowedTypes": "Dozwolone formaty: JPG, PNG, WebP, HEIC",
+    "remove": "Usuń",
+    "preview": "Podgląd",
+    "uploading": "Przesyłanie...",
+    "filesSelected": "{count} plik(ów) wybranych"
+  },
+  "admin": {
+    "login": {
+      "title": "Panel administracyjny",
+      "password": "Hasło",
+      "submit": "Zaloguj się",
+      "error": "Nieprawidłowe hasło."
+    },
+    "panel": {
+      "title": "Zapytania wycenowe",
+      "logout": "Wyloguj"
+    },
+    "table": {
+      "id": "ID",
+      "date": "Data",
+      "name": "Imię",
+      "phone": "Telefon",
+      "service": "Usługa",
+      "status": "Status",
+      "actions": "Akcje",
+      "details": "Szczegóły",
+      "noResults": "Brak zapytań."
+    },
+    "status": {
+      "nowe": "Nowe",
+      "w_trakcie": "W trakcie",
+      "wycenione": "Wycenione",
+      "odrzucone": "Odrzucone"
+    },
+    "details": {
+      "description": "Opis zlecenia",
+      "dimensions": "Wymiary",
+      "photos": "Zdjęcia",
+      "contact": "Dane kontaktowe",
+      "county": "Powiat",
+      "createdAt": "Data utworzenia",
+      "updatedAt": "Ostatnia zmiana",
+      "changeStatus": "Zmień status"
+    }
+  },
+  "a11y": {
+    "openMenu": "Otwórz menu",
+    "closeMenu": "Zamknij menu",
+    "previous": "Poprzedni",
+    "next": "Następny",
+    "skipToContent": "Przejdź do treści",
+    "goToHomepage": "Przejdź do strony głównej",
+    "externalLink": "Otwiera w nowym oknie",
+    "currentPage": "Bieżąca strona",
+    "phoneLink": "Zadzwoń pod numer"
+  },
+  "meta": {
+    "home": {
+      "title": "CalkaWood — Stolarka na wymiar | Podkarpacie",
+      "description": "Stolarka na wymiar, tarasy, podłogi i budowa szkieletowa. Ponad 5 lat doświadczenia na Podkarpaciu. Bezpłatna wycena online."
+    },
+    "services": {
+      "title": "Usługi — CalkaWood",
+      "description": "Stolarka na wymiar, tarasy drewniane i kompozytowe, podłogi, remonty wnętrz oraz budowa w technologii szkieletowej."
+    },
+    "stolarka": {
+      "title": "Stolarka na wymiar — altany, pergole, wiaty | CalkaWood",
+      "description": "Stolarka na wymiar: altany ogrodowe, pergole, wiaty, zadaszenia, drzwi, blaty i antresole. Realizacje na Podkarpaciu."
+    },
+    "tarasy": {
+      "title": "Tarasy drewniane i kompozytowe | CalkaWood",
+      "description": "Budowa tarasów drewnianych, kompozytowych, betonowych i kamiennych. Profesjonalne wykonanie na Podkarpaciu."
+    },
+    "podlogi": {
+      "title": "Podłogi i wnętrza — panele, remonty | CalkaWood",
+      "description": "Układanie podłóg, paneli, remonty wnętrz. Solidne wykończenia na Podkarpaciu."
+    },
+    "budowa": {
+      "title": "Budowa szkieletowa — domy drewniane | CalkaWood",
+      "description": "Budowa domów i obiektów w technologii szkieletu drewnianego. Szybko, solidnie, energooszczędnie."
+    },
+    "portfolio": {
+      "title": "Realizacje — galeria projektów | CalkaWood",
+      "description": "Zobacz nasze realizacje: altany, tarasy, podłogi i budowy szkieletowe na Podkarpaciu."
+    },
+    "quote": {
+      "title": "Wycena online — bezpłatna wycena | CalkaWood",
+      "description": "Wypełnij formularz wyceny online. Opisz zlecenie, dodaj zdjęcia — odpowiemy w ciągu 24 godzin."
+    },
+    "about": {
+      "title": "O mnie — Wojciech Całka | CalkaWood",
+      "description": "Ponad 5 lat doświadczenia w stolarce i budownictwie. Sumienność, rzetelność i dbałość o detale."
+    },
+    "contact": {
+      "title": "Kontakt — CalkaWood",
+      "description": "Skontaktuj się z CalkaWood. Telefon, formularz kontaktowy, obszar działania na Podkarpaciu."
+    },
+    "privacy": {
+      "title": "Polityka prywatności — CalkaWood",
+      "description": "Informacje o przetwarzaniu danych osobowych, celach zbierania danych i prawach użytkownika."
+    },
+    "terms": {
+      "title": "Regulamin — CalkaWood",
+      "description": "Regulamin korzystania z serwisu CalkaWood i usługi wyceny online."
+    }
+  },
+  "breadcrumbs": {
+    "home": "Strona główna",
+    "services": "Usługi",
+    "stolarka": "Stolarka na wymiar",
+    "tarasy": "Tarasy",
+    "podlogi": "Podłogi i wnętrza",
+    "budowa": "Budowa szkieletowa",
+    "portfolio": "Realizacje",
+    "quote": "Wycena online",
+    "about": "O mnie",
+    "contact": "Kontakt",
+    "privacy": "Polityka prywatności",
+    "terms": "Regulamin"
+  },
+  "privacy": {
+    "title": "Polityka prywatności",
+    "introduction": "Informacje ogólne",
+    "dataCollection": "Zbieranie danych",
+    "purposes": "Cele przetwarzania",
+    "retention": "Okres przechowywania",
+    "rights": "Prawa użytkownika",
+    "cookies": "Pliki cookies",
+    "contact": "Kontakt w sprawie danych",
+    "changes": "Zmiany w polityce"
+  },
+  "terms": {
+    "title": "Regulamin",
+    "general": "Postanowienia ogólne",
+    "services": "Zakres usług",
+    "quoteProcess": "Proces wyceny",
+    "liability": "Odpowiedzialność",
+    "personalData": "Dane osobowe",
+    "complaints": "Reklamacje",
+    "finalProvisions": "Postanowienia końcowe"
+  },
+  "contact": {
+    "title": "Kontakt",
+    "subtitle": "Zadzwoń lub napisz — odpowiemy szybko.",
+    "phone": "Telefon",
+    "email": "E-mail",
+    "address": "Adres",
+    "formTitle": "Formularz kontaktowy",
+    "labels": {
+      "name": "Imię",
+      "email": "E-mail",
+      "message": "Wiadomość"
+    },
+    "placeholders": {
+      "name": "Twoje imię",
+      "email": "twoj@email.pl",
+      "message": "W czym możemy pomóc?"
+    },
+    "send": "Wyślij wiadomość",
+    "success": "Wiadomość wysłana. Odpowiemy najszybciej jak to możliwe.",
+    "serviceAreaTitle": "Obszar działania"
+  },
+  "about": {
+    "title": "O mnie",
+    "subtitle": "Wojciech Całka — stolarz z pasją, budowniczy z doświadczeniem."
+  },
+  "serviceArea": {
+    "title": "Obszar działania",
+    "description": "Działamy na terenie województwa podkarpackiego.",
+    "regions": "Rzeszów, Krosno oraz powiaty: brzozowski, dębicki, jasielski, łańcucki, ropczycko-sędziszowski, rzeszowski, strzyżowski."
+  }
+}

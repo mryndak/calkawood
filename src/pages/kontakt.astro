@@ -1,0 +1,86 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import ContactSection from '@/components/sections/ContactSection.astro';
+import ServiceAreaMap from '@/components/sections/ServiceAreaMap.astro';
+
+const title = 'Kontakt — CalkaWood';
+const description = 'Skontaktuj się z CalkaWood. Telefon, formularz kontaktowy, obszar działania na Podkarpaciu. Odpowiadamy w ciągu 24 godzin.';
+---
+
+<PageLayout title={title} description={description}>
+  <section class="px-4 py-16 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-3xl text-center">
+      <h1 class="text-3xl font-bold text-text sm:text-4xl">Kontakt</h1>
+      <p class="mt-4 text-lg text-text/70">
+        Chcesz omówić projekt, zapytać o wycenę lub umówić się na spotkanie? Zadzwoń lub napisz
+        — odpowiemy w ciągu 24 godzin.
+      </p>
+    </div>
+  </section>
+
+  <!-- Główny CTA telefon -->
+  <section class="px-4 sm:px-6 lg:px-8" aria-label="Kontakt telefoniczny">
+    <div class="mx-auto max-w-3xl">
+      <div class="rounded-xl border border-accent/20 bg-accent/5 p-8 text-center">
+        <p class="text-sm font-medium text-text/70">Najszybszy sposób kontaktu:</p>
+        <a
+          href="tel:+48123456789"
+          class="mt-4 inline-flex items-center gap-3 text-3xl font-bold text-accent transition-colors hover:text-primary-dark focus:outline-none focus:ring-2 focus:ring-accent/50 focus:ring-offset-2 sm:text-4xl"
+          aria-label="Zadzwoń pod numer +48 123 456 789"
+        >
+          <span class="flex h-14 w-14 items-center justify-center rounded-full bg-accent text-2xl text-white" aria-hidden="true">
+            📞
+          </span>
+          +48 123 456 789
+        </a>
+        <p class="mt-4 text-sm text-text/60">
+          Pon–Pt: 7:00–18:00 | Sob: 8:00–14:00
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Formularz kontaktowy (reuse ContactSection) -->
+  <ContactSection />
+
+  <!-- Mapa obszaru działania (reuse ServiceAreaMap) -->
+  <ServiceAreaMap />
+
+  <!-- Dane firmy -->
+  <section class="bg-white px-4 py-16 sm:px-6 lg:px-8" aria-labelledby="business-info-heading">
+    <div class="mx-auto max-w-3xl">
+      <h2 id="business-info-heading" class="text-2xl font-bold text-text">Dane firmy</h2>
+
+      <dl class="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
+        <div>
+          <dt class="text-sm font-medium text-text/60">Firma</dt>
+          <dd class="mt-1 text-base text-text">CalkaWood — Wojciech Całka</dd>
+        </div>
+        <div>
+          <dt class="text-sm font-medium text-text/60">Forma prawna</dt>
+          <dd class="mt-1 text-base text-text">Jednoosobowa działalność gospodarcza (JDG)</dd>
+        </div>
+        <div>
+          <dt class="text-sm font-medium text-text/60">Region</dt>
+          <dd class="mt-1 text-base text-text">Województwo podkarpackie — Rzeszów, Krosno i okolice</dd>
+        </div>
+        <div>
+          <dt class="text-sm font-medium text-text/60">Telefon</dt>
+          <dd class="mt-1 text-base text-text">
+            <a href="tel:+48123456789" class="text-accent hover:text-primary-dark transition-colors">
+              +48 123 456 789
+            </a>
+          </dd>
+        </div>
+        <div>
+          <dt class="text-sm font-medium text-text/60">Godziny pracy</dt>
+          <dd class="mt-1 text-base text-text">Pon–Pt: 7:00–18:00 | Sob: 8:00–14:00</dd>
+        </div>
+        <div>
+          <dt class="text-sm font-medium text-text/60">Usługi</dt>
+          <dd class="mt-1 text-base text-text">Stolarka na wymiar, tarasy, podłogi, budowa szkieletowa</dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+</PageLayout>

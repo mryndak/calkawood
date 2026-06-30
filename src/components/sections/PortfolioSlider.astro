@@ -1,0 +1,64 @@
+---
+import { getCollection } from 'astro:content';
+
+const allProjects = await getCollection('projects');
+
+// Featured first, then sort by date descending, limit to 6
+const projects = allProjects
+  .sort((a, b) => {
+    if (a.data.featured && !b.data.featured) return -1;
+    if (!a.data.featured && b.data.featured) return 1;
+    return new Date(b.data.date).getTime() - new Date(a.data.date).getTime();
+  })
+  .slice(0, 6);
+---
+
+<section class="py-16 sm:py-20" aria-labelledby="portfolio-heading">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <h2 id="portfolio-heading" class="text-2xl font-bold text-primary-dark sm:text-3xl">
+      Nasze realizacje
+    </h2>
+
+    <div
+      class="mt-8 flex gap-5 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-4 -mx-4 px-4 sm:mx-0 sm:px-0 sm:grid sm:grid-cols-2 sm:overflow-visible lg:grid-cols-3"
+      role="list"
+    >
+      {projects.map((project) => (
+        <article
+          class="flex-shrink-0 w-72 snap-start sm:w-auto rounded-xl overflow-hidden shadow-sm border border-primary/10 bg-white"
+          role="listitem"
+        >
+          {/* TODO: Replace <img> with <Image /> from astro:assets once real image files
+              are placed in src/assets/projects/. This will enable automatic WebP/AVIF
+              conversion and responsive srcset generation. */}
+          <img
+            src={project.data.images[0]?.src ?? '/images/projects/placeholder.jpg'}
+            alt={project.data.images[0]?.alt ?? project.data.title}
+            loading="lazy"
+            decoding="async"
+            width="400"
+            height="192"
+            class="h-48 w-full object-cover"
+          />
+          <div class="p-4">
+            <h3 class="text-sm font-semibold text-primary-dark leading-snug">
+              {project.data.title}
+            </h3>
+          </div>
+        </article>
+      ))}
+    </div>
+
+    <div class="mt-8 text-center">
+      <a
+        href="/realizacje"
+        class="inline-flex items-center gap-1 font-semibold text-primary-dark hover:text-primary transition-colors"
+      >
+        Zobacz wszystkie realizacje
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+      </a>
+    </div>
+  </div>
+</section>

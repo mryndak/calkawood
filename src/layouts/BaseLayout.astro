@@ -1,0 +1,49 @@
+---
+import '@/styles/global.css';
+import SEOHead from '@/components/ui/SEOHead.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  canonical?: string;
+  ogImage?: string;
+  structuredData?: object;
+}
+
+const {
+  title,
+  description = 'Stolarka na wymiar, tarasy, budowa szkieletowa — Podkarpacie. Solidnie od 5 lat.',
+  canonical,
+  ogImage,
+  structuredData,
+} = Astro.props;
+
+const analyticsUrl = import.meta.env.PUBLIC_ANALYTICS_URL;
+---
+
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <SEOHead
+      title={title}
+      description={description}
+      canonical={canonical}
+      ogImage={ogImage}
+      structuredData={structuredData}
+    />
+  </head>
+  <body class="flex min-h-screen flex-col">
+    <slot />
+    {analyticsUrl && (
+      <script
+        defer
+        data-website-id={import.meta.env.PUBLIC_ANALYTICS_SITE_ID ?? ''}
+        src={analyticsUrl}
+        is:inline
+      />
+    )}
+  </body>
+</html>
