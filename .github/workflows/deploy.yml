@@ -69,6 +69,7 @@ jobs:
           REMOTE: ${{ secrets.MYDEVIL_USER }}@${{ secrets.MYDEVIL_HOST }}:${{ secrets.MYDEVIL_PATH }}
         run: |
           rsync -avz --delete -e "$SSH_CMD" dist/ "${REMOTE}/dist/"
+          rsync -avz --delete -e "$SSH_CMD" dist/client/ "${REMOTE}/public/"
           rsync -avz -e "$SSH_CMD" \
             app.js package.json package-lock.json \
             "${REMOTE}/"
