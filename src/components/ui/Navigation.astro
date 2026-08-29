@@ -50,8 +50,8 @@ const navLinks = [
         </span>
       </a>
 
-      <!-- Desktop navigation (>=768px) -->
-      <ul class="hidden md:flex items-center gap-1" role="menubar">
+      <!-- Desktop navigation (>=1024px) -->
+      <ul class="hidden lg:flex items-center gap-1" role="menubar">
         {navLinks.map((link) => (
           <li role="none">
             <a
@@ -70,7 +70,7 @@ const navLinks = [
         <!-- Phone CTA (desktop) -->
         <a
           href={PHONE_HREF}
-          class="hidden items-center gap-2 rounded-[4px] border border-text/22 px-4 py-2.5 font-serif text-[15px] text-text transition-colors hover:border-primary hover:text-primary-dark md:inline-flex"
+          class="hidden items-center gap-2 rounded-[4px] border border-text/22 px-4 py-2.5 font-serif text-[15px] text-text transition-colors hover:border-primary hover:text-primary-dark lg:inline-flex"
           aria-label={`${t.cta.call}: ${PHONE_NUMBER}`}
         >
           <Phone class="h-3.5 w-3.5" stroke-width={1.8} aria-hidden="true" />
@@ -78,15 +78,17 @@ const navLinks = [
         </a>
 
         <!-- Wycena online (desktop) -->
-        <Button href="/wycena" variant="dark" size="sm" class="hidden md:inline-flex">
-          Wycena online
-        </Button>
+        <div class="hidden lg:inline-flex">
+          <Button href="/wycena" variant="dark" size="sm">
+            Wycena online
+          </Button>
+        </div>
 
-        <!-- Hamburger button (mobile only, <768px) -->
+        <!-- Hamburger button (mobile/tablet, <1024px) -->
         <button
           type="button"
           id="mobile-menu-toggle"
-          class="inline-flex items-center justify-center rounded-md p-2 text-text hover:bg-primary/10 hover:text-primary-dark md:hidden transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+          class="inline-flex items-center justify-center rounded-md p-2 text-text hover:bg-primary/10 hover:text-primary-dark lg:hidden transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
           aria-expanded="false"
           aria-controls="mobile-menu"
           aria-label="Otwórz menu nawigacji"
