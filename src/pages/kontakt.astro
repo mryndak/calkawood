@@ -53,7 +53,7 @@ const companyInfo = [
           </a>.
         </p>
 
-        <form class="mt-[30px] grid max-w-[520px] gap-5" action="#" method="POST" aria-label="Formularz kontaktowy">
+        <form id="contact-form" class="mt-[30px] grid max-w-[520px] gap-5" action="/api/kontakt" method="POST" aria-label="Formularz kontaktowy">
           <div>
             <label for="contact-imie" class="mb-2 block text-xs tracking-[0.1em] text-text-muted uppercase">
               Imię
@@ -104,14 +104,72 @@ const companyInfo = [
 
           <button
             type="submit"
-            class="justify-self-start rounded-[4px] bg-ink px-7 py-[15px] font-serif text-base text-background transition-colors hover:bg-ink-hover"
+            class="justify-self-start rounded-[4px] bg-ink px-7 py-[15px] font-serif text-base text-background transition-colors hover:bg-ink-hover disabled:opacity-50"
           >
             Wyślij wiadomość
           </button>
+
+          <div
+            id="contact-form-feedback"
+            hidden
+            role="status"
+            aria-live="polite"
+            class="max-w-[520px] px-5 py-4 text-sm"
+          ></div>
         </form>
       </div>
     </div>
   </section>
+
+  <script>
+    const form = document.getElementById('contact-form') as HTMLFormElement | null;
+    const feedback = document.getElementById('contact-form-feedback');
+    const submitBtn = form?.querySelector<HTMLButtonElement>('button[type="submit"]');
+
+    const FEEDBACK_BASE = 'max-w-[520px] px-5 py-4 text-sm border';
+    const FEEDBACK_SUCCESS = `${FEEDBACK_BASE} border-hairline bg-surface text-text`;
+    const FEEDBACK_ERROR = `${FEEDBACK_BASE} border-red-300 bg-red-50 text-red-800`;
+
+    form?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (!feedback || !submitBtn) return;
+
+      submitBtn.disabled = true;
+      const originalLabel = submitBtn.textContent;
+      submitBtn.textContent = 'Wysyłanie...';
+      feedback.hidden = true;
+
+      try {
+        const formData = new FormData(form);
+        const response = await fetch('/api/kontakt', { method: 'POST', body: formData });
+        const data = await response.json().catch(() => ({}));
+
+        if (response.ok && data.success) {
+          form.hidden = true;
+          feedback.textContent = 'Wiadomość wysłana. Odpowiemy najszybciej jak to możliwe.';
+          feedback.className = FEEDBACK_SUCCESS;
+          feedback.hidden = false;
+          return;
+        }
+
+        const messages: string[] = data.errors
+          ? Object.values(data.errors).flat() as string[]
+          : [data.error || 'Wystąpił błąd. Spróbuj ponownie lub zadzwoń.'];
+        feedback.textContent = messages.join(' ');
+        feedback.className = FEEDBACK_ERROR;
+        feedback.hidden = false;
+      } catch {
+        feedback.textContent = 'Brak połączenia z internetem. Sprawdź połączenie i spróbuj ponownie.';
+        feedback.className = FEEDBACK_ERROR;
+        feedback.hidden = false;
+      } finally {
+        if (!form.hidden) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalLabel;
+        }
+      }
+    });
+  </script>
 
   <section class="border-t border-hairline bg-surface">
     <ServiceAreaMap
