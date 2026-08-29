@@ -10,9 +10,10 @@ interface Props {
   canonical?: string;
   ogImage?: string;
   structuredData?: object;
+  noindex?: boolean;
 }
 
-const { title, description, canonical, ogImage, structuredData } = Astro.props;
+const { title, description, canonical, ogImage, structuredData, noindex } = Astro.props;
 ---
 
 <BaseLayout
@@ -21,6 +22,7 @@ const { title, description, canonical, ogImage, structuredData } = Astro.props;
   canonical={canonical}
   ogImage={ogImage}
   structuredData={structuredData}
+  noindex={noindex}
 >
   <Navigation />
   <main id="main-content" class="flex-1">

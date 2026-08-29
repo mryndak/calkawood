@@ -5,9 +5,10 @@ interface Props {
   canonical?: string;
   ogImage?: string;
   structuredData?: object;
+  noindex?: boolean;
 }
 
-const { title, description, canonical, ogImage, structuredData } = Astro.props;
+const { title, description, canonical, ogImage, structuredData, noindex = false } = Astro.props;
 
 const pageTitle = `${title} | CalkaWood`;
 const pageUrl = canonical || Astro.url.href;
@@ -15,8 +16,9 @@ const pageUrl = canonical || Astro.url.href;
 
 <title>{pageTitle}</title>
 <meta name="description" content={description} />
+{noindex && <meta name="robots" content="noindex, nofollow" />}
 
-{canonical && <link rel="canonical" href={canonical} />}
+<link rel="canonical" href={pageUrl} />
 
 <!-- Open Graph -->
 <meta property="og:title" content={pageTitle} />

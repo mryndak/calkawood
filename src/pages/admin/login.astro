@@ -6,7 +6,7 @@ const url = new URL(Astro.request.url);
 const hasError = url.searchParams.get('error') === 'invalid';
 ---
 
-<BaseLayout title={i18n.admin.login.title} description="Panel administracyjny CalkaWood">
+<BaseLayout title={i18n.admin.login.title} description="Panel administracyjny CalkaWood" noindex>
   <main class="min-h-screen flex items-center justify-center bg-stone-100 px-4">
     <div class="w-full max-w-sm">
       <div class="bg-white rounded-lg shadow-md p-8">
