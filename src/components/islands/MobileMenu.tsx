@@ -156,18 +156,25 @@ export default function MobileMenu({ links, phone }: MobileMenuProps) {
       {/* Lista linków nawigacyjnych */}
       <nav aria-label="Menu mobilne" className="flex-1 overflow-y-auto px-4 py-6">
         <ul className="space-y-1" role="menu">
-          {links.map((link) => (
-            <li key={link.label} role="none">
-              <a
-                href={link.href}
-                role="menuitem"
-                onClick={closeMenu}
-                className="block rounded-lg px-4 py-3 text-lg font-medium text-text hover:bg-primary/10 hover:text-primary-dark transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-              >
-                {link.label}
-              </a>
-            </li>
-          ))}
+          {links.map((link) => {
+            const isQuote = link.href === '/wycena';
+            return (
+              <li key={link.label} role="none" className={isQuote ? 'py-2' : undefined}>
+                <a
+                  href={link.href}
+                  role="menuitem"
+                  onClick={closeMenu}
+                  className={
+                    isQuote
+                      ? 'flex items-center justify-center rounded-[4px] bg-ink px-4 py-3.5 text-lg font-serif font-normal text-background hover:bg-ink-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cta focus-visible:ring-offset-2'
+                      : 'block rounded-lg px-4 py-3 text-lg font-medium text-text hover:bg-primary/10 hover:text-primary-dark transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2'
+                  }
+                >
+                  {link.label}
+                </a>
+              </li>
+            );
+          })}
         </ul>
       </nav>
 
