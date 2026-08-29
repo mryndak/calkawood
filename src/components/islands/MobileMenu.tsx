@@ -133,7 +133,7 @@ export default function MobileMenu({ links, phone }: MobileMenuProps) {
       className="fixed inset-0 z-50 flex flex-col bg-background/98 backdrop-blur-sm"
     >
       {/* Header z przyciskiem zamknięcia */}
-      <div className="flex items-center justify-between px-4 h-24 border-b border-primary/10">
+      <div className="flex items-center justify-between px-4 h-16 sm:h-24 border-b border-primary/10">
         <div className="flex items-center gap-3">
           <img src="/logo/znak-kolor.svg" alt="" aria-hidden="true" className="h-11 w-11" width={44} height={44} />
           <span className="font-serif text-[23px] tracking-[0.16em] text-text">
