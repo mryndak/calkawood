@@ -1,11 +1,9 @@
 ---
 import PageLayout from '@/layouts/PageLayout.astro';
-
-const title = 'Regulamin';
-const description = 'Regulamin korzystania ze strony CalkaWood i narzędzia wyceny online. Warunki użytkowania, zakres usług, proces wyceny.';
+import t from '@/i18n';
 ---
 
-<PageLayout title={title} description={description}>
+<PageLayout title={t.meta.terms.title} description={t.meta.terms.description}>
   <section class="px-4 py-16 sm:px-6 lg:px-8">
     <div class="mx-auto max-w-3xl">
       <h1 class="text-3xl font-bold text-text sm:text-4xl">Regulamin</h1>

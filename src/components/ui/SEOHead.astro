@@ -10,8 +10,15 @@ interface Props {
 
 const { title, description, canonical, ogImage, structuredData, noindex = false } = Astro.props;
 
-const pageTitle = `${title} | CalkaWood`;
+// `title` musi być już kompletnym tytułem strony (z marką) — patrz
+// src/i18n/pl.json → meta.*.title. Dzięki temu jest dokładnie jedno miejsce,
+// które decyduje o pełnym brzmieniu <title>, zamiast doklejania marki tutaj
+// i osobno w każdej podstronie (to źródło dawnych zdublowanych tytułów).
+const pageTitle = title;
 const pageUrl = canonical || Astro.url.href;
+
+const OG_LOCALES: Record<string, string> = { pl: 'pl_PL', en: 'en_US' };
+const ogLocale = OG_LOCALES[Astro.currentLocale ?? 'pl'] ?? 'pl_PL';
 ---
 
 <title>{pageTitle}</title>
@@ -26,7 +33,7 @@ const pageUrl = canonical || Astro.url.href;
 <meta property="og:type" content="website" />
 <meta property="og:url" content={pageUrl} />
 {ogImage && <meta property="og:image" content={ogImage} />}
-<meta property="og:locale" content="pl_PL" />
+<meta property="og:locale" content={ogLocale} />
 <meta property="og:site_name" content="CalkaWood" />
 
 <!-- Twitter Card -->

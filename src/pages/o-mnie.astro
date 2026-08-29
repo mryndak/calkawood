@@ -2,12 +2,10 @@
 import PageLayout from '@/layouts/PageLayout.astro';
 import Button from '@/components/ui/Button.astro';
 import { Phone } from '@lucide/astro';
-
-const title = 'O mnie — Wojciech Całka';
-const description = 'Wojciech Całka — stolarz i budowniczy z Podkarpacia. Ponad 5 lat doświadczenia w stolarce na wymiar, tarasach i budowie szkieletowej.';
+import t from '@/i18n';
 ---
 
-<PageLayout title={title} description={description}>
+<PageLayout title={t.meta.about.title} description={t.meta.about.description}>
   <section class="mx-auto max-w-3xl px-4 py-16 sm:px-10 sm:py-[84px]">
     <p class="kicker">O mnie</p>
     <h1 class="mt-[18px] text-4xl leading-[1.01] tracking-[-0.025em] text-text sm:text-6xl">

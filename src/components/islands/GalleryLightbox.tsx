@@ -1,7 +1,7 @@
 // Directive: client:visible
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Image as ImageIcon, X, ChevronLeft, ChevronRight } from 'lucide-react';
-import translations from '@/i18n/pl.json';
+import translations from '@/i18n';
 
 interface GalleryProject {
   id: string;

@@ -25,8 +25,15 @@ export default defineConfig({
     checkOrigin: false,
   },
 
+  // Na razie tylko polski — angielski jest planowany (patrz src/i18n/index.ts).
+  // routing.prefixDefaultLocale: false utrzymuje polskie adresy bez przedrostka
+  // (/, /kontakt, ...), żeby dodanie /en/... w przyszłości nie zmieniało
+  // istniejących URL-i.
   i18n: {
     defaultLocale: 'pl',
     locales: ['pl'],
+    routing: {
+      prefixDefaultLocale: false,
+    },
   },
 });

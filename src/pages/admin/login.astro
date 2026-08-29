@@ -1,12 +1,12 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import i18n from '@/i18n/pl.json';
+import i18n from '@/i18n';
 
 const url = new URL(Astro.request.url);
 const hasError = url.searchParams.get('error') === 'invalid';
 ---
 
-<BaseLayout title={i18n.admin.login.title} description="Panel administracyjny CalkaWood" noindex>
+<BaseLayout title={`${i18n.admin.login.title} | CalkaWood`} description="Panel administracyjny CalkaWood" noindex>
   <main class="min-h-screen flex items-center justify-center bg-stone-100 px-4">
     <div class="w-full max-w-sm">
       <div class="bg-white rounded-lg shadow-md p-8">
