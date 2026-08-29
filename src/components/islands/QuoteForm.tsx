@@ -389,7 +389,7 @@ export default function QuoteForm({ maxFiles, maxFileSize }: QuoteFormProps) {
                     value={data.opis}
                     onChange={(e) => update('opis', e.target.value)}
                     placeholder="np. taras na skarpie, wyjście z salonu, obok jest jacuzzi"
-                    className="w-full resize-y rounded-[4px] border border-text/20 bg-transparent px-4 py-3.5 font-sans text-[15px] text-text transition-colors focus:border-primary focus:outline-none"
+                    className="w-full resize-y rounded-[4px] border border-text/20 bg-transparent px-4 py-3.5 font-sans text-base text-text transition-colors focus:border-primary focus:outline-none"
                   />
                 </div>
               </div>
