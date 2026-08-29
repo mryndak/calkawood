@@ -1,5 +1,5 @@
 import { defineCollection } from 'astro:content';
-import { glob, file } from 'astro/loaders';
+import { file } from 'astro/loaders';
 import { z } from 'astro/zod';
 
 const projects = defineCollection({
@@ -7,12 +7,17 @@ const projects = defineCollection({
   schema: z.object({
     id: z.string(),
     title: z.string(),
-    category: z.enum(['stolarka-na-wymiar', 'tarasy', 'podlogi-i-wnetrza', 'budowa-szkieletowa']),
-    description: z.string(),
+    category: z.enum(['domy', 'sauny', 'tarasy', 'zadaszenia', 'wnetrza']),
+    location: z.string(),
+    area: z.number().optional(),
+    description: z.string().optional(),
     images: z.array(z.object({
       src: z.string(),
       alt: z.string(),
     })),
+    // Opis kadru dla realizacji bez dostarczonego zdjęcia — pokazywana zamiast
+    // images (patrz PhotoPlaceholder / GalleryLightbox).
+    placeholderNote: z.string().optional(),
     date: z.coerce.date(),
     featured: z.boolean().default(false),
   }),
@@ -23,21 +28,11 @@ const testimonials = defineCollection({
   schema: z.object({
     id: z.string(),
     author: z.string(),
+    location: z.string(),
     content: z.string(),
     rating: z.number().min(1).max(5),
     date: z.coerce.date(),
   }),
 });
 
-const services = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/services' }),
-  schema: z.object({
-    title: z.string(),
-    slug: z.string(),
-    description: z.string(),
-    icon: z.string(),
-    order: z.number(),
-  }),
-});
-
-export const collections = { projects, testimonials, services };
+export const collections = { projects, testimonials };

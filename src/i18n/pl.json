@@ -32,14 +32,16 @@
     "quote": "Wycena online"
   },
   "services": {
-    "stolarka": "Stolarka na wymiar",
-    "stolarkaDesc": "Altany, pergole, wiaty, zadaszenia, drzwi, blaty, antresole.",
+    "domy": "Domy drewniane",
+    "domyDesc": "Domy jednorodzinne i letniskowe w technologii szkieletowej i z bali.",
+    "sauny": "Sauny",
+    "saunyDesc": "Sauny ogrodowe i wnętrzowe — fińska, beczkowa, na wymiar.",
     "tarasy": "Tarasy",
     "tarasyDesc": "Tarasy drewniane, kompozytowe, betonowe i kamienne.",
-    "podlogi": "Podłogi i wnętrza",
-    "podlogiDesc": "Układanie paneli, podłóg drewnianych, remonty wnętrz.",
-    "budowa": "Budowa szkieletowa",
-    "budowaDesc": "Domy i obiekty w technologii szkieletu drewnianego."
+    "zadaszenia": "Zadaszenia i pergole",
+    "zadaszeniaDesc": "Altany, pergole, wiaty i zadaszenia na wymiar.",
+    "wnetrza": "Podłogi i wnętrza",
+    "wnetrzaDesc": "Układanie paneli, podłóg drewnianych, remonty wnętrz."
   },
   "trust": {
     "sumiennosc": "Sumienność",
@@ -49,65 +51,6 @@
     "doswiadczenie": "Doświadczenie",
     "doswiadczenieDesc": "Ponad 5 lat pracy na Podkarpaciu. Setki zrealizowanych projektów."
   },
-  "quote_form": {
-    "title": "Wycena online",
-    "subtitle": "Opisz swoje zlecenie — odpowiemy w ciągu 24 godzin.",
-    "steps": {
-      "service": "Usługa",
-      "description": "Opis",
-      "photos": "Zdjęcia",
-      "dimensions": "Wymiary",
-      "contact": "Dane kontaktowe",
-      "summary": "Podsumowanie"
-    },
-    "stepTitles": {
-      "service": "Wybierz rodzaj usługi",
-      "description": "Opisz swoje zlecenie",
-      "photos": "Dodaj zdjęcia (opcjonalnie)",
-      "dimensions": "Podaj wymiary (opcjonalnie)",
-      "contact": "Twoje dane kontaktowe",
-      "summary": "Sprawdź i wyślij"
-    },
-    "labels": {
-      "usluga": "Rodzaj usługi",
-      "opis": "Opis zlecenia",
-      "telefon": "Numer telefonu",
-      "imie": "Imię",
-      "email": "Adres e-mail",
-      "powiat": "Powiat",
-      "wymiary": "Wymiary / parametry",
-      "zgoda_rodo": "Zgadzam się na przetwarzanie danych osobowych",
-      "zdjecia": "Zdjęcia"
-    },
-    "placeholders": {
-      "opis": "Np. Chcę postawić altanę 4x3m z dachem dwuspadowym w ogrodzie...",
-      "telefon": "+48 123 456 789",
-      "imie": "Jan",
-      "email": "jan@example.pl",
-      "powiat": "Wybierz powiat (opcjonalnie)",
-      "wymiary": "Np. szerokość 4m, głębokość 3m, wysokość 2.5m"
-    },
-    "validation": {
-      "uslugaRequired": "Wybierz rodzaj usługi.",
-      "opisMin": "Opis musi mieć minimum 20 znaków.",
-      "opisRequired": "Podaj opis zlecenia.",
-      "telefonInvalid": "Nieprawidłowy numer telefonu.",
-      "telefonRequired": "Podaj numer telefonu.",
-      "imieMin": "Imię musi mieć minimum 2 znaki.",
-      "imieRequired": "Podaj imię.",
-      "emailInvalid": "Nieprawidłowy adres e-mail.",
-      "emailRequired": "Podaj adres e-mail.",
-      "zgodaRequired": "Wymagana zgoda na przetwarzanie danych."
-    },
-    "navigation": {
-      "next": "Dalej",
-      "prev": "Wstecz",
-      "submit": "Wyślij zapytanie",
-      "stepOf": "Krok {current} z {total}"
-    },
-    "success": "Dziękujemy! Odpowiemy w ciągu 24 godzin.",
-    "gdprLink": "Polityka prywatności"
-  },
   "form": {
     "required": "Pole wymagane",
     "send": "Wyślij zapytanie",
@@ -116,10 +59,11 @@
   },
   "gallery": {
     "all": "Wszystkie",
-    "stolarka": "Stolarka na wymiar",
+    "domy": "Domy",
+    "sauny": "Sauny",
     "tarasy": "Tarasy",
-    "podlogi": "Podłogi i wnętrza",
-    "budowa": "Budowa szkieletowa",
+    "zadaszenia": "Zadaszenia",
+    "wnetrza": "Wnętrza",
     "lightbox": {
       "close": "Zamknij",
       "prev": "Poprzednie zdjęcie",
@@ -225,21 +169,25 @@
       "title": "Usługi — CalkaWood",
       "description": "Stolarka na wymiar, tarasy drewniane i kompozytowe, podłogi, remonty wnętrz oraz budowa w technologii szkieletowej."
     },
-    "stolarka": {
-      "title": "Stolarka na wymiar — altany, pergole, wiaty | CalkaWood",
-      "description": "Stolarka na wymiar: altany ogrodowe, pergole, wiaty, zadaszenia, drzwi, blaty i antresole. Realizacje na Podkarpaciu."
+    "domy": {
+      "title": "Domy drewniane — szkieletowe i z bali | CalkaWood",
+      "description": "Budowa domów jednorodzinnych i letniskowych w technologii szkieletowej oraz z bali. Szybko, solidnie, energooszczędnie."
+    },
+    "sauny": {
+      "title": "Sauny na wymiar — ogrodowe i wnętrzowe | CalkaWood",
+      "description": "Budowa saun ogrodowych i wnętrzowych: fińska, beczkowa, na wymiar. Realizacje na Podkarpaciu."
     },
     "tarasy": {
       "title": "Tarasy drewniane i kompozytowe | CalkaWood",
       "description": "Budowa tarasów drewnianych, kompozytowych, betonowych i kamiennych. Profesjonalne wykonanie na Podkarpaciu."
     },
-    "podlogi": {
+    "zadaszenia": {
+      "title": "Zadaszenia i pergole — altany, wiaty | CalkaWood",
+      "description": "Zadaszenia, pergole, altany ogrodowe i wiaty na wymiar. Realizacje na Podkarpaciu."
+    },
+    "wnetrza": {
       "title": "Podłogi i wnętrza — panele, remonty | CalkaWood",
       "description": "Układanie podłóg, paneli, remonty wnętrz. Solidne wykończenia na Podkarpaciu."
-    },
-    "budowa": {
-      "title": "Budowa szkieletowa — domy drewniane | CalkaWood",
-      "description": "Budowa domów i obiektów w technologii szkieletu drewnianego. Szybko, solidnie, energooszczędnie."
     },
     "portfolio": {
       "title": "Realizacje — galeria projektów | CalkaWood",
@@ -269,10 +217,11 @@
   "breadcrumbs": {
     "home": "Strona główna",
     "services": "Usługi",
-    "stolarka": "Stolarka na wymiar",
+    "domy": "Domy drewniane",
+    "sauny": "Sauny",
     "tarasy": "Tarasy",
-    "podlogi": "Podłogi i wnętrza",
-    "budowa": "Budowa szkieletowa",
+    "zadaszenia": "Zadaszenia i pergole",
+    "wnetrza": "Podłogi i wnętrza",
     "portfolio": "Realizacje",
     "quote": "Wycena online",
     "about": "O mnie",

@@ -1,0 +1,44 @@
+---
+import { Image } from 'astro:assets';
+import detalImg from '@/assets/photos/tekstura-drewno-detal.jpeg';
+import montazImg from '@/assets/photos/montaz-deski-praca.jpeg';
+import zadaszenieImg from '@/assets/photos/pergola-taras-slup.jpeg';
+
+const photos = [
+  { src: detalImg, alt: 'Detal połączenia drewnianych desek', caption: 'Detal deski' },
+  { src: montazImg, alt: 'Montaż deski tarasowej przez rzemieślnika', caption: 'Montaż' },
+  { src: zadaszenieImg, alt: 'Zadaszenie oparte na drewnianym słupie', caption: 'Zadaszenie na słupie' },
+];
+---
+
+<section class="bg-background px-4 py-20 sm:px-6 lg:px-8 sm:py-28" aria-label="Rzemiosło">
+  <div class="mx-auto grid max-w-7xl grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-16 lg:divide-x lg:divide-hairline">
+    <div class="lg:pr-16">
+      <h2 class="text-3xl text-text sm:text-4xl lg:text-[46px]">
+        Widać to w miejscach, na które nikt nie patrzy
+      </h2>
+      <p class="mt-5 text-justify text-base leading-[1.75] text-text-secondary sm:text-lg sm:leading-[1.8]">
+        Deska pod deską, śruba zamiast gwoździa tam, gdzie ma to znaczenie, spadek dachu policzony
+        z zapasem na śnieg — to detale, których nikt nie zobaczy na zdjęciu z gotowej realizacji.
+        Zobaczy je za to ekipa, która przyjedzie do nas za pięć lat na przegląd, i nie znajdzie niczego
+        do poprawki.
+      </p>
+      <p class="mt-4 text-justify text-base leading-[1.75] text-text-secondary sm:text-lg sm:leading-[1.8]">
+        Dlatego każdą realizację prowadzi ta sama, niewielka ekipa od pomiaru po ostatnią deskę —
+        bez podwykonawców, którzy nie znają reszty projektu. To wolniejsze, ale to jedyny sposób, żeby
+        rzemiosło zostało widoczne tam, gdzie się go nie widzi.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-3 gap-4 lg:pl-16">
+      {photos.map((photo) => (
+        <figure class="col-span-1">
+          <div class="plate aspect-square">
+            <Image src={photo.src} alt={photo.alt} class="h-full w-full object-cover" width={300} height={300} loading="lazy" />
+          </div>
+          <figcaption class="mt-2 text-center text-xs text-text-muted">{photo.caption}</figcaption>
+        </figure>
+      ))}
+    </div>
+  </div>
+</section>

@@ -1,10 +1,17 @@
 -- CalkaWood: Migracja bazy danych
 -- Tabela zapytań wycenowych (quote_requests)
+--
+-- Schemat dla NOWEJ instalacji (uwzględnia już migracje/002). Jeśli baza już
+-- istnieje z wcześniejszą wersją tabeli, użyj zamiast tego
+-- scripts/migrate-002-wycena-widelki.sql (ALTER, nie niszczy danych).
 
 CREATE TABLE quote_requests (
   id            SERIAL PRIMARY KEY,
-  usluga        VARCHAR(50) NOT NULL CHECK (usluga IN ('stolarka-na-wymiar', 'tarasy', 'podlogi-i-wnetrza', 'budowa-szkieletowa')),
-  opis          TEXT NOT NULL CHECK (char_length(opis) >= 20),
+  usluga        VARCHAR(50) NOT NULL CHECK (usluga IN ('domy', 'sauna', 'taras', 'zadaszenie', 'wnetrza')),
+  powierzchnia  SMALLINT CHECK (powierzchnia BETWEEN 10 AND 250),
+  material      VARCHAR(20) CHECK (material IN ('sosna', 'modrzew', 'kompozyt', 'dab')),
+  termin        VARCHAR(10) CHECK (termin IN ('asap', '1-3', '3-6', 'orient')),
+  opis          TEXT,
   telefon       VARCHAR(20) NOT NULL,
   imie          VARCHAR(100) NOT NULL,
   email         VARCHAR(255) NOT NULL,

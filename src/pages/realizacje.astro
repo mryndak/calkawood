@@ -1,55 +1,74 @@
 ---
 import { getCollection } from 'astro:content';
 import PageLayout from '@/layouts/PageLayout.astro';
+import Button from '@/components/ui/Button.astro';
 import GalleryLightbox from '@/components/islands/GalleryLightbox.tsx';
 
 const allProjects = await getCollection('projects');
 
-// Sort by date descending (newest first)
 const projects = allProjects.sort(
   (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
 );
 
-// Flatten all project images into the GalleryLightbox format
-const images = projects.flatMap((project) =>
-  project.data.images.map((img) => ({
-    src: img.src,
-    alt: img.alt,
-    caption: project.data.title,
-    category: project.data.category,
-  }))
-);
+function metaLine(project: (typeof projects)[number]): string {
+  const year = new Date(project.data.date).getFullYear();
+  const parts = [project.data.location];
+  if (project.data.area) parts.push(`${project.data.area} m²`);
+  parts.push(String(year));
+  return parts.join(' · ');
+}
 
-const categories = [
-  'stolarka-na-wymiar',
-  'tarasy',
-  'podlogi-i-wnetrza',
-  'budowa-szkieletowa',
-];
+const galleryProjects = projects.map((project) => ({
+  id: project.id,
+  title: project.data.title,
+  meta: metaLine(project),
+  category: project.data.category,
+  image: project.data.images[0],
+  placeholderNote: project.data.placeholderNote,
+}));
+
+const categories = ['domy', 'sauny', 'tarasy', 'zadaszenia', 'wnetrza'];
+
+// Pozwala linkować bezpośrednio do przefiltrowanej galerii, np. z kart oferty
+// na stronie głównej (?kategoria=domy).
+const requestedCategory = Astro.url.searchParams.get('kategoria');
+const initialCategory = categories.includes(requestedCategory ?? '') ? requestedCategory : null;
 ---
 
 <PageLayout
   title="Realizacje"
-  description="Zobacz nasze realizacje: altany, tarasy, podłogi i budowy szkieletowe na Podkarpaciu."
+  description="Zobacz nasze realizacje: domy, sauny, tarasy, zadaszenia i wnętrza na Podkarpaciu."
 >
-  <section class="py-16 sm:py-20">
-    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-      <h1 class="text-3xl font-bold text-primary-dark sm:text-4xl">
-        Realizacje
-      </h1>
-      <p class="mt-4 max-w-2xl text-lg text-text/70">
-        Przeglądaj nasze projekty — od altan i tarasów po podłogi i budowę
-        szkieletową. Filtruj po kategorii, aby znaleźć inspirację do swojego
-        projektu.
-      </p>
-
-      <div class="mt-10">
-        <GalleryLightbox
-          client:visible
-          images={images}
-          categories={categories}
-        />
+  <section class="mx-auto max-w-7xl px-4 pt-16 sm:px-10 sm:pt-[84px]">
+    <div class="grid grid-cols-1 gap-8 border-b border-hairline pb-11 sm:grid-cols-2 sm:items-end sm:gap-[70px]">
+      <div>
+        <p class="kicker">Realizacje</p>
+        <h1 class="mt-[18px] text-4xl leading-none tracking-[-0.025em] text-text sm:text-6xl lg:text-[72px]">
+          Zdjęcia z placu, nie z katalogu
+        </h1>
       </div>
+      <p class="max-w-[52ch] text-base leading-[1.75] text-text-secondary">
+        Każdy kadr pochodzi z naszej budowy. Przy realizacjach podajemy miejsce, powierzchnię i rok, żeby
+        dało się porównać z własnym projektem.
+      </p>
+    </div>
+
+    <div class="py-[26px]">
+      <GalleryLightbox
+        client:visible
+        projects={galleryProjects}
+        categories={categories}
+        initialCategory={initialCategory}
+      />
+    </div>
+  </section>
+
+  <section class="mt-10 border-t border-hairline bg-surface sm:mt-20">
+    <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-8 px-4 py-16 sm:px-10 sm:py-20">
+      <h2 class="max-w-[34ch] text-3xl leading-[1.05] text-text sm:text-4xl">
+        Podobna realizacja u Ciebie? Policz koszt w sześciu pytaniach.
+      </h2>
+      <Button href="/wycena" variant="dark" size="lg">Wycena online →</Button>
     </div>
   </section>
 </PageLayout>

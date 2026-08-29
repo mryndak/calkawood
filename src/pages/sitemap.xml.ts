@@ -10,10 +10,6 @@ interface SitemapEntry {
 
 const pages: SitemapEntry[] = [
   { url: '/', priority: 1.0, changefreq: 'monthly' },
-  { url: '/uslugi/stolarka-na-wymiar', priority: 0.8, changefreq: 'monthly' },
-  { url: '/uslugi/tarasy', priority: 0.8, changefreq: 'monthly' },
-  { url: '/uslugi/podlogi-i-wnetrza', priority: 0.8, changefreq: 'monthly' },
-  { url: '/uslugi/budowa-szkieletowa', priority: 0.8, changefreq: 'monthly' },
   { url: '/realizacje', priority: 0.7, changefreq: 'weekly' },
   { url: '/wycena', priority: 0.9, changefreq: 'monthly' },
   { url: '/o-mnie', priority: 0.5, changefreq: 'monthly' },

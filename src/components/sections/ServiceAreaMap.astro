@@ -3,8 +3,26 @@
  * Sekcja mapy obszaru działania — interaktywna mapa OpenStreetMap (Leaflet)
  * z rzeczywistymi granicami administracyjnymi 4 obsługiwanych województw:
  * małopolskiego, podkarpackiego, świętokrzyskiego i lubelskiego.
+ * Układ (kicker/h2/akapit/siatka województw po lewej, mapa po prawej) 1:1 z
+ * handoffem — tylko statyczne SVG z makiety zastąpione działającą mapą Leaflet.
  */
-import { CAPITALS, VOIVODESHIP_BOUNDARIES, VOIVODESHIP_COLORS } from '@/data/serviceAreaBoundaries';
+import {
+  CAPITALS,
+  VOIVODESHIP_BOUNDARIES,
+  HIGHLIGHTED_VOIVODESHIP,
+  NEUTRAL_BOUNDARY_COLOR,
+  HIGHLIGHT_COLOR,
+} from '@/data/serviceAreaBoundaries';
+
+interface Props {
+  heading?: string;
+  intro?: string;
+}
+
+const {
+  heading = 'Cztery województwa, jeden zespół',
+  intro = 'Budujemy w promieniu około 180 km od Rzeszowa. Przy większych zleceniach — domy, sauny — dojeżdżamy dalej; wystarczy zapytać.',
+} = Astro.props;
 
 const coveredVoivodeships = [
   { key: 'malopolskie', name: 'małopolskie', examples: 'Kraków, Tarnów, Nowy Sącz' },
@@ -15,74 +33,47 @@ const coveredVoivodeships = [
 
 const mapDataJson = JSON.stringify({
   boundaries: VOIVODESHIP_BOUNDARIES,
-  colors: VOIVODESHIP_COLORS,
   capitals: CAPITALS,
+  highlighted: HIGHLIGHTED_VOIVODESHIP,
+  neutralColor: NEUTRAL_BOUNDARY_COLOR,
+  highlightColor: HIGHLIGHT_COLOR,
 });
 ---
 
-<section class="bg-background px-4 py-16 sm:px-6 lg:px-8" aria-labelledby="service-area-heading">
-  <div class="mx-auto max-w-5xl">
-    <h2 id="service-area-heading" class="text-center text-2xl font-bold text-text sm:text-3xl">
-      Obszar działania
-    </h2>
+<section class="mx-auto max-w-7xl px-4 py-20 sm:px-10 sm:py-[110px]" aria-labelledby="service-area-heading">
+  <div class="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:items-center lg:gap-[70px]">
+    <!-- Tekst + lista województw -->
+    <div>
+      <p class="kicker">Obszar działania</p>
+      <h2 id="service-area-heading" class="mt-[18px] text-3xl leading-[1.03] tracking-[-0.025em] text-text sm:text-5xl">
+        {heading}
+      </h2>
+      <p class="mt-6 max-w-[50ch] text-base leading-[1.75] text-text-secondary">
+        {intro}
+      </p>
 
-    <p class="mx-auto mt-3 max-w-2xl text-center text-sm text-text/70 sm:text-base">
-      Działamy na terenie czterech województw: małopolskiego, podkarpackiego, świętokrzyskiego i lubelskiego.
-    </p>
-
-    <div class="mt-10 flex flex-col items-center gap-8 lg:flex-row lg:items-start lg:gap-12">
-      <!-- Mapa OpenStreetMap -->
-      <div class="w-full max-w-md flex-shrink-0 lg:w-1/2">
-        <div
-          class="service-area-leaflet aspect-[5/4] w-full overflow-hidden rounded-xl border border-text/10 bg-text/5"
-          data-map={mapDataJson}
-          role="img"
-          aria-label="Mapa obszaru działania CalkaWood obejmująca województwa małopolskie, podkarpackie, świętokrzyskie i lubelskie"
-        >
-        </div>
-
-        <p class="mt-2 text-center text-xs text-text/50">
-          Mapa © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer" class="underline">OpenStreetMap</a> contributors, style © <a href="https://carto.com/attributions" target="_blank" rel="noopener noreferrer" class="underline">CARTO</a> — przybliż lub przesuń, aby zobaczyć szczegóły.
-        </p>
+      <div class="mt-[34px] grid grid-cols-1 border-t border-hairline sm:grid-cols-2">
+        {coveredVoivodeships.map((v) => (
+          <div class="border-b border-hairline py-5 pr-5">
+            <p class="font-serif text-xl text-text capitalize">{v.name}</p>
+            <p class="mt-1 text-[12.5px] text-text-muted">{v.examples}</p>
+          </div>
+        ))}
       </div>
+    </div>
 
-      <!-- Lista województw -->
-      <div class="w-full lg:w-1/2">
-        <h3 class="text-lg font-semibold text-text">
-          Obsługiwane województwa
-        </h3>
-        <p class="mt-1 text-sm text-text/70">
-          Realizujemy zlecenia na terenie poniższych województw:
-        </p>
-
-        <ul class="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2" role="list">
-          {coveredVoivodeships.map((v) => (
-            <li class="flex items-start gap-2 text-sm text-text">
-              <span
-                class="mt-1 inline-block h-3 w-3 flex-shrink-0 rounded-full"
-                style={`background-color:${VOIVODESHIP_COLORS[v.key]}`}
-                aria-hidden="true"
-              ></span>
-              <span>
-                <span class="font-medium">Województwo {v.name}</span>
-                <span class="block text-text/60">{v.examples}</span>
-              </span>
-            </li>
-          ))}
-        </ul>
-
-        <p class="mt-6 text-sm text-text/60">
-          Nie widzisz swojego regionu? Zadzwoń — w wielu przypadkach dojedziemy dalej.
-        </p>
-
-        <a
-          href="tel:+48123456789"
-          class="mt-4 inline-flex items-center gap-2 rounded-lg bg-ink px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-ink-hover focus:outline-none focus:ring-2 focus:ring-cta/50 focus:ring-offset-2"
-          aria-label="Zadzwoń do CalkaWood, aby zapytać o obsługę Twojego regionu"
-        >
-          📞 Zadzwoń i zapytaj
-        </a>
+    <!-- Mapa OpenStreetMap (Leaflet) -->
+    <div class="rounded-[4px] border border-hairline bg-surface p-[30px]">
+      <div
+        class="service-area-leaflet aspect-[5/4] w-full overflow-hidden rounded-[4px]"
+        data-map={mapDataJson}
+        role="img"
+        aria-label="Mapa obszaru działania CalkaWood obejmująca województwa małopolskie, podkarpackie, świętokrzyskie i lubelskie"
+      >
       </div>
+      <p class="mt-2 text-center text-xs text-text-muted">
+        Mapa © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer" class="underline">OpenStreetMap</a> contributors, style © <a href="https://carto.com/attributions" target="_blank" rel="noopener noreferrer" class="underline">CARTO</a>
+      </p>
     </div>
   </div>
 </section>
@@ -118,8 +109,10 @@ const mapDataJson = JSON.stringify({
   type CapitalPoint = { voivodeship: string; city: string; lat: number; lng: number };
   type MapData = {
     boundaries: Record<string, [number, number][]>;
-    colors: Record<string, string>;
     capitals: CapitalPoint[];
+    highlighted: string;
+    neutralColor: string;
+    highlightColor: string;
   };
 
   const CAPITAL_MARKER_COLOR = '#7d5411';
@@ -142,13 +135,16 @@ const mapDataJson = JSON.stringify({
       maxZoom: 19,
     }).addTo(map);
 
+    // Jeden neutralny hairline dla wszystkich województw, wyróżniony jest tylko
+    // region główny (kolor akcentu + delikatne wypełnienie) — zgodnie z makietą.
     for (const [key, latlngs] of Object.entries(data.boundaries)) {
-      const color = data.colors[key] ?? '#4A7C59';
+      const isHighlighted = key === data.highlighted;
       L.polygon(latlngs, {
-        color,
-        weight: 2.5,
-        fillColor: color,
-        fillOpacity: 0.3,
+        color: isHighlighted ? data.highlightColor : data.neutralColor,
+        weight: isHighlighted ? 1.5 : 1,
+        opacity: isHighlighted ? 1 : 0.35,
+        fillColor: data.highlightColor,
+        fillOpacity: isHighlighted ? 0.1 : 0,
       }).addTo(map);
     }
 

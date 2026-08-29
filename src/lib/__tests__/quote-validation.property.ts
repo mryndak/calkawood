@@ -5,6 +5,7 @@ import { describe, it, expect } from 'vitest';
 import fc from 'fast-check';
 import { z } from 'zod';
 import { quoteRequestSchema, SERVICE_CATEGORIES } from '@/lib/quote-validation';
+import { MATERIALS, TERMS, MIN_AREA, MAX_AREA } from '@/lib/estimate';
 
 const zodEmailValidator = z.string().email();
 
@@ -17,13 +18,14 @@ const polishPhoneArbitrary = () =>
 const validQuoteRequestArbitrary = () =>
   fc.record({
     usluga: fc.constantFrom(...SERVICE_CATEGORIES),
-    opis: fc.string({ minLength: 20, maxLength: 2000 }),
+    powierzchnia: fc.integer({ min: MIN_AREA, max: MAX_AREA }),
+    material: fc.constantFrom(...MATERIALS),
+    termin: fc.constantFrom(...TERMS),
     telefon: polishPhoneArbitrary(),
     imie: fc.string({ minLength: 2, maxLength: 100 }),
     email: fc.emailAddress().filter(e => zodEmailValidator.safeParse(e).success),
-    powiat: fc.option(fc.string({ minLength: 1, maxLength: 100 }), { nil: undefined }),
     zgoda_rodo: fc.constant(true as const),
-    wymiary: fc.option(fc.string({ maxLength: 500 }), { nil: undefined }),
+    opis: fc.option(fc.string({ maxLength: 500 }), { nil: undefined }),
   });
 
 describe('Property 6: Quote schema validation (accept valid, reject invalid)', () => {
@@ -56,18 +58,18 @@ describe('Property 6: Quote schema validation (accept valid, reject invalid)', (
     );
   });
 
-  it('rejects when opis is shorter than 20 characters', () => {
+  it('rejects when powierzchnia is outside the 10–250 m² range', () => {
     fc.assert(
       fc.property(
         validQuoteRequestArbitrary(),
-        fc.string({ minLength: 0, maxLength: 19 }),
-        (request, shortOpis) => {
-          const invalid = { ...request, opis: shortOpis };
+        fc.integer({ min: -1000, max: 1000 }).filter((n) => n < MIN_AREA || n > MAX_AREA),
+        (request, invalidArea) => {
+          const invalid = { ...request, powierzchnia: invalidArea };
           const result = quoteRequestSchema.safeParse(invalid);
           expect(result.success).toBe(false);
           if (!result.success) {
             const fields = result.error.flatten().fieldErrors;
-            expect(fields.opis).toBeDefined();
+            expect(fields.powierzchnia).toBeDefined();
           }
         }
       ),

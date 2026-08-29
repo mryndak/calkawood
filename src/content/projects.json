@@ -1,39 +1,185 @@
 [
   {
-    "id": "altana-brzozow",
-    "title": "Altana ogrodowa na wymiar — Brzozów",
-    "category": "stolarka-na-wymiar",
-    "description": "Altana ogrodowa z drewna sosnowego impregnowanego ciśnieniowo, wymiary 4×3 m. Konstrukcja z belek 12×12 cm, dach dwuspadowy kryty gontem bitumicznym. Realizacja obejmowała przygotowanie fundamentów punktowych, montaż konstrukcji oraz wykończenie detalami ozdobnymi.",
-    "images": [
-      { "src": "/images/projects/altana-brzozow-1.jpg", "alt": "Altana ogrodowa z drewna — widok z przodu" },
-      { "src": "/images/projects/altana-brzozow-2.jpg", "alt": "Altana ogrodowa — detal połączenia ciesielskiego" },
-      { "src": "/images/projects/altana-brzozow-3.jpg", "alt": "Altana ogrodowa — widok od wewnątrz" }
-    ],
-    "date": "2024-08-15",
-    "featured": true
-  },
-  {
-    "id": "taras-kompozytowy-rzeszow",
-    "title": "Taras kompozytowy z podświetleniem LED — Rzeszów",
+    "id": "taras-modrzew-rzeszow",
+    "title": "Taras z modrzewia syberyjskiego",
     "category": "tarasy",
-    "description": "Taras z desek kompozytowych WPC w kolorze orzech, powierzchnia 28 m². Podkonstrukcja aluminiowa na legarach regulowanych. Wykończenie listwami obwodowymi i oświetleniem LED wbudowanym w stopnie. Realizacja w 5 dni roboczych.",
+    "location": "Rzeszów",
+    "area": 38,
     "images": [
-      { "src": "/images/projects/taras-rzeszow-1.jpg", "alt": "Taras kompozytowy — widok ogólny z ogrodem" },
-      { "src": "/images/projects/taras-rzeszow-2.jpg", "alt": "Taras kompozytowy — detal wykończenia krawędzi" }
+      { "src": "/images/projects/taras-dom-nowoczesny.jpeg", "alt": "Taras z modrzewia syberyjskiego przy nowoczesnym domu w Rzeszowie" }
     ],
-    "date": "2024-06-20",
+    "date": "2025-05-10",
     "featured": true
   },
   {
-    "id": "podloga-debowa-krosno",
-    "title": "Podłoga dębowa olejowana — Krosno",
-    "category": "podlogi-i-wnetrza",
-    "description": "Montaż podłogi z litego dębu europejskiego, klasa rustyk, grubość 20 mm. Powierzchnia 45 m² w salonie i korytarzu. Deski olejowane naturalnym olejem twardym. Przygotowanie podłoża obejmowało wyrównanie wylewki i ułożenie izolacji akustycznej.",
+    "id": "zadaszenie-krosno",
+    "title": "Zadaszenie tarasu z drewna klejonego",
+    "category": "zadaszenia",
+    "location": "Krosno",
+    "area": 26,
     "images": [
-      { "src": "/images/projects/podloga-krosno-1.jpg", "alt": "Podłoga dębowa olejowana — salon" },
-      { "src": "/images/projects/podloga-krosno-2.jpg", "alt": "Podłoga dębowa — detal rysunku słojów" }
+      { "src": "/images/projects/zadaszenie-taras-meble.jpeg", "alt": "Zadaszenie tarasu z drewna klejonego z meblami ogrodowymi w Krośnie" }
     ],
-    "date": "2024-04-10",
+    "date": "2025-04-02",
+    "featured": true
+  },
+  {
+    "id": "pergola-brzozow",
+    "title": "Pergola przy elewacji domu",
+    "category": "zadaszenia",
+    "location": "Brzozów",
+    "area": 18,
+    "images": [
+      { "src": "/images/projects/pergola-taras-slup.jpeg", "alt": "Pergola wsparta na drewnianym słupie przy elewacji domu w Brzozowie" }
+    ],
+    "date": "2024-09-18",
+    "featured": true
+  },
+  {
+    "id": "taras-sosna-sanok",
+    "title": "Taras z sosny olejowanej",
+    "category": "tarasy",
+    "location": "Sanok",
+    "area": 42,
+    "images": [
+      { "src": "/images/projects/taras-zlote-swiatlo.jpeg", "alt": "Taras z olejowanej sosny w złotym świetle zachodzącego słońca, Sanok" }
+    ],
+    "date": "2024-08-05",
+    "featured": false
+  },
+  {
+    "id": "taras-balustrada-debica",
+    "title": "Taras z balustradą listwową",
+    "category": "tarasy",
+    "location": "Dębica",
+    "area": 31,
+    "images": [
+      { "src": "/images/projects/taras-balustrada.jpeg", "alt": "Taras drewniany z balustradą listwową w Dębicy" }
+    ],
+    "date": "2024-07-22",
+    "featured": false
+  },
+  {
+    "id": "podcien-jaslo",
+    "title": "Podcień z deską modrzewiową",
+    "category": "zadaszenia",
+    "location": "Jasło",
+    "area": 34,
+    "images": [
+      { "src": "/images/projects/taras-zadaszony-perspektywa.jpeg", "alt": "Zadaszony podcień z deską modrzewiową, widok perspektywiczny, Jasło" }
+    ],
+    "date": "2024-06-14",
+    "featured": false
+  },
+  {
+    "id": "schody-krosno",
+    "title": "Schody drewniane we wnętrzu",
+    "category": "wnetrza",
+    "location": "Krosno",
+    "images": [
+      { "src": "/images/projects/schody-wnetrze.jpeg", "alt": "Drewniane schody wewnętrzne w Krośnie" }
+    ],
+    "date": "2025-02-20",
+    "featured": false
+  },
+  {
+    "id": "taras-jacuzzi-rzeszow",
+    "title": "Taras pod wanną jacuzzi",
+    "category": "tarasy",
+    "location": "Rzeszów",
+    "area": 24,
+    "images": [
+      { "src": "/images/projects/taras-jacuzzi.jpeg", "alt": "Taras drewniany pod wanną jacuzzi w Rzeszowie" }
+    ],
+    "date": "2025-06-30",
+    "featured": false
+  },
+  {
+    "id": "taras-narozny-strzyzow",
+    "title": "Taras narożny wokół domu",
+    "category": "tarasy",
+    "location": "Strzyżów",
+    "area": 52,
+    "images": [
+      { "src": "/images/projects/taras-narozny.jpeg", "alt": "Taras narożny prowadzony wokół domu w Strzyżowie" }
+    ],
+    "date": "2024-05-11",
+    "featured": false
+  },
+  {
+    "id": "taras-wejsciowy-brzozow",
+    "title": "Taras wejściowy ze stopniami",
+    "category": "tarasy",
+    "location": "Brzozów",
+    "area": 16,
+    "images": [
+      { "src": "/images/projects/schody-taras-wejscie.jpeg", "alt": "Taras wejściowy ze stopniami do domu w Brzozowie" }
+    ],
+    "date": "2023-09-08",
+    "featured": false
+  },
+  {
+    "id": "taras-gladki-lancut",
+    "title": "Taras z deski gładkiej",
+    "category": "tarasy",
+    "location": "Łańcut",
+    "area": 29,
+    "images": [
+      { "src": "/images/projects/taras-deski-rytm.jpeg", "alt": "Taras z gładkiej deski drewnianej w rytmicznym układzie, Łańcut" }
+    ],
+    "date": "2023-07-19",
+    "featured": false
+  },
+  {
+    "id": "taras-dwupoziomowy-rzeszow",
+    "title": "Taras dwupoziomowy z kontrastem",
+    "category": "tarasy",
+    "location": "Rzeszów",
+    "area": 46,
+    "images": [
+      { "src": "/images/projects/taras-kontrast-deski.jpeg", "alt": "Dwupoziomowy taras z kontrastowym układem desek w Rzeszowie" }
+    ],
+    "date": "2023-05-27",
+    "featured": false
+  },
+  {
+    "id": "dom-szkieletowy-podkarpacie",
+    "title": "Dom szkieletowy 132 m²",
+    "category": "domy",
+    "location": "Podkarpacie",
+    "images": [],
+    "placeholderNote": "elewacja domu szkieletowego",
+    "date": "2025-03-01",
+    "featured": false
+  },
+  {
+    "id": "dom-z-bali-podkarpacie",
+    "title": "Dom z bali pod klucz",
+    "category": "domy",
+    "location": "Podkarpacie",
+    "images": [],
+    "placeholderNote": "dom z bali, widok od ogrodu",
+    "date": "2024-11-15",
+    "featured": false
+  },
+  {
+    "id": "sauna-cedr-rzeszow",
+    "title": "Sauna ogrodowa z cedru",
+    "category": "sauny",
+    "location": "Rzeszów",
+    "images": [],
+    "placeholderNote": "sauna ogrodowa, wnętrze",
+    "date": "2025-01-20",
+    "featured": false
+  },
+  {
+    "id": "sauna-barrel-krosno",
+    "title": "Sauna typu barrel",
+    "category": "sauny",
+    "location": "Krosno",
+    "images": [],
+    "placeholderNote": "sauna beczka w ogrodzie",
+    "date": "2024-10-10",
     "featured": false
   }
 ]

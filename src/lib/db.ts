@@ -16,15 +16,16 @@ export async function saveQuoteRequest(
 ): Promise<number> {
   const [row] = await sql`
     INSERT INTO quote_requests (
-      usluga, opis, telefon, imie, email, powiat, wymiary, zdjecia, ip_address
+      usluga, powierzchnia, material, termin, opis, telefon, imie, email, zdjecia, ip_address
     ) VALUES (
       ${data.usluga},
-      ${data.opis},
+      ${data.powierzchnia},
+      ${data.material},
+      ${data.termin},
+      ${data.opis ?? null},
       ${data.telefon},
       ${data.imie},
       ${data.email},
-      ${data.powiat ?? null},
-      ${data.wymiary ?? null},
       ${data.files},
       ${data.ip_address ?? null}
     )
@@ -43,8 +44,8 @@ export async function getQuoteRequests(options: {
 }): Promise<QuoteRequestRow[]> {
   const rows = await sql<QuoteRequestRow[]>`
     SELECT
-      id, usluga, opis, telefon, imie, email,
-      powiat, wymiary, status, zdjecia, ip_address,
+      id, usluga, powierzchnia, material, termin, opis, telefon, imie, email,
+      status, zdjecia, ip_address,
       created_at, updated_at
     FROM quote_requests
     ORDER BY created_at DESC
@@ -88,8 +89,8 @@ export async function getQuoteById(
 ): Promise<QuoteRequestRow | null> {
   const rows = await sql<QuoteRequestRow[]>`
     SELECT
-      id, usluga, opis, telefon, imie, email,
-      powiat, wymiary, status, zdjecia, ip_address,
+      id, usluga, powierzchnia, material, termin, opis, telefon, imie, email,
+      status, zdjecia, ip_address,
       created_at, updated_at
     FROM quote_requests
     WHERE id = ${id}

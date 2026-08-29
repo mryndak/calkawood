@@ -1,6 +1,5 @@
 ---
 import { getCollection } from 'astro:content';
-import TestimonialCard from '@/components/ui/TestimonialCard.astro';
 
 const allTestimonials = await getCollection('testimonials');
 
@@ -10,20 +9,39 @@ const testimonials = allTestimonials.sort(
 );
 ---
 
-<section class="py-16 sm:py-20 bg-background" aria-labelledby="testimonials-heading">
-  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-    <h2 id="testimonials-heading" class="text-2xl font-bold text-primary-dark sm:text-3xl">
-      Opinie klientów
-    </h2>
+<section class="border-y border-hairline bg-surface" aria-labelledby="testimonials-heading">
+  <div class="mx-auto max-w-7xl px-4 py-20 sm:px-10 sm:py-[100px]">
+    <div class="grid grid-cols-1 gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-[70px]">
+      <div>
+        <p class="kicker">Opinie</p>
+        <h2 id="testimonials-heading" class="mt-[18px] text-3xl leading-[1.03] tracking-[-0.025em] text-text sm:text-5xl">
+          Co mówią klienci
+        </h2>
+        <p class="mt-[22px] text-[15px] leading-[1.7] text-text-secondary">
+          Publikujemy też opinie z uwagami. Jedna rzecz, o którą klienci pytają najczęściej — termin —
+          bywa naszą słabą stroną przy opóźnieniach dostaw i mówimy o tym wprost.
+        </p>
+      </div>
 
-    <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {testimonials.map((testimonial) => (
-        <TestimonialCard
-          author={testimonial.data.author}
-          content={testimonial.data.content}
-          rating={testimonial.data.rating}
-        />
-      ))}
+      <div class="border-t border-hairline">
+        {testimonials.map((testimonial) => (
+          <div class="border-b border-hairline py-[30px]">
+            <div class="flex gap-[3px]" role="img" aria-label={`Ocena: ${testimonial.data.rating} na 5 gwiazdek`}>
+              {Array.from({ length: testimonial.data.rating }).map(() => (
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#b68235" stroke-width="1.4" aria-hidden="true">
+                  <path d="M12 2.5l2.95 5.98 6.6.96-4.78 4.66 1.13 6.57L12 17.6l-5.9 3.07 1.13-6.57L2.45 9.44l6.6-.96z" />
+                </svg>
+              ))}
+            </div>
+            <p class="mt-3.5 text-lg leading-[1.7] text-text italic">
+              {testimonial.data.content}
+            </p>
+            <p class="mt-2.5 text-xs tracking-[0.1em] text-text-muted uppercase">
+              {testimonial.data.author} · {testimonial.data.location}
+            </p>
+          </div>
+        ))}
+      </div>
     </div>
   </div>
 </section>

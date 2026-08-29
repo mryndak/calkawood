@@ -52,8 +52,10 @@ function createMockRequest(formData: FormData): Request {
 }
 
 const VALID_FORM_DATA: Record<string, string> = {
-  usluga: 'tarasy',
-  opis: 'Potrzebuję tarasu drewnianego 4x3m przy domu jednorodzinnym',
+  usluga: 'taras',
+  powierzchnia: '38',
+  material: 'sosna',
+  termin: 'asap',
   telefon: '+48 123 456 789',
   imie: 'Jan',
   email: 'jan@example.com',
@@ -95,8 +97,10 @@ describe('POST /api/wycena — integration', () => {
 
       expect(saveQuoteRequest).toHaveBeenCalledWith(
         expect.objectContaining({
-          usluga: 'tarasy',
-          opis: VALID_FORM_DATA.opis,
+          usluga: 'taras',
+          powierzchnia: 38,
+          material: 'sosna',
+          termin: 'asap',
           telefon: '+48 123 456 789',
           imie: 'Jan',
           email: 'jan@example.com',
@@ -118,7 +122,7 @@ describe('POST /api/wycena — integration', () => {
       expect(sendQuoteNotification).toHaveBeenCalledWith(
         expect.objectContaining({
           id: 42,
-          usluga: 'tarasy',
+          usluga: 'taras',
           imie: 'Jan',
         }),
       );
@@ -126,9 +130,9 @@ describe('POST /api/wycena — integration', () => {
   });
 
   describe('Walidacja', () => {
-    it('zwraca 400 z błędami pól gdy brak wymaganego pola opis', async () => {
-      const { opis, ...dataWithoutOpis } = VALID_FORM_DATA;
-      const formData = createMockFormData(dataWithoutOpis);
+    it('zwraca 400 z błędami pól gdy brak wymaganego pola material', async () => {
+      const { material, ...dataWithoutMaterial } = VALID_FORM_DATA;
+      const formData = createMockFormData(dataWithoutMaterial);
       const request = createMockRequest(formData);
 
       const response = await POST({
@@ -140,11 +144,11 @@ describe('POST /api/wycena — integration', () => {
 
       const body = await response.json();
       expect(body.errors).toBeDefined();
-      expect(body.errors.opis).toBeDefined();
+      expect(body.errors.material).toBeDefined();
     });
 
-    it('zwraca 400 gdy opis jest za krótki (< 20 znaków)', async () => {
-      const formData = createMockFormData({ ...VALID_FORM_DATA, opis: 'Krótki' });
+    it('zwraca 400 gdy powierzchnia jest poza zakresem 10–250 m²', async () => {
+      const formData = createMockFormData({ ...VALID_FORM_DATA, powierzchnia: '999' });
       const request = createMockRequest(formData);
 
       const response = await POST({
@@ -156,7 +160,7 @@ describe('POST /api/wycena — integration', () => {
 
       const body = await response.json();
       expect(body.errors).toBeDefined();
-      expect(body.errors.opis).toBeDefined();
+      expect(body.errors.powierzchnia).toBeDefined();
     });
 
     it('zwraca 400 gdy brak zgody RODO', async () => {

@@ -1,86 +1,122 @@
 ---
 import PageLayout from '@/layouts/PageLayout.astro';
-import ContactSection from '@/components/sections/ContactSection.astro';
 import ServiceAreaMap from '@/components/sections/ServiceAreaMap.astro';
 
 const title = 'Kontakt — CalkaWood';
-const description = 'Skontaktuj się z CalkaWood. Telefon, formularz kontaktowy, obszar działania na Podkarpaciu. Odpowiadamy w ciągu 24 godzin.';
+const description = 'Zadzwoń lub napisz do CalkaWood. Telefon, dane firmy, obszar działania na Podkarpaciu. Odpowiadamy w ciągu 24 godzin.';
+
+const companyInfo = [
+  { label: 'Firma', value: 'CalkaWood — Wojciech Całka' },
+  { label: 'Region', value: 'Podkarpackie — Rzeszów, Krosno i okolice' },
+  { label: 'E-mail', value: 'biuro@calkawood.pl' },
+  { label: 'Zakres', value: 'Domy drewniane, sauny, zadaszenia, tarasy, wnętrza' },
+];
 ---
 
 <PageLayout title={title} description={description}>
-  <section class="px-4 py-16 sm:px-6 lg:px-8">
-    <div class="mx-auto max-w-3xl text-center">
-      <h1 class="text-3xl font-bold text-text sm:text-4xl">Kontakt</h1>
-      <p class="mt-4 text-lg text-text/70">
-        Chcesz omówić projekt, zapytać o wycenę lub umówić się na spotkanie? Zadzwoń lub napisz
-        — odpowiemy w ciągu 24 godzin.
-      </p>
-    </div>
-  </section>
-
-  <!-- Główny CTA telefon -->
-  <section class="px-4 sm:px-6 lg:px-8" aria-label="Kontakt telefoniczny">
-    <div class="mx-auto max-w-3xl">
-      <div class="rounded-xl border border-accent/20 bg-accent/5 p-8 text-center">
-        <p class="text-sm font-medium text-text/70">Najszybszy sposób kontaktu:</p>
+  <section class="mx-auto max-w-7xl px-4 py-16 sm:px-10 sm:py-[84px] sm:pb-[90px]">
+    <div class="grid grid-cols-1 border-t border-hairline lg:grid-cols-2">
+      <!-- Telefon + dane firmy -->
+      <div class="py-10 lg:border-r lg:border-hairline lg:py-[52px] lg:pr-16">
+        <p class="kicker">Kontakt</p>
+        <h1 class="mt-[18px] text-4xl leading-[1.01] tracking-[-0.025em] text-text sm:text-6xl">
+          Najprościej zadzwonić
+        </h1>
         <a
           href="tel:+48123456789"
-          class="mt-4 inline-flex items-center gap-3 text-3xl font-bold text-primary-dark transition-colors hover:text-accent focus:outline-none focus:ring-2 focus:ring-accent/50 focus:ring-offset-2 sm:text-4xl"
-          aria-label="Zadzwoń pod numer +48 123 456 789"
+          class="mt-6 block font-serif text-3xl tracking-[-0.02em] tabular-nums text-text transition-colors hover:text-primary-dark sm:text-[46px]"
         >
-          <span class="flex h-14 w-14 items-center justify-center rounded-full bg-accent text-2xl text-white" aria-hidden="true">
-            📞
-          </span>
           +48 123 456 789
         </a>
-        <p class="mt-4 text-sm text-text/60">
-          Pon–Pt: 7:00–18:00 | Sob: 8:00–14:00
+        <p class="mt-2.5 max-w-[52ch] text-[15px] leading-[1.7] text-text-secondary">
+          Pon–Pt 7:00–18:00 · Sob 8:00–14:00. Jeśli nie odbieramy, jesteśmy na dachu — oddzwaniamy tego samego
+          dnia.
         </p>
+
+        <div class="mt-10 grid grid-cols-1 border-t border-hairline">
+          {companyInfo.map((row) => (
+            <div class="border-b border-hairline py-[18px]">
+              <p class="text-[11px] tracking-[0.16em] text-text-muted uppercase">{row.label}</p>
+              <p class="mt-1.5 text-base text-text">{row.value}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Formularz kontaktowy -->
+      <div class="py-10 lg:py-[52px] lg:pl-16">
+        <h2 class="text-2xl leading-[1.1] text-text sm:text-4xl">Albo napisz</h2>
+        <p class="mt-2 max-w-[52ch] text-[14.5px] leading-[1.7] text-text-secondary">
+          Trzy pola. Jeśli chcesz konkretną cenę, przejdź od razu do{' '}
+          <a href="/wycena" class="text-primary-dark underline decoration-1 underline-offset-[3px] hover:text-accent">
+            wyceny online
+          </a>.
+        </p>
+
+        <form class="mt-[30px] grid max-w-[520px] gap-5" action="#" method="POST" aria-label="Formularz kontaktowy">
+          <div>
+            <label for="contact-imie" class="mb-2 block text-xs tracking-[0.1em] text-text-muted uppercase">
+              Imię
+            </label>
+            <input
+              type="text"
+              id="contact-imie"
+              name="imie"
+              required
+              autocomplete="name"
+              placeholder="Jan Kowalski"
+              class="w-full rounded-[4px] border border-text/20 bg-transparent px-3.5 py-2.5 font-sans text-base text-text transition-colors focus:border-primary focus:outline-none"
+            />
+          </div>
+          <div>
+            <label for="contact-telefon" class="mb-2 block text-xs tracking-[0.1em] text-text-muted uppercase">
+              Telefon
+            </label>
+            <input
+              type="tel"
+              id="contact-telefon"
+              name="telefon"
+              required
+              autocomplete="tel"
+              placeholder="600 000 000"
+              class="w-full rounded-[4px] border border-text/20 bg-transparent px-3.5 py-2.5 font-sans text-base tabular-nums text-text transition-colors focus:border-primary focus:outline-none"
+            />
+          </div>
+          <div>
+            <label for="contact-wiadomosc" class="mb-2 block text-xs tracking-[0.1em] text-text-muted uppercase">
+              Wiadomość
+            </label>
+            <textarea
+              id="contact-wiadomosc"
+              name="wiadomosc"
+              required
+              rows={5}
+              placeholder="Czego dotyczy sprawa?"
+              class="w-full resize-y rounded-[4px] border border-text/20 bg-transparent px-4 py-3.5 font-sans text-[15px] text-text transition-colors focus:border-primary focus:outline-none"
+            ></textarea>
+          </div>
+
+          <!-- Honeypot — ukryte pole, boty je wypełnią -->
+          <div class="hidden" aria-hidden="true">
+            <label for="contact-website">Website</label>
+            <input type="text" id="contact-website" name="website" tabindex="-1" autocomplete="off" />
+          </div>
+
+          <button
+            type="submit"
+            class="justify-self-start rounded-[4px] bg-ink px-7 py-[15px] font-serif text-base text-background transition-colors hover:bg-ink-hover"
+          >
+            Wyślij wiadomość
+          </button>
+        </form>
       </div>
     </div>
   </section>
 
-  <!-- Formularz kontaktowy (reuse ContactSection) -->
-  <ContactSection />
-
-  <!-- Mapa obszaru działania (reuse ServiceAreaMap) -->
-  <ServiceAreaMap />
-
-  <!-- Dane firmy -->
-  <section class="px-4 py-16 sm:px-6 lg:px-8" aria-labelledby="business-info-heading">
-    <div class="mx-auto max-w-3xl">
-      <h2 id="business-info-heading" class="text-2xl font-bold text-text">Dane firmy</h2>
-
-      <dl class="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
-        <div>
-          <dt class="text-sm font-medium text-text/60">Firma</dt>
-          <dd class="mt-1 text-base text-text">CalkaWood — Wojciech Całka</dd>
-        </div>
-        <div>
-          <dt class="text-sm font-medium text-text/60">Forma prawna</dt>
-          <dd class="mt-1 text-base text-text">Jednoosobowa działalność gospodarcza (JDG)</dd>
-        </div>
-        <div>
-          <dt class="text-sm font-medium text-text/60">Region</dt>
-          <dd class="mt-1 text-base text-text">Województwo podkarpackie — Rzeszów, Krosno i okolice</dd>
-        </div>
-        <div>
-          <dt class="text-sm font-medium text-text/60">Telefon</dt>
-          <dd class="mt-1 text-base text-text">
-            <a href="tel:+48123456789" class="text-primary-dark hover:text-accent transition-colors">
-              +48 123 456 789
-            </a>
-          </dd>
-        </div>
-        <div>
-          <dt class="text-sm font-medium text-text/60">Godziny pracy</dt>
-          <dd class="mt-1 text-base text-text">Pon–Pt: 7:00–18:00 | Sob: 8:00–14:00</dd>
-        </div>
-        <div>
-          <dt class="text-sm font-medium text-text/60">Usługi</dt>
-          <dd class="mt-1 text-base text-text">Stolarka na wymiar, tarasy, podłogi, budowa szkieletowa</dd>
-        </div>
-      </dl>
-    </div>
+  <section class="border-t border-hairline bg-surface">
+    <ServiceAreaMap
+      heading="Gdzie dojeżdżamy"
+      intro="Podkarpackie, małopolskie, świętokrzyskie i lubelskie. Promień około 180 km od Rzeszowa — przy domach i saunach dalej."
+    />
   </section>
 </PageLayout>

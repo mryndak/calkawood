@@ -1,0 +1,43 @@
+---
+// Treść robocza — README nie podaje gotowych opisów kroków, tylko układ.
+// Do akceptacji/edycji przez klienta przed publikacją.
+const steps = [
+  {
+    number: '01',
+    title: 'Rozmowa i pomiar',
+    description: 'Telefon albo wizyta na miejscu. Ustalamy zakres, materiał i wstępny budżet.',
+  },
+  {
+    number: '02',
+    title: 'Wycena i projekt',
+    description: 'W 24 h dostajesz widełki cenowe. Po akceptacji przygotowujemy szczegółowy projekt.',
+  },
+  {
+    number: '03',
+    title: 'Materiał i przygotowanie',
+    description: 'Wybieramy drewno, zamawiamy materiał, planujemy harmonogram ekipy.',
+  },
+  {
+    number: '04',
+    title: 'Realizacja',
+    description: 'Jedna budowa na raz. Pracujemy do końca, bez rozciągania w czasie.',
+  },
+  {
+    number: '05',
+    title: 'Odbiór i gwarancja',
+    description: 'Sprzątamy plac budowy, przekazujemy dokumentację i gwarancję na konstrukcję.',
+  },
+];
+---
+
+<section class="bg-dark px-4 py-20 sm:px-6 lg:px-8 sm:py-28" aria-label="Proces współpracy">
+  <div class="mx-auto grid max-w-7xl grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-5 lg:divide-x lg:divide-hairline-dark">
+    {steps.map((step) => (
+      <div class="lg:px-6 lg:first:pl-0 lg:last:pr-0">
+        <p class="font-serif text-3xl text-dark-accent">{step.number}</p>
+        <h3 class="mt-2 font-serif text-2xl text-dark-text">{step.title}</h3>
+        <p class="mt-2 text-sm leading-relaxed text-dark-text-secondary">{step.description}</p>
+      </div>
+    ))}
+  </div>
+</section>

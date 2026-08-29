@@ -8,15 +8,11 @@ import { resolve } from 'node:path';
 
 /**
  * Public page routes and their corresponding source files.
- * Every public page MUST use PageLayout or ServiceLayout,
- * both of which include Navigation.astro (with tel: CTA) and Footer.astro (with tel: CTA).
+ * Every public page MUST use PageLayout, which includes Navigation.astro
+ * (with tel: CTA) and Footer.astro (with tel: CTA).
  */
 const PUBLIC_PAGES = [
   { route: '/', file: 'src/pages/index.astro' },
-  { route: '/uslugi/stolarka-na-wymiar', file: 'src/pages/uslugi/stolarka-na-wymiar.astro' },
-  { route: '/uslugi/tarasy', file: 'src/pages/uslugi/tarasy.astro' },
-  { route: '/uslugi/podlogi-i-wnetrza', file: 'src/pages/uslugi/podlogi-i-wnetrza.astro' },
-  { route: '/uslugi/budowa-szkieletowa', file: 'src/pages/uslugi/budowa-szkieletowa.astro' },
   { route: '/realizacje', file: 'src/pages/realizacje.astro' },
   { route: '/wycena', file: 'src/pages/wycena.astro' },
   { route: '/o-mnie', file: 'src/pages/o-mnie.astro' },
@@ -60,15 +56,13 @@ describe('Property 10: Phone CTA accessible on every public page', () => {
   });
 
   // Property: For any public route, the page source imports a layout that includes Navigation + Footer
-  it('every public page uses PageLayout or ServiceLayout (which include phone CTA components)', () => {
+  it('every public page uses PageLayout (which includes phone CTA components)', () => {
     fc.assert(
       fc.property(
         fc.constantFrom(...PUBLIC_PAGES),
         (page) => {
           const source = readSource(page.file);
-          const usesLayoutWithPhoneCTA =
-            source.includes('PageLayout') || source.includes('ServiceLayout');
-          expect(usesLayoutWithPhoneCTA).toBe(true);
+          expect(source.includes('PageLayout')).toBe(true);
         }
       ),
       { numRuns: 100 }
@@ -102,8 +96,7 @@ describe('Property 10: Phone CTA accessible on every public page', () => {
         fc.constantFrom(...PUBLIC_PAGES),
         (page) => {
           const source = readSource(page.file);
-          const usesLayout =
-            source.includes('PageLayout') || source.includes('ServiceLayout');
+          const usesLayout = source.includes('PageLayout');
 
           // If page uses a layout, it inherits Navigation + Footer with tel: links
           if (usesLayout) {

@@ -1,16 +1,18 @@
 import type { QuoteRequest, ServiceCategory } from './quote-validation';
+import type { EstimateMaterial, EstimateTerm } from './estimate';
 
 export type QuoteStatus = 'nowe' | 'w trakcie' | 'wycenione' | 'odrzucone';
 
 export interface QuoteRequestRow {
   id: number;
   usluga: ServiceCategory;
-  opis: string;
+  powierzchnia: number;
+  material: EstimateMaterial;
+  termin: EstimateTerm;
+  opis: string | null;
   telefon: string;
   imie: string;
   email: string;
-  powiat: string | null;
-  wymiary: string | null;
   status: QuoteStatus;
   zdjecia: string[];
   ip_address: string | null;

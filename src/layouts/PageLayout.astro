@@ -2,6 +2,7 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Navigation from '@/components/ui/Navigation.astro';
 import Footer from '@/components/ui/Footer.astro';
+import MobileActionBar from '@/components/ui/MobileActionBar.astro';
 
 interface Props {
   title: string;
@@ -26,4 +27,5 @@ const { title, description, canonical, ogImage, structuredData } = Astro.props;
     <slot />
   </main>
   <Footer />
+  <MobileActionBar />
 </BaseLayout>

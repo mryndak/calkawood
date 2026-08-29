@@ -1,269 +1,208 @@
 // Directive: client:visible
-// QuoteForm — React island wielokrokowy formularz wyceny online
+// QuoteForm — React island, sześciokrokowy kreator wyceny z widełkami cenowymi na żywo
 // Validates: Requirements 5.1–5.10, 8.3, 13.4, 15.1
 
-import { useState, useCallback, useRef } from 'react';
-import { z } from 'zod';
+import { useState, useCallback, useMemo, useRef } from 'react';
+import { CircleCheck, Info } from 'lucide-react';
+import { quoteRequestSchema } from '@/lib/quote-validation';
 import {
-  quoteRequestSchema,
-  type ServiceCategory,
-} from '@/lib/quote-validation';
+  TERMS,
+  MIN_AREA,
+  MAX_AREA,
+  AREA_STEP,
+  SERVICE_LABELS,
+  MATERIAL_LABELS,
+  TERM_LABELS,
+  estimateRange,
+  formatEstimateRange,
+  type EstimateService,
+  type EstimateMaterial,
+  type EstimateTerm,
+} from '@/lib/estimate';
 import PhotoUpload from './PhotoUpload';
 
-// --- Types ---
+// --- Dane opcji kroków (tytuł + opis wg makiety) ---
 
-interface QuoteFormProps {
-  services: Array<{ id: string; label: string }>;
-  maxFiles: number;
-  maxFileSize: number; // bytes
-}
+const USLUGA_OPTIONS: Array<{ value: EstimateService; desc: string }> = [
+  { value: 'domy', desc: 'szkieletowy lub z bali' },
+  { value: 'sauna', desc: 'ogrodowa, barrel, domowa' },
+  { value: 'taras', desc: 'drewno lub kompozyt' },
+  { value: 'zadaszenie', desc: 'wiata, podcień, carport' },
+  { value: 'wnetrza', desc: 'deska, schody, zabudowa' },
+];
+
+const MATERIAL_OPTIONS: Array<{ value: EstimateMaterial; desc: string }> = [
+  { value: 'sosna', desc: 'najtańsza, wymaga olejowania co 2 lata' },
+  { value: 'modrzew', desc: 'twardy, żywiczny, klasa trwałości 3' },
+  { value: 'kompozyt', desc: 'bez konserwacji, stabilny kolor' },
+  { value: 'dab', desc: 'najwyższa trwałość i cena' },
+];
+
+const TERMIN_OPTIONS: EstimateTerm[] = [...TERMS];
+
+const TOTAL_STEPS = 6;
+
+// --- Typy ---
 
 interface FormData {
-  usluga: ServiceCategory | '';
-  opis: string;
+  usluga: EstimateService | '';
+  powierzchnia: number;
+  material: EstimateMaterial | '';
+  termin: EstimateTerm | '';
   zdjecia: File[];
-  wymiary: string;
+  opis: string; // opis miejsca — krok 5, opcjonalny
   imie: string;
   telefon: string;
   email: string;
-  powiat: string;
   zgoda_rodo: boolean;
   website: string; // honeypot
 }
 
 type FieldErrors = Partial<Record<keyof FormData, string>>;
 
-// --- Constants ---
+const INITIAL_DATA: FormData = {
+  usluga: '',
+  powierzchnia: 38,
+  material: '',
+  termin: '',
+  zdjecia: [],
+  opis: '',
+  imie: '',
+  telefon: '',
+  email: '',
+  zgoda_rodo: false,
+  website: '',
+};
 
-const TOTAL_STEPS = 6;
-
-const POWIATY = [
-  'brzozowski',
-  'dębicki',
-  'jasielski',
-  'łańcucki',
-  'ropczycko-sędziszowski',
-  'rzeszowski',
-  'strzyżowski',
-  'Rzeszów (miasto)',
-  'Krosno (miasto)',
-];
-
-
-
-// --- Helpers ---
-
-function getStepLabel(step: number): string {
-  const labels: Record<number, string> = {
-    1: 'Usługa',
-    2: 'Opis',
-    3: 'Zdjęcia',
-    4: 'Wymiary',
-    5: 'Dane kontaktowe',
-    6: 'Podsumowanie',
-  };
-  return labels[step] ?? '';
+interface QuoteFormProps {
+  maxFiles: number;
+  maxFileSize: number;
 }
-
-
-// --- Step validation schemas ---
 
 function validateStep(step: number, data: FormData): FieldErrors {
   const errors: FieldErrors = {};
-
   switch (step) {
-    case 1: {
-      if (!data.usluga) {
-        errors.usluga = 'Wybierz rodzaj usługi.';
-      }
+    case 1:
+      if (!data.usluga) errors.usluga = 'Wybierz, co planujesz zbudować.';
       break;
-    }
-    case 2: {
-      if (!data.opis.trim()) {
-        errors.opis = 'Podaj opis zlecenia.';
-      } else if (data.opis.trim().length < 20) {
-        errors.opis = 'Opis musi mieć minimum 20 znaków.';
-      }
+    case 3:
+      if (!data.material) errors.material = 'Wybierz materiał.';
       break;
-    }
-    case 3: {
-      // Photos are optional — no validation required
+    case 4:
+      if (!data.termin) errors.termin = 'Wybierz termin.';
       break;
-    }
-    case 4: {
-      // Dimensions are optional — no validation required
-      break;
-    }
-    case 5: {
-      if (!data.imie.trim()) {
-        errors.imie = 'Podaj imię.';
-      } else if (data.imie.trim().length < 2) {
-        errors.imie = 'Imię musi mieć minimum 2 znaki.';
-      }
-
-      if (!data.telefon.trim()) {
-        errors.telefon = 'Podaj numer telefonu.';
-      } else if (!/^\+?48?\s?\d{3}\s?\d{3}\s?\d{3}$/.test(data.telefon.trim())) {
-        errors.telefon = 'Nieprawidłowy numer telefonu.';
-      }
-
-      if (!data.email.trim()) {
-        errors.email = 'Podaj adres e-mail.';
-      } else {
-        const emailResult = z.string().email().safeParse(data.email.trim());
-        if (!emailResult.success) {
-          errors.email = 'Nieprawidłowy adres e-mail.';
-        }
-      }
-
-      if (!data.zgoda_rodo) {
-        errors.zgoda_rodo = 'Wymagana zgoda na przetwarzanie danych.';
-      }
-      break;
-    }
     case 6: {
-      // Full validation before submit
       const result = quoteRequestSchema.safeParse({
         usluga: data.usluga,
-        opis: data.opis.trim(),
+        powierzchnia: data.powierzchnia,
+        material: data.material,
+        termin: data.termin,
+        opis: data.opis.trim() || undefined,
         telefon: data.telefon.trim(),
         imie: data.imie.trim(),
         email: data.email.trim(),
-        powiat: data.powiat || undefined,
         zgoda_rodo: data.zgoda_rodo,
-        wymiary: data.wymiary.trim() || undefined,
         website: data.website,
       });
       if (!result.success) {
         for (const issue of result.error.issues) {
           const field = issue.path[0] as keyof FormData;
-          if (!errors[field]) {
-            errors[field] = issue.message;
-          }
+          if (!errors[field]) errors[field] = issue.message;
         }
       }
       break;
     }
   }
-
   return errors;
 }
 
-// --- Component ---
-
-export default function QuoteForm({ services, maxFiles, maxFileSize }: QuoteFormProps) {
-  const [currentStep, setCurrentStep] = useState(1);
-  const [formData, setFormData] = useState<FormData>({
-    usluga: '',
-    opis: '',
-    zdjecia: [],
-    wymiary: '',
-    imie: '',
-    telefon: '',
-    email: '',
-    powiat: '',
-    zgoda_rodo: false,
-    website: '',
-  });
-  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
+export default function QuoteForm({ maxFiles, maxFileSize }: QuoteFormProps) {
+  const [step, setStep] = useState(1);
+  const [data, setData] = useState<FormData>(INITIAL_DATA);
+  const [errors, setErrors] = useState<FieldErrors>({});
   const [globalError, setGlobalError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
-
-  const formRef = useRef<HTMLFormElement>(null);
+  const [isSent, setIsSent] = useState(false);
   const announceRef = useRef<HTMLDivElement>(null);
 
-  // --- Handlers ---
-
-  const updateField = useCallback(<K extends keyof FormData>(field: K, value: FormData[K]) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-    // Clear field error on change
-    setFieldErrors((prev) => {
-      if (prev[field]) {
-        const next = { ...prev };
-        delete next[field];
-        return next;
-      }
-      return prev;
+  const update = useCallback(<K extends keyof FormData>(field: K, value: FormData[K]) => {
+    setData((prev) => ({ ...prev, [field]: value }));
+    setErrors((prev) => {
+      if (!prev[field]) return prev;
+      const next = { ...prev };
+      delete next[field];
+      return next;
     });
   }, []);
 
   const goNext = useCallback(() => {
-    const errors = validateStep(currentStep, formData);
-    if (Object.keys(errors).length > 0) {
-      setFieldErrors(errors);
+    const stepErrors = validateStep(step, data);
+    if (Object.keys(stepErrors).length > 0) {
+      setErrors(stepErrors);
       return;
     }
-    setFieldErrors({});
-    setCurrentStep((s) => Math.min(s + 1, TOTAL_STEPS));
-  }, [currentStep, formData]);
+    setErrors({});
+    setStep((s) => Math.min(TOTAL_STEPS, s + 1));
+  }, [step, data]);
 
-  const goBack = useCallback(() => {
-    setFieldErrors({});
+  const goPrev = useCallback(() => {
+    setErrors({});
     setGlobalError(null);
-    setCurrentStep((s) => Math.max(s - 1, 1));
+    setStep((s) => Math.max(1, s - 1));
+  }, []);
+
+  const restart = useCallback(() => {
+    setData(INITIAL_DATA);
+    setErrors({});
+    setGlobalError(null);
+    setIsSent(false);
+    setStep(1);
   }, []);
 
   const handleSubmit = useCallback(async () => {
-    // Full validation
-    const errors = validateStep(6, formData);
-    if (Object.keys(errors).length > 0) {
-      setFieldErrors(errors);
+    const stepErrors = validateStep(6, data);
+    if (Object.keys(stepErrors).length > 0) {
+      setErrors(stepErrors);
       return;
     }
 
     setIsSubmitting(true);
     setGlobalError(null);
-    setFieldErrors({});
+    setErrors({});
 
     try {
       const body = new FormData();
-      body.append('usluga', formData.usluga);
-      body.append('opis', formData.opis.trim());
-      body.append('telefon', formData.telefon.trim());
-      body.append('imie', formData.imie.trim());
-      body.append('email', formData.email.trim());
+      body.append('usluga', data.usluga);
+      body.append('powierzchnia', String(data.powierzchnia));
+      body.append('material', data.material);
+      body.append('termin', data.termin);
+      body.append('telefon', data.telefon.trim());
+      body.append('imie', data.imie.trim());
+      body.append('email', data.email.trim());
       body.append('zgoda_rodo', 'true');
-      body.append('website', formData.website); // honeypot
+      body.append('website', data.website);
+      if (data.opis.trim()) body.append('opis', data.opis.trim());
+      for (const file of data.zdjecia) body.append('zdjecia', file);
 
-      if (formData.powiat) {
-        body.append('powiat', formData.powiat);
-      }
-      if (formData.wymiary.trim()) {
-        body.append('wymiary', formData.wymiary.trim());
-      }
-
-      for (const file of formData.zdjecia) {
-        body.append('zdjecia', file);
-      }
-
-      const response = await fetch('/api/wycena', {
-        method: 'POST',
-        body,
-      });
+      const response = await fetch('/api/wycena', { method: 'POST', body });
 
       if (response.ok) {
-        setIsSuccess(true);
+        setIsSent(true);
         return;
       }
 
       if (response.status === 400) {
-        const data = await response.json();
-        // API zwraca błędy pól pod kluczem `errors` (Zod flatten → string[] na pole)
-        if (data.errors && typeof data.errors === 'object') {
+        const payload = await response.json();
+        if (payload.errors && typeof payload.errors === 'object') {
           const serverErrors: FieldErrors = {};
-          for (const [key, msg] of Object.entries(data.errors)) {
+          for (const [key, msg] of Object.entries(payload.errors)) {
             const message = Array.isArray(msg) ? msg[0] : msg;
-            if (typeof message === 'string') {
-              serverErrors[key as keyof FormData] = message;
-            }
+            if (typeof message === 'string') serverErrors[key as keyof FormData] = message;
           }
-          setFieldErrors(serverErrors);
-          // Jeśli błąd dotyczy wcześniejszego kroku, cofnij do kroku z danymi kontaktowymi
+          setErrors(serverErrors);
           setGlobalError('Formularz zawiera błędy. Popraw zaznaczone pola.');
         } else {
-          // Błędy ogólne (np. walidacja plików) API zwraca pod kluczem `error`
-          setGlobalError(data.error ?? 'Formularz zawiera błędy. Popraw zaznaczone pola.');
+          setGlobalError(payload.error ?? 'Formularz zawiera błędy. Popraw zaznaczone pola.');
         }
         return;
       }
@@ -279,566 +218,483 @@ export default function QuoteForm({ services, maxFiles, maxFileSize }: QuoteForm
     } finally {
       setIsSubmitting(false);
     }
-  }, [formData]);
+  }, [data]);
 
-  // --- Success screen ---
+  // Widełki cenowe — liczone na żywo, z sensownym fallbackiem zanim usługa/materiał są wybrane
+  const range = useMemo(
+    () =>
+      estimateRange(
+        (data.usluga || 'taras') as EstimateService,
+        data.powierzchnia,
+        (data.material || 'sosna') as EstimateMaterial
+      ),
+    [data.usluga, data.powierzchnia, data.material]
+  );
 
-  if (isSuccess) {
-    return (
-      <div className="rounded-xl bg-accent/10 border border-accent/30 p-8 text-center" role="status" aria-live="polite">
-        <svg className="mx-auto h-12 w-12 text-accent mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-        </svg>
-        <h2 className="text-2xl font-bold text-primary-dark mb-2">Dziękujemy!</h2>
-        <p className="text-text/80 text-lg">Otrzymaliśmy Twoje zapytanie. Odpowiemy w ciągu 24 godzin.</p>
-      </div>
-    );
+  if (isSent) {
+    return <SentScreen onRestart={restart} />;
   }
 
-  // --- Render ---
+  const progressPct = Math.round((step / TOTAL_STEPS) * 100);
 
   return (
-    <form
-      ref={formRef}
-      onSubmit={(e) => {
-        e.preventDefault();
-        if (currentStep === TOTAL_STEPS) {
-          handleSubmit();
-        } else {
-          goNext();
-        }
-      }}
-      noValidate
-      className="w-full max-w-2xl mx-auto"
-    >
-      {/* Live region for announcements */}
-      <div ref={announceRef} aria-live="polite" aria-atomic="true" className="sr-only">
-        Krok {currentStep} z {TOTAL_STEPS}: {getStepLabel(currentStep)}
-      </div>
-
-      {/* Progress indicator */}
-      <ProgressIndicator currentStep={currentStep} totalSteps={TOTAL_STEPS} />
-
-      {/* Global error */}
-      {globalError && (
-        <div
-          role="alert"
-          className="mb-6 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-red-800 text-sm"
-        >
-          {globalError}
+    <div className="bg-surface border-b border-hairline">
+      <div className="mx-auto max-w-7xl px-4 pt-16 sm:px-10 sm:pt-[70px]">
+        <div className="flex flex-wrap items-end justify-between gap-6">
+          <div>
+            <p className="kicker">Wycena online</p>
+            <h1 className="mt-4 text-4xl leading-none tracking-[-0.025em] text-text sm:text-6xl">
+              Sześć pytań, przedział ceny od razu
+            </h1>
+          </div>
+          <span className="text-[13px] tracking-[0.12em] text-text-muted uppercase tabular-nums">
+            Krok {step} z {TOTAL_STEPS}
+          </span>
         </div>
-      )}
-
-      {/* Steps */}
-      <div className="min-h-[320px]">
-        {currentStep === 1 && (
-          <StepService
-            value={formData.usluga}
-            services={services}
-            error={fieldErrors.usluga}
-            onChange={(val) => updateField('usluga', val)}
+        <div className="mt-[38px] h-0.5 bg-text/[0.14]">
+          <div
+            className="h-0.5 bg-primary transition-[width] duration-[350ms] ease-out"
+            style={{ width: `${progressPct}%` }}
           />
-        )}
-        {currentStep === 2 && (
-          <StepDescription
-            value={formData.opis}
-            error={fieldErrors.opis}
-            onChange={(val) => updateField('opis', val)}
-          />
-        )}
-        {currentStep === 3 && (
-          <StepPhotos
-            files={formData.zdjecia}
-            maxFiles={maxFiles}
-            maxFileSize={maxFileSize}
-            onChange={(files) => updateField('zdjecia', files)}
-          />
-        )}
-        {currentStep === 4 && (
-          <StepDimensions
-            value={formData.wymiary}
-            onChange={(val) => updateField('wymiary', val)}
-          />
-        )}
-        {currentStep === 5 && (
-          <StepContact
-            data={formData}
-            errors={fieldErrors}
-            onChange={updateField}
-          />
-        )}
-        {currentStep === 6 && (
-          <StepSummary data={formData} services={services} errors={fieldErrors} />
-        )}
+        </div>
       </div>
 
-      {/* Navigation */}
-      <div className="flex items-center justify-between mt-8 pt-6 border-t border-primary/10">
-        {currentStep > 1 ? (
-          <button
-            type="button"
-            onClick={goBack}
-            className="inline-flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-medium text-primary-dark hover:bg-primary/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-          >
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-            Wstecz
-          </button>
-        ) : (
-          <span />
-        )}
+      <div ref={announceRef} aria-live="polite" aria-atomic="true" className="sr-only">
+        Krok {step} z {TOTAL_STEPS}
+      </div>
 
-        {currentStep < TOTAL_STEPS ? (
-          <button
-            type="submit"
-            className="inline-flex items-center gap-2 rounded-lg bg-ink px-6 py-2.5 text-sm font-semibold text-white hover:bg-ink-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cta focus-visible:ring-offset-2"
-          >
-            Dalej
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
-        ) : (
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="inline-flex items-center gap-2 rounded-lg bg-ink px-6 py-2.5 text-sm font-semibold text-white hover:bg-ink-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cta focus-visible:ring-offset-2"
-          >
-            {isSubmitting ? (
-              <>
-                <svg className="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24" aria-hidden="true">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                </svg>
-                Wysyłanie...
-              </>
-            ) : (
-              'Wyślij zapytanie'
+      <div className="mx-auto max-w-7xl px-4 pb-16 sm:px-10 sm:pb-[90px] grid grid-cols-1 gap-10 lg:grid-cols-[1.5fr_0.85fr] lg:items-start lg:gap-[60px]">
+        {/* Lewa kolumna — pytanie kroku */}
+        <div className="pt-10 sm:pt-14 min-h-[420px]">
+          {globalError && (
+            <div role="alert" className="mb-6 border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-800">
+              {globalError}
+            </div>
+          )}
+
+          {step === 1 && (
+            <StepChoice
+              heading="Co planujesz zbudować?"
+              hint="Wybierz najbliższą kategorię. Jeśli chodzi o kilka rzeczy naraz, dopiszesz to w kroku piątym."
+              error={errors.usluga}
+            >
+              <div className="grid max-w-[560px] gap-3">
+                {USLUGA_OPTIONS.map((opt) => (
+                  <OptionCard
+                    key={opt.value}
+                    selected={data.usluga === opt.value}
+                    onClick={() => update('usluga', opt.value)}
+                    title={SERVICE_LABELS[opt.value]}
+                    desc={opt.desc}
+                    titleSize="text-[23px]"
+                  />
+                ))}
+              </div>
+            </StepChoice>
+          )}
+
+          {step === 2 && (
+            <StepChoice
+              heading="Jaka powierzchnia?"
+              hint="Przybliżenie wystarczy — dokładny obmiar robimy na miejscu i wtedy cena się doprecyzowuje."
+            >
+              <div className="max-w-[560px]">
+                <div className="mb-[30px] flex items-baseline gap-2.5">
+                  <span className="font-serif text-6xl tracking-[-0.03em] tabular-nums text-text sm:text-[86px]">
+                    {data.powierzchnia}
+                  </span>
+                  <span className="font-serif text-2xl text-text-muted sm:text-3xl">m²</span>
+                </div>
+                <input
+                  type="range"
+                  min={MIN_AREA}
+                  max={MAX_AREA}
+                  step={AREA_STEP}
+                  value={data.powierzchnia}
+                  onChange={(e) => update('powierzchnia', Number(e.target.value))}
+                  className="quote-range w-full"
+                  aria-label="Powierzchnia w metrach kwadratowych"
+                />
+                <div className="mt-3.5 flex justify-between text-xs tabular-nums text-text-muted">
+                  <span>{MIN_AREA} m²</span>
+                  <span>{MAX_AREA} m²</span>
+                </div>
+              </div>
+            </StepChoice>
+          )}
+
+          {step === 3 && (
+            <StepChoice
+              heading="Jakie drewno albo materiał?"
+              hint="Materiał ma największy wpływ na cenę i na to, ile pracy wymaga później. Możemy też pokazać próbki na miejscu."
+              error={errors.material}
+            >
+              <div className="grid max-w-[560px] gap-3">
+                {MATERIAL_OPTIONS.map((opt) => (
+                  <OptionCard
+                    key={opt.value}
+                    selected={data.material === opt.value}
+                    onClick={() => update('material', opt.value)}
+                    title={MATERIAL_LABELS[opt.value]}
+                    desc={opt.desc}
+                    titleSize="text-xl"
+                  />
+                ))}
+              </div>
+            </StepChoice>
+          )}
+
+          {step === 4 && (
+            <StepChoice
+              heading="Kiedy chcesz zacząć?"
+              hint="Terminy na tarasy zamykamy zwykle do końca marca. Domy planujemy z półrocznym wyprzedzeniem."
+              error={errors.termin}
+            >
+              <div className="grid max-w-[520px] gap-2.5">
+                {TERMIN_OPTIONS.map((value) => (
+                  <button
+                    key={value}
+                    type="button"
+                    onClick={() => update('termin', value)}
+                    className={`w-full rounded-[4px] border px-[22px] py-[18px] text-left font-serif text-lg transition-colors ${
+                      data.termin === value ? 'border-primary text-primary-dark' : 'border-text/18 text-text hover:border-primary/50'
+                    }`}
+                  >
+                    {TERM_LABELS[value]}
+                  </button>
+                ))}
+              </div>
+            </StepChoice>
+          )}
+
+          {step === 5 && (
+            <StepChoice
+              heading="Pokaż nam miejsce"
+              hint="Dwa, trzy zdjęcia działki lub ściany wystarczą, żeby wycena była bliska prawdy. To krok opcjonalny."
+            >
+              <div className="max-w-[620px]">
+                <PhotoUpload
+                  files={data.zdjecia}
+                  onFilesChange={(files) => update('zdjecia', files)}
+                  maxFiles={maxFiles}
+                  maxFileSize={maxFileSize}
+                />
+                <div className="mt-6">
+                  <label htmlFor="quote-opis" className="mb-2 block text-xs tracking-[0.1em] text-text-muted uppercase">
+                    Opis miejsca — nieobowiązkowo
+                  </label>
+                  <textarea
+                    id="quote-opis"
+                    rows={4}
+                    value={data.opis}
+                    onChange={(e) => update('opis', e.target.value)}
+                    placeholder="np. taras na skarpie, wyjście z salonu, obok jest jacuzzi"
+                    className="w-full resize-y rounded-[4px] border border-text/20 bg-transparent px-4 py-3.5 font-sans text-[15px] text-text transition-colors focus:border-primary focus:outline-none"
+                  />
+                </div>
+              </div>
+            </StepChoice>
+          )}
+
+          {step === 6 && (
+            <StepChoice
+              heading="Gdzie wysłać wycenę?"
+              hint="Ofertę dostajesz mailem, a przy pytaniach dzwonimy. Nie zapisujemy nikogo do newslettera."
+            >
+              <div className="grid max-w-[520px] gap-5">
+                <Field label="Imię i nazwisko" error={errors.imie}>
+                  <input
+                    type="text"
+                    value={data.imie}
+                    onChange={(e) => update('imie', e.target.value)}
+                    placeholder="Jan Kowalski"
+                    autoComplete="name"
+                    className={inputClass(!!errors.imie)}
+                  />
+                </Field>
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <Field label="Telefon" error={errors.telefon}>
+                    <input
+                      type="tel"
+                      value={data.telefon}
+                      onChange={(e) => update('telefon', e.target.value)}
+                      placeholder="600 000 000"
+                      autoComplete="tel"
+                      className={`${inputClass(!!errors.telefon)} tabular-nums`}
+                    />
+                  </Field>
+                  <Field label="E-mail" error={errors.email}>
+                    <input
+                      type="email"
+                      value={data.email}
+                      onChange={(e) => update('email', e.target.value)}
+                      placeholder="jan@example.pl"
+                      autoComplete="email"
+                      className={inputClass(!!errors.email)}
+                    />
+                  </Field>
+                </div>
+                <label className="flex items-start gap-3 text-[12.5px] leading-[1.6] text-text-muted">
+                  <input
+                    type="checkbox"
+                    checked={data.zgoda_rodo}
+                    onChange={(e) => update('zgoda_rodo', e.target.checked)}
+                    className="mt-0.5 h-4 w-4 shrink-0 accent-primary"
+                    aria-invalid={!!errors.zgoda_rodo}
+                  />
+                  <span>
+                    Zgadzam się na kontakt w sprawie tego zapytania. Dane wykorzystujemy tylko do przygotowania
+                    wyceny.
+                  </span>
+                </label>
+                {errors.zgoda_rodo && (
+                  <p role="alert" className="-mt-3 text-sm text-red-700">{errors.zgoda_rodo}</p>
+                )}
+
+                {/* Honeypot */}
+                <div aria-hidden="true" style={{ position: 'absolute', left: '-9999px' }}>
+                  <label htmlFor="quote-website">Website</label>
+                  <input
+                    type="text"
+                    id="quote-website"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    value={data.website}
+                    onChange={(e) => update('website', e.target.value)}
+                  />
+                </div>
+              </div>
+            </StepChoice>
+          )}
+
+          {/* Nawigacja */}
+          <div className="mt-12 flex items-center gap-3.5 border-t border-hairline pt-[26px]">
+            {step > 1 && (
+              <button
+                type="button"
+                onClick={goPrev}
+                className="rounded-[4px] border border-text/22 px-[22px] py-3.5 font-serif text-[15px] text-text transition-colors hover:border-primary"
+              >
+                ← Wstecz
+              </button>
             )}
-          </button>
-        )}
+            {step < TOTAL_STEPS ? (
+              <button
+                type="button"
+                onClick={goNext}
+                className="rounded-[4px] bg-ink px-[30px] py-[15px] font-serif text-base text-background transition-colors hover:bg-ink-hover"
+              >
+                Dalej →
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={handleSubmit}
+                disabled={isSubmitting}
+                className="rounded-[4px] bg-ink px-[30px] py-[15px] font-serif text-base text-background transition-colors hover:bg-ink-hover disabled:opacity-50"
+              >
+                {isSubmitting ? 'Wysyłanie…' : 'Wyślij zapytanie'}
+              </button>
+            )}
+            <a href="tel:+48123456789" className="ml-auto text-[13.5px] text-text-muted">
+              Wolisz porozmawiać? +48 123 456 789
+            </a>
+          </div>
+        </div>
+
+        {/* Prawa kolumna — panel widełek */}
+        <EstimatePanel data={data} range={range} />
       </div>
 
-      {/* Honeypot — hidden from users and assistive tech */}
-      <div aria-hidden="true" style={{ display: 'none' }}>
-        <label htmlFor="quote-website">Website</label>
-        <input
-          type="text"
-          id="quote-website"
-          name="website"
-          tabIndex={-1}
-          autoComplete="off"
-          value={formData.website}
-          onChange={(e) => updateField('website', e.target.value)}
-        />
-      </div>
-    </form>
-  );
-}
-
-
-// --- Sub-components ---
-
-// Progress indicator
-function ProgressIndicator({ currentStep, totalSteps }: { currentStep: number; totalSteps: number }) {
-  return (
-    <div className="mb-8">
-      <div className="flex items-center justify-between mb-2">
-        <span className="text-sm font-medium text-primary-dark">
-          Krok {currentStep} z {totalSteps}
-        </span>
-        <span className="text-sm text-text/60">{getStepLabel(currentStep)}</span>
-      </div>
-      <div className="h-2 w-full rounded-full bg-primary/10" role="progressbar" aria-valuenow={currentStep} aria-valuemin={1} aria-valuemax={totalSteps}>
-        <div
-          className="h-2 rounded-full bg-cta transition-all duration-300"
-          style={{ width: `${(currentStep / totalSteps) * 100}%` }}
-        />
-      </div>
+      <style>{`
+        .quote-range {
+          -webkit-appearance: none;
+          appearance: none;
+          height: 2px;
+          background: rgba(32, 31, 29, 0.16);
+          border-radius: 1px;
+          margin: 8px 0;
+        }
+        .quote-range::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          appearance: none;
+          width: 17px;
+          height: 17px;
+          border-radius: 50%;
+          background: #f3f2f2;
+          border: 1.5px solid var(--color-primary);
+          cursor: pointer;
+        }
+        .quote-range::-moz-range-thumb {
+          width: 17px;
+          height: 17px;
+          border-radius: 50%;
+          background: #f3f2f2;
+          border: 1.5px solid var(--color-primary);
+          cursor: pointer;
+        }
+      `}</style>
     </div>
   );
 }
 
-// Step 1: Service selection
-function StepService({
-  value,
-  services,
+// --- Podkomponenty ---
+
+function StepChoice({
+  heading,
+  hint,
   error,
-  onChange,
+  children,
 }: {
-  value: string;
-  services: Array<{ id: string; label: string }>;
+  heading: string;
+  hint: string;
   error?: string;
-  onChange: (val: ServiceCategory) => void;
+  children: React.ReactNode;
 }) {
   return (
-    <fieldset>
-      <legend className="text-xl font-bold text-primary-dark mb-2">Wybierz rodzaj usługi</legend>
-      <p className="text-text/60 text-sm mb-6">Jaki typ usługi Cię interesuje?</p>
-
+    <div>
+      <h2 className="mb-3 text-3xl leading-[1.05] tracking-[-0.02em] text-text sm:text-[44px]">{heading}</h2>
+      <p className="mb-8 max-w-[56ch] text-[15.5px] leading-[1.7] text-text-secondary">{hint}</p>
       {error && (
-        <p role="alert" id="usluga-error" className="mb-4 text-sm text-red-700">
+        <p role="alert" className="mb-4 text-sm text-red-700">
           {error}
         </p>
       )}
-
-      <div className="grid gap-3 sm:grid-cols-2" role="radiogroup" aria-describedby={error ? 'usluga-error' : undefined}>
-        {services.map((service) => {
-          const isSelected = value === service.id;
-          return (
-            <label
-              key={service.id}
-              className={`relative flex cursor-pointer items-center gap-3 rounded-xl border-2 p-4 transition-all hover:border-cta/50 focus-within:ring-2 focus-within:ring-cta focus-within:ring-offset-2 ${
-                isSelected ? 'border-cta bg-cta/5' : 'border-primary/20 bg-white'
-              }`}
-            >
-              <input
-                type="radio"
-                name="usluga"
-                value={service.id}
-                checked={isSelected}
-                onChange={() => onChange(service.id as ServiceCategory)}
-                className="sr-only"
-                aria-describedby={error ? 'usluga-error' : undefined}
-              />
-              <span
-                className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 ${
-                  isSelected ? 'border-cta bg-cta' : 'border-primary/30'
-                }`}
-                aria-hidden="true"
-              >
-                {isSelected && (
-                  <svg className="h-3 w-3 text-white" fill="currentColor" viewBox="0 0 8 8">
-                    <circle cx="4" cy="4" r="4" />
-                  </svg>
-                )}
-              </span>
-              <span className={`text-sm font-medium ${isSelected ? 'text-primary-dark' : 'text-text'}`}>
-                {service.label}
-              </span>
-            </label>
-          );
-        })}
-      </div>
-    </fieldset>
-  );
-}
-
-// Step 2: Description
-function StepDescription({
-  value,
-  error,
-  onChange,
-}: {
-  value: string;
-  error?: string;
-  onChange: (val: string) => void;
-}) {
-  const charCount = value.trim().length;
-  const minChars = 20;
-
-  return (
-    <div>
-      <h2 className="text-xl font-bold text-primary-dark mb-2">Opisz swoje zlecenie</h2>
-      <p className="text-text/60 text-sm mb-6">Im więcej szczegółów, tym trafniejsza wycena.</p>
-
-      <div>
-        <label htmlFor="quote-opis" className="block text-sm font-medium text-text mb-1.5">
-          Opis zlecenia <span className="text-red-600" aria-hidden="true">*</span>
-        </label>
-        <textarea
-          id="quote-opis"
-          name="opis"
-          rows={5}
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          placeholder="Np. Chcę postawić altanę 4x3m z dachem dwuspadowym w ogrodzie..."
-          aria-required="true"
-          aria-invalid={!!error}
-          aria-describedby={error ? 'opis-error' : 'opis-hint'}
-          className={`w-full rounded-lg border px-4 py-3 text-sm text-text placeholder:text-text/40 resize-y focus:outline-none focus:ring-2 focus:ring-cta focus:border-cta transition-colors ${
-            error ? 'border-red-400 bg-red-50/50' : 'border-primary/20 bg-white'
-          }`}
-        />
-        <div className="mt-1.5 flex items-center justify-between">
-          {error ? (
-            <p id="opis-error" role="alert" className="text-sm text-red-700">
-              {error}
-            </p>
-          ) : (
-            <p id="opis-hint" className="text-xs text-text/50">
-              Minimum {minChars} znaków
-            </p>
-          )}
-          <span
-            className={`text-xs ${charCount < minChars ? 'text-text/50' : 'text-primary-dark'}`}
-            aria-live="polite"
-            aria-atomic="true"
-          >
-            {charCount}/{minChars}
-          </span>
-        </div>
-      </div>
+      {children}
     </div>
   );
 }
 
-// Step 3: Photos — uses PhotoUpload component with drag & drop, previews, compression
-function StepPhotos({
-  files,
-  maxFiles,
-  maxFileSize,
-  onChange,
+function OptionCard({
+  selected,
+  onClick,
+  title,
+  desc,
+  titleSize,
 }: {
-  files: File[];
-  maxFiles: number;
-  maxFileSize: number;
-  onChange: (files: File[]) => void;
+  selected: boolean;
+  onClick: () => void;
+  title: string;
+  desc: string;
+  titleSize: string;
 }) {
-  const maxSizeMB = Math.round(maxFileSize / (1024 * 1024));
-
   return (
-    <div>
-      <h2 className="text-xl font-bold text-primary-dark mb-2">Dodaj zdjęcia (opcjonalnie)</h2>
-      <p className="text-text/60 text-sm mb-6">
-        Zdjęcia pomagają lepiej ocenić zakres prac. Maks. {maxFiles} plików, do {maxSizeMB} MB każdy.
-      </p>
-
-      <PhotoUpload
-        files={files}
-        onFilesChange={onChange}
-        maxFiles={maxFiles}
-        maxFileSize={maxFileSize}
-      />
-    </div>
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={selected}
+      className={`w-full rounded-[4px] border px-6 py-[22px] text-left transition-colors ${
+        selected ? 'border-primary shadow-[inset_0_0_0_1px_var(--color-primary)]' : 'border-text/18 hover:border-primary/50'
+      }`}
+    >
+      <div className={`font-serif ${titleSize} mb-1 text-text`}>{title}</div>
+      <div className="text-[13.5px] text-text-muted">{desc}</div>
+    </button>
   );
 }
 
-// Step 4: Dimensions
-function StepDimensions({
-  value,
-  onChange,
-}: {
-  value: string;
-  onChange: (val: string) => void;
-}) {
+function Field({ label, error, children }: { label: string; error?: string; children: React.ReactNode }) {
   return (
     <div>
-      <h2 className="text-xl font-bold text-primary-dark mb-2">Podaj wymiary (opcjonalnie)</h2>
-      <p className="text-text/60 text-sm mb-6">
-        Jeśli znasz wymiary lub parametry projektu, wpisz je poniżej.
-      </p>
-
-      <div>
-        <label htmlFor="quote-wymiary" className="block text-sm font-medium text-text mb-1.5">
-          Wymiary / parametry
-        </label>
-        <textarea
-          id="quote-wymiary"
-          name="wymiary"
-          rows={4}
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          placeholder="Np. szerokość 4m, głębokość 3m, wysokość 2.5m"
-          className="w-full rounded-lg border border-primary/20 bg-white px-4 py-3 text-sm text-text placeholder:text-text/40 resize-y focus:outline-none focus:ring-2 focus:ring-cta focus:border-cta transition-colors"
-        />
-      </div>
-    </div>
-  );
-}
-
-
-// Step 5: Contact details
-function StepContact({
-  data,
-  errors,
-  onChange,
-}: {
-  data: FormData;
-  errors: FieldErrors;
-  onChange: <K extends keyof FormData>(field: K, value: FormData[K]) => void;
-}) {
-  return (
-    <div>
-      <h2 className="text-xl font-bold text-primary-dark mb-2">Twoje dane kontaktowe</h2>
-      <p className="text-text/60 text-sm mb-6">Potrzebujemy ich, żeby przesłać wycenę.</p>
-
-      <div className="space-y-4">
-        {/* Imię */}
-        <div>
-          <label htmlFor="quote-imie" className="block text-sm font-medium text-text mb-1.5">
-            Imię <span className="text-red-600" aria-hidden="true">*</span>
-          </label>
-          <input
-            type="text"
-            id="quote-imie"
-            name="imie"
-            value={data.imie}
-            onChange={(e) => onChange('imie', e.target.value)}
-            placeholder="Jan"
-            autoComplete="given-name"
-            aria-required="true"
-            aria-invalid={!!errors.imie}
-            aria-describedby={errors.imie ? 'imie-error' : undefined}
-            className={`w-full rounded-lg border px-4 py-2.5 text-sm text-text placeholder:text-text/40 focus:outline-none focus:ring-2 focus:ring-cta focus:border-cta transition-colors ${
-              errors.imie ? 'border-red-400 bg-red-50/50' : 'border-primary/20 bg-white'
-            }`}
-          />
-          {errors.imie && (
-            <p id="imie-error" role="alert" className="mt-1 text-sm text-red-700">{errors.imie}</p>
-          )}
-        </div>
-
-        {/* Telefon */}
-        <div>
-          <label htmlFor="quote-telefon" className="block text-sm font-medium text-text mb-1.5">
-            Numer telefonu <span className="text-red-600" aria-hidden="true">*</span>
-          </label>
-          <input
-            type="tel"
-            id="quote-telefon"
-            name="telefon"
-            value={data.telefon}
-            onChange={(e) => onChange('telefon', e.target.value)}
-            placeholder="+48 123 456 789"
-            autoComplete="tel"
-            aria-required="true"
-            aria-invalid={!!errors.telefon}
-            aria-describedby={errors.telefon ? 'telefon-error' : undefined}
-            className={`w-full rounded-lg border px-4 py-2.5 text-sm text-text placeholder:text-text/40 focus:outline-none focus:ring-2 focus:ring-cta focus:border-cta transition-colors ${
-              errors.telefon ? 'border-red-400 bg-red-50/50' : 'border-primary/20 bg-white'
-            }`}
-          />
-          {errors.telefon && (
-            <p id="telefon-error" role="alert" className="mt-1 text-sm text-red-700">{errors.telefon}</p>
-          )}
-        </div>
-
-        {/* Email */}
-        <div>
-          <label htmlFor="quote-email" className="block text-sm font-medium text-text mb-1.5">
-            Adres e-mail <span className="text-red-600" aria-hidden="true">*</span>
-          </label>
-          <input
-            type="email"
-            id="quote-email"
-            name="email"
-            value={data.email}
-            onChange={(e) => onChange('email', e.target.value)}
-            placeholder="jan@example.pl"
-            autoComplete="email"
-            aria-required="true"
-            aria-invalid={!!errors.email}
-            aria-describedby={errors.email ? 'email-error' : undefined}
-            className={`w-full rounded-lg border px-4 py-2.5 text-sm text-text placeholder:text-text/40 focus:outline-none focus:ring-2 focus:ring-cta focus:border-cta transition-colors ${
-              errors.email ? 'border-red-400 bg-red-50/50' : 'border-primary/20 bg-white'
-            }`}
-          />
-          {errors.email && (
-            <p id="email-error" role="alert" className="mt-1 text-sm text-red-700">{errors.email}</p>
-          )}
-        </div>
-
-        {/* Powiat */}
-        <div>
-          <label htmlFor="quote-powiat" className="block text-sm font-medium text-text mb-1.5">
-            Powiat <span className="text-text/40 text-xs font-normal">(opcjonalnie)</span>
-          </label>
-          <select
-            id="quote-powiat"
-            name="powiat"
-            value={data.powiat}
-            onChange={(e) => onChange('powiat', e.target.value)}
-            className="w-full rounded-lg border border-primary/20 bg-white px-4 py-2.5 text-sm text-text focus:outline-none focus:ring-2 focus:ring-cta focus:border-cta transition-colors"
-          >
-            <option value="">Wybierz powiat (opcjonalnie)</option>
-            {POWIATY.map((p) => (
-              <option key={p} value={p}>{p}</option>
-            ))}
-          </select>
-        </div>
-
-        {/* Zgoda RODO */}
-        <div className="pt-2">
-          <label className="flex items-start gap-3 cursor-pointer">
-            <input
-              type="checkbox"
-              name="zgoda_rodo"
-              checked={data.zgoda_rodo}
-              onChange={(e) => onChange('zgoda_rodo', e.target.checked)}
-              aria-required="true"
-              aria-invalid={!!errors.zgoda_rodo}
-              aria-describedby={errors.zgoda_rodo ? 'rodo-error' : undefined}
-              className="mt-0.5 h-4 w-4 shrink-0 rounded border-primary/30 text-cta focus:ring-cta focus:ring-2"
-            />
-            <span className="text-sm text-text">
-              Zgadzam się na przetwarzanie moich danych osobowych w celu przygotowania wyceny.{' '}
-              <a
-                href="/polityka-prywatnosci"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary-dark underline hover:text-cta transition-colors"
-              >
-                Polityka prywatności
-              </a>
-              {' '}<span className="text-red-600" aria-hidden="true">*</span>
-            </span>
-          </label>
-          {errors.zgoda_rodo && (
-            <p id="rodo-error" role="alert" className="mt-1 ml-7 text-sm text-red-700">{errors.zgoda_rodo}</p>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// Step 6: Summary
-function StepSummary({
-  data,
-  services,
-  errors,
-}: {
-  data: FormData;
-  services: Array<{ id: string; label: string }>;
-  errors: FieldErrors;
-}) {
-  const serviceLabel = services.find((s) => s.id === data.usluga)?.label ?? data.usluga;
-  const hasErrors = Object.keys(errors).length > 0;
-
-  return (
-    <div>
-      <h2 className="text-xl font-bold text-primary-dark mb-2">Sprawdź i wyślij</h2>
-      <p className="text-text/60 text-sm mb-6">Upewnij się, że dane są prawidłowe.</p>
-
-      {hasErrors && (
-        <div role="alert" className="mb-4 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-red-800 text-sm">
-          Formularz zawiera błędy. Wróć do odpowiednich kroków, aby je poprawić.
-        </div>
+      <label className="mb-2 block text-xs tracking-[0.1em] text-text-muted uppercase">{label}</label>
+      {children}
+      {error && (
+        <p role="alert" className="mt-1.5 text-sm text-red-700">
+          {error}
+        </p>
       )}
-
-      <dl className="space-y-3 rounded-xl border border-primary/10 bg-white p-5">
-        <SummaryRow label="Usługa" value={serviceLabel} />
-        <SummaryRow label="Opis" value={data.opis.trim()} />
-        {data.zdjecia.length > 0 && (
-          <SummaryRow label="Zdjęcia" value={`${data.zdjecia.length} plik(ów)`} />
-        )}
-        {data.wymiary.trim() && <SummaryRow label="Wymiary" value={data.wymiary.trim()} />}
-        <SummaryRow label="Imię" value={data.imie.trim()} />
-        <SummaryRow label="Telefon" value={data.telefon.trim()} />
-        <SummaryRow label="E-mail" value={data.email.trim()} />
-        {data.powiat && <SummaryRow label="Powiat" value={data.powiat} />}
-      </dl>
     </div>
   );
 }
 
-function SummaryRow({ label, value }: { label: string; value: string }) {
+function inputClass(hasError: boolean): string {
+  return `w-full rounded-[4px] border bg-transparent px-3.5 py-2.5 font-sans text-base text-text transition-colors focus:outline-none ${
+    hasError ? 'border-red-400' : 'border-text/20 focus:border-primary'
+  }`;
+}
+
+function EstimatePanel({
+  data,
+  range,
+}: {
+  data: FormData;
+  range: ReturnType<typeof estimateRange>;
+}) {
+  const summary: Array<[string, string]> = [
+    ['Usługa', data.usluga ? SERVICE_LABELS[data.usluga] : '—'],
+    ['Powierzchnia', `${data.powierzchnia} m²`],
+    ['Materiał', data.material ? MATERIAL_LABELS[data.material] : '—'],
+    ['Termin', data.termin ? TERM_LABELS[data.termin] : '—'],
+  ];
+
   return (
-    <div className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-3 py-2 border-b border-primary/5 last:border-b-0">
-      <dt className="text-xs font-medium text-text/50 uppercase tracking-wide sm:w-28 shrink-0">{label}</dt>
-      <dd className="text-sm text-text break-words">{value}</dd>
+    <div className="lg:sticky lg:top-[150px] border border-text/18 rounded-[4px] bg-background">
+      <div className="border-b border-hairline px-7 py-[26px]">
+        <p className="kicker mb-3.5">Wstępne widełki</p>
+        <p className="font-serif text-[33px] leading-[1.15] tracking-[-0.02em] tabular-nums text-text">
+          {formatEstimateRange(range)}
+        </p>
+        <p className="mt-3 text-[12.5px] leading-[1.6] text-text-muted">
+          Szacunek na podstawie stawek z 2026 r. Nie jest ofertą — dokładną cenę podajemy po pomiarze.
+        </p>
+      </div>
+      <div className="px-7 py-[22px]">
+        <p className="mb-4 text-[11px] tracking-[0.16em] text-text-muted uppercase">Twoje odpowiedzi</p>
+        <div>
+          {summary.map(([k, v]) => (
+            <div key={k} className="flex justify-between gap-4 border-b border-text/10 py-[11px] text-[13.5px] last:border-b-0">
+              <span className="text-text-muted">{k}</span>
+              <span className="text-right text-text">{v}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="flex gap-2.5 border-t border-accent-border bg-accent-soft px-7 py-5">
+        <Info className="mt-0.5 h-[15px] w-[15px] shrink-0 text-primary-dark" strokeWidth={1.6} aria-hidden="true" />
+        <p className="text-[12.5px] leading-[1.6] text-primary-dark">
+          Wypełnienie zajmuje około dwóch minut. Odpowiadamy w 24 h, także w sobotę.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function SentScreen({ onRestart }: { onRestart: () => void }) {
+  return (
+    <div className="bg-surface border-b border-hairline">
+      <div className="mx-auto max-w-7xl px-4 py-20 sm:px-10 sm:py-[110px]">
+        <div className="max-w-[640px]">
+          <CircleCheck className="mb-[22px] h-[46px] w-[46px] text-primary" strokeWidth={1.2} aria-hidden="true" />
+          <h2 className="mb-[18px] text-4xl leading-[1.04] tracking-[-0.02em] text-text sm:text-5xl">
+            Zapytanie wysłane
+          </h2>
+          <p className="mb-[30px] max-w-[56ch] text-lg leading-[1.75] text-text-secondary">
+            Wojciech odezwie się w ciągu 24 godzin — najczęściej tego samego dnia. Kopia zestawienia poszła na
+            Twój adres e-mail.
+          </p>
+          <div className="flex flex-wrap gap-3.5">
+            <a
+              href="tel:+48123456789"
+              className="rounded-[4px] bg-ink px-6 py-[15px] font-serif text-base text-background"
+            >
+              Nie chcę czekać — dzwonię
+            </a>
+            <a
+              href="/realizacje"
+              className="rounded-[4px] border border-text/22 px-6 py-[15px] font-serif text-base text-text"
+            >
+              Zobacz realizacje w tym czasie
+            </a>
+            <button
+              type="button"
+              onClick={onRestart}
+              className="rounded-[4px] px-6 py-[15px] font-serif text-base text-primary-dark"
+            >
+              Wypełnij ponownie
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

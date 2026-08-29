@@ -30,6 +30,13 @@
   --font-sans: "Inter", system-ui, sans-serif;
   --font-serif: "Cormorant Garamond", Garamond, serif; /* wordmark logo */
   --font-tagline: "Lora", Georgia, serif; /* podpis pod logo */
+
+  /* Promień — jeden dla całego systemu (przyciski, karty, inputy) */
+  --radius-md: 4px;
+
+  /* Hairline — jedyna elewacja w systemie, zamiast cieni */
+  --color-hairline: rgba(32, 31, 29, 0.16);
+  --color-hairline-dark: rgba(232, 228, 220, 0.18);
 }
 
 /* Base reset */
@@ -42,18 +49,43 @@
     @apply text-primary-dark hover:text-accent transition-colors;
   }
 
+  /* Nagłówki — Cormorant, waga 400 (lżejsza niż domyślna), ciasny tracking/leading
+     zgodnie z hi-fi makietą (skala ustawiana per-użycie klasami text-*) */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif font-normal text-text;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+  }
+
   /* Default focus indicator for keyboard navigation (a11y) */
   :focus-visible {
     @apply outline-2 outline-offset-2 outline-primary;
   }
 }
 
-/* Passe-partout dla zdjęć — cieplejsza, delikatna „oprawa" wokół kadru */
 @layer components {
+  /* Passe-partout dla zdjęć — cieplejsza, delikatna „oprawa" wokół kadru,
+     z ciepłym, archiwalnym gradingiem spinającym zdjęcia z różnych źródeł */
   .plate {
-    background-color: var(--color-accent-soft);
-    border: 1px solid var(--color-accent-border);
-    padding: 0.5rem;
+    background-color: var(--color-surface);
+    border: 6px solid var(--color-surface);
+    outline: 1px solid var(--color-hairline);
+    box-sizing: border-box;
+  }
+  .plate img {
+    filter: sepia(0.2) saturate(0.85) contrast(1.04);
+  }
+
+  /* Kicker — nadtytuł sekcji, Lora uppercase z szerokim trackingiem */
+  .kicker {
+    font-family: var(--font-tagline);
+    font-size: 11px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: var(--color-primary-dark);
+  }
+  .kicker-on-dark {
+    color: var(--color-dark-accent);
   }
 }
 

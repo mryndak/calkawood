@@ -1,68 +1,72 @@
 // Directive: client:visible
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { Image as ImageIcon, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import translations from '@/i18n/pl.json';
 
-interface GalleryImage {
-  src: string;
-  alt: string;
-  caption: string;
+interface GalleryProject {
+  id: string;
+  title: string;
+  meta: string;
   category: string;
+  image?: { src: string; alt: string };
+  placeholderNote?: string;
 }
 
 interface GalleryLightboxProps {
-  images: GalleryImage[];
+  projects: GalleryProject[];
   categories: string[];
+  initialCategory?: string | null;
 }
 
-/** Map category slugs to human-readable labels */
 const CATEGORY_LABELS: Record<string, string> = {
-  'stolarka-na-wymiar': 'Stolarka na wymiar',
-  'tarasy': 'Tarasy',
-  'podlogi-i-wnetrza': 'Podłogi i wnętrza',
-  'budowa-szkieletowa': 'Budowa szkieletowa',
+  domy: translations.gallery.domy,
+  sauny: translations.gallery.sauny,
+  tarasy: translations.gallery.tarasy,
+  zadaszenia: translations.gallery.zadaszenia,
+  wnetrza: translations.gallery.wnetrza,
 };
 
-export default function GalleryLightbox({ images, categories }: GalleryLightboxProps) {
-  const [activeCategory, setActiveCategory] = useState<string | null>(null);
-  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+export default function GalleryLightbox({ projects, categories, initialCategory = null }: GalleryLightboxProps) {
+  const [activeCategory, setActiveCategory] = useState<string | null>(initialCategory);
+  const [lightboxId, setLightboxId] = useState<string | null>(null);
   const lightboxRef = useRef<HTMLDivElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
 
-  // Filtered images based on active category
-  const filteredImages = activeCategory
-    ? images.filter((img) => img.category === activeCategory)
-    : images;
+  const shown = activeCategory ? projects.filter((p) => p.category === activeCategory) : projects;
+  // Tylko realizacje z prawdziwym zdjęciem można otworzyć w lightboxie i po nich nawigować.
+  const openable = shown.filter((p) => p.image);
+  const lightboxIndex = lightboxId ? openable.findIndex((p) => p.id === lightboxId) : -1;
 
-  // Lightbox navigation within filtered set
-  const openLightbox = useCallback((index: number) => {
+  const openLightbox = useCallback((id: string) => {
     previousFocusRef.current = document.activeElement as HTMLElement;
-    setLightboxIndex(index);
+    setLightboxId(id);
   }, []);
 
   const closeLightbox = useCallback(() => {
-    setLightboxIndex(null);
-    // Restore focus to previously focused element
+    setLightboxId(null);
     setTimeout(() => {
       previousFocusRef.current?.focus();
     }, 0);
   }, []);
 
   const goNext = useCallback(() => {
-    if (lightboxIndex === null) return;
-    setLightboxIndex((prev) =>
-      prev !== null ? (prev + 1) % filteredImages.length : null
-    );
-  }, [lightboxIndex, filteredImages.length]);
+    if (openable.length === 0) return;
+    setLightboxId((prev) => {
+      const i = openable.findIndex((p) => p.id === prev);
+      return openable[(i + 1) % openable.length]?.id ?? prev;
+    });
+  }, [openable]);
 
   const goPrev = useCallback(() => {
-    if (lightboxIndex === null) return;
-    setLightboxIndex((prev) =>
-      prev !== null ? (prev - 1 + filteredImages.length) % filteredImages.length : null
-    );
-  }, [lightboxIndex, filteredImages.length]);
+    if (openable.length === 0) return;
+    setLightboxId((prev) => {
+      const i = openable.findIndex((p) => p.id === prev);
+      return openable[(i - 1 + openable.length) % openable.length]?.id ?? prev;
+    });
+  }, [openable]);
 
-  // Keyboard navigation
   useEffect(() => {
-    if (lightboxIndex === null) return;
+    if (lightboxId === null) return;
 
     const handleKeyDown = (e: KeyboardEvent) => {
       switch (e.key) {
@@ -80,25 +84,20 @@ export default function GalleryLightbox({ images, categories }: GalleryLightboxP
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [lightboxIndex, closeLightbox, goNext, goPrev]);
+  }, [lightboxId, closeLightbox, goNext, goPrev]);
 
-  // Focus trap in lightbox
   useEffect(() => {
-    if (lightboxIndex === null) return;
+    if (lightboxId === null) return;
 
-    // Focus the lightbox container
     lightboxRef.current?.focus();
-
-    // Prevent body scroll when lightbox is open
     document.body.style.overflow = 'hidden';
     return () => {
       document.body.style.overflow = '';
     };
-  }, [lightboxIndex]);
+  }, [lightboxId]);
 
-  // Focus trap handler
   const handleFocusTrap = useCallback((e: React.KeyboardEvent) => {
-    if (e.key !== 'Tab' || lightboxIndex === null) return;
+    if (e.key !== 'Tab' || lightboxId === null) return;
 
     const focusableElements = lightboxRef.current?.querySelectorAll<HTMLElement>(
       'button, [tabindex="0"]'
@@ -115,28 +114,29 @@ export default function GalleryLightbox({ images, categories }: GalleryLightboxP
       e.preventDefault();
       first.focus();
     }
-  }, [lightboxIndex]);
+  }, [lightboxId]);
 
-  // Reset lightbox index when category changes (filtered set changes)
   useEffect(() => {
-    setLightboxIndex(null);
+    setLightboxId(null);
   }, [activeCategory]);
+
+  const current = lightboxIndex >= 0 ? openable[lightboxIndex] : null;
 
   return (
     <div>
-      {/* Category filter buttons */}
-      <div className="flex flex-wrap gap-2 mb-8" role="group" aria-label="Filtruj realizacje po kategorii">
+      {/* Filtry kategorii */}
+      <div className="flex flex-wrap gap-2" role="group" aria-label="Filtruj realizacje po kategorii">
         <button
           onClick={() => setActiveCategory(null)}
           aria-label="Pokaż wszystkie realizacje"
           aria-pressed={activeCategory === null}
-          className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+          className={`rounded-[3px] border px-[18px] py-[9px] font-sans text-[13px] transition-colors ${
             activeCategory === null
-              ? 'bg-ink text-white'
-              : 'bg-white border border-gray-300 text-text hover:border-primary'
+              ? 'border-primary bg-accent-soft text-primary-dark'
+              : 'border-text/18 text-text-secondary hover:border-primary'
           }`}
         >
-          Wszystkie
+          {translations.gallery.all}
         </button>
         {categories.map((category) => (
           <button
@@ -144,137 +144,111 @@ export default function GalleryLightbox({ images, categories }: GalleryLightboxP
             onClick={() => setActiveCategory(category)}
             aria-label={`Filtruj: ${CATEGORY_LABELS[category] || category}`}
             aria-pressed={activeCategory === category}
-            className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+            className={`rounded-[3px] border px-[18px] py-[9px] font-sans text-[13px] transition-colors ${
               activeCategory === category
-                ? 'bg-ink text-white border-2 border-primary'
-                : 'bg-white border border-gray-300 text-text hover:border-primary'
+                ? 'border-primary bg-accent-soft text-primary-dark'
+                : 'border-text/18 text-text-secondary hover:border-primary'
             }`}
           >
             {CATEGORY_LABELS[category] || category}
           </button>
         ))}
+        <span className="ml-auto self-center text-[12.5px] tabular-nums text-text-muted">
+          {shown.length} z {projects.length} realizacji
+        </span>
       </div>
 
-      {/* Image grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {filteredImages.map((image, index) => (
-          <button
-            key={`${image.src}-${index}`}
-            onClick={() => openLightbox(index)}
-            className="group relative overflow-hidden rounded-lg aspect-[4/3] cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-            aria-label={`Otwórz podgląd: ${image.alt}`}
-          >
-            {/* TODO: Replace with <Image /> from astro:assets once real image files are available in src/assets/ */}
-            <img
-              src={image.src}
-              alt={image.alt}
-              loading="lazy"
-              decoding="async"
-              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            <p className="absolute bottom-0 left-0 right-0 p-3 text-white text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              {image.caption}
-            </p>
-          </button>
-        ))}
+      {/* Siatka realizacji */}
+      <div className="mt-8 grid grid-cols-1 gap-[30px] sm:grid-cols-2 lg:grid-cols-3">
+        {shown.map((project) =>
+          project.image ? (
+            <button
+              key={project.id}
+              onClick={() => openLightbox(project.id)}
+              className="block cursor-pointer text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              aria-label={`Otwórz podgląd: ${project.title}`}
+            >
+              <span className="block border-[6px] border-surface outline outline-1 outline-hairline">
+                <img
+                  src={project.image.src}
+                  alt={project.image.alt}
+                  loading="lazy"
+                  decoding="async"
+                  className="h-[300px] w-full object-cover"
+                />
+              </span>
+              <span className="mt-4 block text-[11px] tracking-[0.16em] text-primary-dark uppercase">{project.meta}</span>
+              <span className="mt-2 block font-serif text-[23px] leading-[1.2] text-text">{project.title}</span>
+            </button>
+          ) : (
+            <div key={project.id} aria-hidden="true">
+              <div className="flex h-[300px] flex-col items-center justify-center gap-2 border border-hairline bg-[#e2ded6] px-6 text-center">
+                <ImageIcon className="h-8 w-8 text-text-muted" strokeWidth={1} aria-hidden="true" />
+                <p className="text-[10px] tracking-[0.18em] text-text-muted uppercase">Kadr do uzupełnienia</p>
+                <p className="text-[12.5px] text-text-muted">{project.placeholderNote}</p>
+              </div>
+              <span className="mt-4 block text-[11px] tracking-[0.16em] text-primary-dark uppercase">{project.meta}</span>
+              <span className="mt-2 block font-serif text-[23px] leading-[1.2] text-text">{project.title}</span>
+            </div>
+          )
+        )}
       </div>
 
       {/* Empty state */}
-      {filteredImages.length === 0 && (
-        <p className="text-center text-gray-500 py-12">
-          Brak realizacji w wybranej kategorii.
-        </p>
+      {shown.length === 0 && (
+        <p className="py-12 text-center text-text-muted">{translations.gallery.noResults}</p>
       )}
 
       {/* Lightbox overlay */}
-      {lightboxIndex !== null && filteredImages[lightboxIndex] && (
+      {current && (
         <div
           ref={lightboxRef}
           role="dialog"
           aria-modal="true"
-          aria-label={`Podgląd zdjęcia: ${filteredImages[lightboxIndex].alt}`}
+          aria-label={`Podgląd zdjęcia: ${current.title}`}
           tabIndex={0}
           onKeyDown={handleFocusTrap}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-primary-dark/95 p-4"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-dark/95 p-4"
         >
-          {/* Background overlay (for click-to-close) */}
-          <div
-            aria-hidden="true"
-            className="absolute inset-0"
-            onClick={closeLightbox}
-          />
+          <div aria-hidden="true" className="absolute inset-0" onClick={closeLightbox} />
 
-          {/* Close button */}
           <button
             onClick={closeLightbox}
             aria-label="Zamknij podgląd"
-            className="absolute top-4 right-4 z-10 p-2 text-white hover:text-cta transition-colors rounded-full bg-black/30 hover:bg-black/50"
+            className="absolute top-4 right-4 z-10 rounded-full bg-black/30 p-2 text-white transition-colors hover:bg-black/50 hover:text-dark-accent"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-7 h-7"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-            </svg>
+            <X className="h-7 w-7" strokeWidth={1.8} aria-hidden="true" />
           </button>
 
-          {/* Previous button */}
-          {filteredImages.length > 1 && (
+          {openable.length > 1 && (
             <button
               onClick={goPrev}
               aria-label="Poprzednie zdjęcie"
-              className="absolute left-4 z-10 p-2 text-white hover:text-cta transition-colors rounded-full bg-black/30 hover:bg-black/50"
+              className="absolute left-4 z-10 rounded-full bg-black/30 p-2 text-white transition-colors hover:bg-black/50 hover:text-dark-accent"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-8 h-8"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-              </svg>
+              <ChevronLeft className="h-8 w-8" strokeWidth={1.8} aria-hidden="true" />
             </button>
           )}
 
-          {/* Image and caption */}
-          <div className="relative z-10 max-w-5xl max-h-[90vh] flex flex-col items-center">
+          <div className="relative z-10 flex max-h-[90vh] max-w-5xl flex-col items-center">
             <img
-              src={filteredImages[lightboxIndex].src}
-              alt={filteredImages[lightboxIndex].alt}
-              className="max-w-full max-h-[80vh] object-contain rounded-lg shadow-2xl"
+              src={current.image!.src}
+              alt={current.image!.alt}
+              className="max-h-[80vh] max-w-full rounded-sm object-contain shadow-2xl"
             />
-            <p className="mt-4 text-white text-center text-lg font-medium">
-              {filteredImages[lightboxIndex].caption}
-            </p>
-            <p className="mt-1 text-white/60 text-sm">
-              {lightboxIndex + 1} / {filteredImages.length}
+            <p className="mt-4 text-center text-lg font-medium text-white">{current.title}</p>
+            <p className="mt-1 text-sm text-white/60">
+              {lightboxIndex + 1} / {openable.length}
             </p>
           </div>
 
-          {/* Next button */}
-          {filteredImages.length > 1 && (
+          {openable.length > 1 && (
             <button
               onClick={goNext}
               aria-label="Następne zdjęcie"
-              className="absolute right-4 z-10 p-2 text-white hover:text-cta transition-colors rounded-full bg-black/30 hover:bg-black/50"
+              className="absolute right-4 z-10 rounded-full bg-black/30 p-2 text-white transition-colors hover:bg-black/50 hover:text-dark-accent"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-8 h-8"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-              </svg>
+              <ChevronRight className="h-8 w-8" strokeWidth={1.8} aria-hidden="true" />
             </button>
           )}
         </div>

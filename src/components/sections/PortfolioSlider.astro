@@ -1,66 +1,69 @@
 ---
 import { getCollection } from 'astro:content';
+import PhotoPlaceholder from '@/components/ui/PhotoPlaceholder.astro';
 
 const allProjects = await getCollection('projects');
 
-// Featured first, then sort by date descending, limit to 6
+// Featured first, then sort by date descending, limit to 3 (jak w makiecie)
 const projects = allProjects
   .sort((a, b) => {
     if (a.data.featured && !b.data.featured) return -1;
     if (!a.data.featured && b.data.featured) return 1;
     return new Date(b.data.date).getTime() - new Date(a.data.date).getTime();
   })
-  .slice(0, 6);
+  .slice(0, 3);
+
+function metaLine(project: (typeof projects)[number]): string {
+  const year = new Date(project.data.date).getFullYear();
+  const parts = [project.data.location];
+  if (project.data.area) parts.push(`${project.data.area} m²`);
+  parts.push(String(year));
+  return parts.join(' · ');
+}
 ---
 
-<section class="py-16 sm:py-20" aria-labelledby="portfolio-heading">
-  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-    <h2 id="portfolio-heading" class="text-2xl font-bold text-primary-dark sm:text-3xl">
-      Nasze realizacje
-    </h2>
-
-    <div
-      class="mt-8 flex gap-5 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-4 -mx-4 px-4 sm:mx-0 sm:px-0 sm:grid sm:grid-cols-2 sm:overflow-visible lg:grid-cols-3"
-      role="list"
+<section class="mx-auto max-w-7xl px-4 py-20 sm:px-10 sm:py-[110px]" aria-labelledby="portfolio-heading">
+  <div class="flex flex-wrap items-end justify-between gap-6 border-b border-hairline pb-12">
+    <div>
+      <p class="kicker">Realizacje</p>
+      <h2 id="portfolio-heading" class="mt-[18px] text-3xl leading-[1.02] tracking-[-0.025em] text-text sm:text-5xl">
+        Zdjęcia z naszych budów
+      </h2>
+    </div>
+    <a
+      href="/realizacje"
+      class="inline-flex items-center rounded-[4px] border border-primary px-6 py-3 font-serif text-base text-primary-dark transition-colors hover:bg-accent-soft"
     >
-      {projects.map((project) => (
-        <article
-          class="flex-shrink-0 w-72 snap-start sm:w-auto rounded-xl overflow-hidden shadow-sm border border-primary/10 bg-white"
-          role="listitem"
-        >
-          {/* TODO: Replace <img> with <Image /> from astro:assets once real image files
-              are placed in src/assets/projects/. This will enable automatic WebP/AVIF
-              conversion and responsive srcset generation. */}
+      Wszystkie realizacje →
+    </a>
+  </div>
+
+  <div class="mt-[26px] grid grid-cols-1 gap-[26px] sm:grid-cols-3">
+    {projects.map((project) => (
+      <a href={`/realizacje?kategoria=${project.data.category}`} class="block">
+        {project.data.images[0] ? (
           <div class="plate">
             <img
-              src={project.data.images[0]?.src ?? '/images/projects/placeholder.jpg'}
-              alt={project.data.images[0]?.alt ?? project.data.title}
+              src={project.data.images[0].src}
+              alt={project.data.images[0].alt}
               loading="lazy"
               decoding="async"
               width="400"
-              height="192"
-              class="h-48 w-full rounded object-cover"
+              height="300"
+              class="h-[300px] w-full object-cover"
             />
           </div>
-          <div class="p-4">
-            <h3 class="text-sm font-semibold text-primary-dark leading-snug">
-              {project.data.title}
-            </h3>
-          </div>
-        </article>
-      ))}
-    </div>
-
-    <div class="mt-8 text-center">
-      <a
-        href="/realizacje"
-        class="inline-flex items-center gap-1 font-semibold text-primary-dark hover:text-accent transition-colors"
-      >
-        Zobacz wszystkie realizacje
-        <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-        </svg>
+        ) : (
+          <PhotoPlaceholder
+            description={project.data.placeholderNote ?? project.data.title}
+            ratio="aspect-auto h-[300px]"
+          />
+        )}
+        <div class="pt-4">
+          <p class="kicker">{metaLine(project)}</p>
+          <p class="mt-2 font-serif text-2xl leading-[1.2] text-text">{project.data.title}</p>
+        </div>
       </a>
-    </div>
+    ))}
   </div>
 </section>

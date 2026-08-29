@@ -1,20 +1,14 @@
 ---
+import { Phone } from '@lucide/astro';
 import t from '@/i18n/pl.json';
+import Button from '@/components/ui/Button.astro';
 import MobileMenu from '@/components/islands/MobileMenu.tsx';
 
 const PHONE_NUMBER = '+48 123 456 789';
 const PHONE_HREF = 'tel:+48123456789';
 
-const serviceLinks = [
-  { label: 'Stolarka na wymiar', href: '/uslugi/stolarka-na-wymiar' },
-  { label: 'Tarasy', href: '/uslugi/tarasy' },
-  { label: 'Podłogi i wnętrza', href: '/uslugi/podlogi-i-wnetrza' },
-  { label: 'Budowa szkieletowa', href: '/uslugi/budowa-szkieletowa' },
-];
-
 const navLinks = [
   { label: t.nav.home, href: '/' },
-  { label: t.nav.services, href: '#', children: serviceLinks },
   { label: t.nav.portfolio, href: '/realizacje' },
   { label: t.nav.quote, href: '/wycena' },
   { label: t.nav.about, href: '/o-mnie' },
@@ -32,103 +26,61 @@ const navLinks = [
 
 <header class="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-primary/10 shadow-sm">
   <nav aria-label="Nawigacja główna" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-    <div class="flex h-20 items-center justify-between">
+    <div class="flex h-24 items-center justify-between">
       <!-- Logo: znak (SVG) + wordmark jako prawdziwy tekst (fonty ładują się niezależnie od SVG) -->
       <a
         href="/"
-        class="flex flex-shrink-0 items-center gap-2.5 transition-opacity hover:opacity-80"
+        class="flex flex-shrink-0 items-center gap-3 transition-opacity hover:opacity-80"
       >
-        <svg viewBox="0 0 120 120" class="h-9 w-9 sm:h-10 sm:w-10" role="img" aria-hidden="true">
-          <mask id="nav-logo-mask">
-            <rect width="120" height="120" fill="#fff"></rect>
-            <polygon points="55,63 132,31 132,95" fill="#000"></polygon>
-          </mask>
-          <g mask="url(#nav-logo-mask)">
-            <g fill="none" stroke="#444141" stroke-linecap="round">
-              <circle cx="55" cy="63" r="5" stroke-width="1.1"></circle>
-              <circle cx="55.4" cy="62.7" r="9.5" stroke-width="0.9"></circle>
-              <circle cx="55.8" cy="62.4" r="13.5" stroke-width="1.3"></circle>
-              <circle cx="56.2" cy="62.1" r="17" stroke-width="0.9"></circle>
-              <circle cx="56.6" cy="61.8" r="21.5" stroke-width="1"></circle>
-              <circle cx="57" cy="61.5" r="25" stroke-width="1.4"></circle>
-              <circle cx="57.4" cy="61.2" r="29.5" stroke-width="0.9"></circle>
-              <circle cx="57.8" cy="60.9" r="33" stroke-width="1"></circle>
-              <circle cx="58.2" cy="60.6" r="37.5" stroke-width="1.3"></circle>
-              <circle cx="58.6" cy="60.3" r="41" stroke-width="0.9"></circle>
-              <circle cx="59" cy="60" r="45.5" stroke-width="1"></circle>
-              <circle cx="59.4" cy="59.7" r="49" stroke-width="1.2"></circle>
-            </g>
-            <circle cx="60" cy="60" r="53.5" fill="none" stroke="#b68235" stroke-width="2.4"></circle>
-          </g>
-        </svg>
-        <span class="font-serif text-xl tracking-[0.08em] text-text sm:text-2xl">
-          CAŁKA<span class="text-primary-dark">WOOD</span>
+        <img
+          src="/logo/znak-kolor.svg"
+          alt=""
+          aria-hidden="true"
+          class="h-11 w-11"
+          width="44"
+          height="44"
+        />
+        <span class="leading-tight">
+          <span class="block font-serif text-[23px] tracking-[0.16em] text-text">
+            CAŁKA<span class="text-primary-dark">WOOD</span>
+          </span>
+          <span class="mt-0.5 hidden font-tagline text-[10px] tracking-[0.3em] text-text-muted sm:block">
+            DOMY SAUNY ZADASZENIA TARASY
+          </span>
         </span>
       </a>
 
       <!-- Desktop navigation (>=768px) -->
       <ul class="hidden md:flex items-center gap-1" role="menubar">
         {navLinks.map((link) => (
-          <li class="relative" role="none">
-            {link.children ? (
-              <div class="group">
-                <a
-                  href={link.href}
-                  role="menuitem"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                  class="inline-flex items-center gap-1 px-3 py-2 text-sm font-medium text-text hover:text-primary-dark rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-                >
-                  {link.label}
-                  <svg class="h-4 w-4 transition-transform group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                  </svg>
-                </a>
-                <!-- Dropdown menu (CSS-only hover) -->
-                <ul
-                  role="menu"
-                  class="invisible opacity-0 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100 absolute left-0 top-full mt-1 w-56 rounded-lg bg-background border border-primary/10 shadow-lg py-2 transition-all duration-200"
-                >
-                  {link.children.map((child) => (
-                    <li role="none">
-                      <a
-                        href={child.href}
-                        role="menuitem"
-                        class="block px-4 py-2 text-sm text-text hover:bg-primary/10 hover:text-primary-dark transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary"
-                      >
-                        {child.label}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ) : (
-              <a
-                href={link.href}
-                role="menuitem"
-                class="inline-flex items-center px-3 py-2 text-sm font-medium text-text hover:text-primary-dark rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-              >
-                {link.label}
-              </a>
-            )}
+          <li role="none">
+            <a
+              href={link.href}
+              role="menuitem"
+              class="inline-flex items-center px-3 py-2 text-sm font-medium text-text hover:text-primary-dark rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+            >
+              {link.label}
+            </a>
           </li>
         ))}
       </ul>
 
-      <!-- Right side: Phone CTA + Mobile hamburger -->
+      <!-- Right side: Phone CTA + Wycena online + Mobile hamburger -->
       <div class="flex items-center gap-3">
-        <!-- Phone CTA (always visible) -->
+        <!-- Phone CTA (desktop) -->
         <a
           href={PHONE_HREF}
-          class="inline-flex items-center gap-2 rounded-lg bg-ink px-3 py-2 text-sm font-semibold text-white hover:bg-ink-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cta focus-visible:ring-offset-2"
+          class="hidden items-center gap-2 rounded-[4px] border border-text/22 px-4 py-2.5 font-serif text-[15px] text-text transition-colors hover:border-primary hover:text-primary-dark md:inline-flex"
           aria-label={`${t.cta.call}: ${PHONE_NUMBER}`}
         >
-          <!-- Phone icon (SVG) -->
-          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-          </svg>
-          <span class="hidden sm:inline">{t.cta.call}</span>
+          <Phone class="h-3.5 w-3.5" stroke-width={1.8} aria-hidden="true" />
+          <span class="tabular-nums">{PHONE_NUMBER}</span>
         </a>
+
+        <!-- Wycena online (desktop) -->
+        <Button href="/wycena" variant="dark" size="sm" class="hidden md:inline-flex">
+          Wycena online
+        </Button>
 
         <!-- Hamburger button (mobile only, <768px) -->
         <button
@@ -152,4 +104,4 @@ const navLinks = [
 </header>
 
 <!-- Spacer to compensate for fixed header height -->
-<div class="h-20" aria-hidden="true"></div>
+<div class="h-24" aria-hidden="true"></div>

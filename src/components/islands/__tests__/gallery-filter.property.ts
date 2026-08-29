@@ -5,12 +5,7 @@ import { describe, it, expect } from 'vitest';
 import * as fc from 'fast-check';
 
 // Valid gallery categories matching the GalleryLightbox component
-const VALID_CATEGORIES = [
-  'stolarka-na-wymiar',
-  'tarasy',
-  'podlogi-i-wnetrza',
-  'budowa-szkieletowa',
-] as const;
+const VALID_CATEGORIES = ['domy', 'sauny', 'tarasy', 'zadaszenia', 'wnetrza'] as const;
 
 type GalleryCategory = (typeof VALID_CATEGORIES)[number];
 

@@ -163,13 +163,14 @@ describe('PATCH /api/admin/quotes/[id]', () => {
     mockIsAuthenticated.mockReturnValue(true);
     mockGetQuoteById.mockResolvedValue({
       id: 1,
-      usluga: 'tarasy',
-      opis: 'Taras drewniany',
+      usluga: 'taras',
+      powierzchnia: 38,
+      material: 'sosna',
+      termin: 'asap',
+      opis: null,
       telefon: '123456789',
       imie: 'Jan',
       email: 'jan@example.com',
-      powiat: null,
-      wymiary: null,
       status: 'nowe',
       zdjecia: [],
       ip_address: null,

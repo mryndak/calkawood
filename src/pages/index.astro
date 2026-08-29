@@ -1,13 +1,14 @@
 ---
 import PageLayout from '@/layouts/PageLayout.astro';
 import Hero from '@/components/sections/Hero.astro';
+import StatsBar from '@/components/sections/StatsBar.astro';
 import ServicesOverview from '@/components/sections/ServicesOverview.astro';
-import TrustSection from '@/components/sections/TrustSection.astro';
+import CraftSection from '@/components/sections/CraftSection.astro';
+import ProcessSection from '@/components/sections/ProcessSection.astro';
 import PortfolioSlider from '@/components/sections/PortfolioSlider.astro';
 import QuoteCTA from '@/components/sections/QuoteCTA.astro';
 import Testimonials from '@/components/sections/Testimonials.astro';
 import ServiceAreaMap from '@/components/sections/ServiceAreaMap.astro';
-import ContactSection from '@/components/sections/ContactSection.astro';
 
 const structuredData = {
   "@context": "https://schema.org",
@@ -20,10 +21,11 @@ const structuredData = {
     "name": "podkarpackie"
   },
   "serviceType": [
-    "Stolarka na wymiar",
+    "Domy drewniane",
+    "Sauny",
     "Tarasy",
-    "Podłogi i wnętrza",
-    "Budowa szkieletowa"
+    "Zadaszenia i pergole",
+    "Podłogi i wnętrza"
   ],
   "url": "https://calkawood.pl"
 };
@@ -35,11 +37,12 @@ const structuredData = {
   structuredData={structuredData}
 >
   <Hero />
+  <StatsBar />
   <ServicesOverview />
-  <TrustSection />
+  <CraftSection />
+  <ProcessSection />
   <PortfolioSlider />
-  <QuoteCTA />
   <Testimonials />
   <ServiceAreaMap />
-  <ContactSection />
+  <QuoteCTA />
 </PageLayout>

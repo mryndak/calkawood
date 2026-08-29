@@ -1,14 +1,8 @@
 import { Resend } from 'resend';
 import type { QuoteRequest } from './quote-validation';
+import { SERVICE_LABELS, MATERIAL_LABELS, TERM_LABELS, formatEstimateRange, estimateRange } from './estimate';
 
 const resend = new Resend(import.meta.env.RESEND_API_KEY);
-
-const SERVICE_LABELS: Record<string, string> = {
-  'stolarka-na-wymiar': 'Stolarka na wymiar',
-  'tarasy': 'Tarasy',
-  'podlogi-i-wnetrza': 'Podłogi i wnętrza',
-  'budowa-szkieletowa': 'Budowa szkieletowa',
-};
 
 /**
  * Wysyła powiadomienie email o nowym zapytaniu wycenowym.
@@ -41,15 +35,19 @@ function buildNotificationHtml(
   quote: QuoteRequest & { id: number },
   serviceLabel: string
 ): string {
+  const range = estimateRange(quote.usluga, quote.powierzchnia, quote.material);
+
   const rows: Array<[string, string | undefined]> = [
     ['ID', String(quote.id)],
     ['Usługa', serviceLabel],
+    ['Powierzchnia', `${quote.powierzchnia} m²`],
+    ['Materiał', MATERIAL_LABELS[quote.material]],
+    ['Termin', TERM_LABELS[quote.termin]],
+    ['Widełki cenowe', formatEstimateRange(range)],
     ['Imię', quote.imie],
     ['Telefon', quote.telefon],
     ['Email', quote.email],
-    ['Opis', quote.opis],
-    ['Powiat', quote.powiat],
-    ['Wymiary', quote.wymiary],
+    ['Opis miejsca', quote.opis],
   ];
 
   const tableRows = rows

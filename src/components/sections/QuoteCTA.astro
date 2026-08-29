@@ -1,21 +1,40 @@
 ---
+import { Image } from 'astro:assets';
 import Button from '@/components/ui/Button.astro';
+import textureImg from '@/assets/photos/tekstura-drewno-szare.jpeg';
 ---
 
-<section class="bg-dark py-14 sm:py-16" aria-labelledby="quote-cta-heading">
-  <div class="mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
-    <h2 id="quote-cta-heading" class="text-2xl font-bold text-dark-text sm:text-3xl">
-      Wycena online w 3 prostych krokach
-    </h2>
+<section class="relative overflow-hidden bg-dark" aria-labelledby="quote-cta-heading">
+  <Image
+    src={textureImg}
+    alt=""
+    aria-hidden="true"
+    class="absolute inset-0 h-full w-full object-cover opacity-[0.22]"
+    width={1920}
+    height={1080}
+    loading="lazy"
+  />
 
-    <p class="mx-auto mt-4 max-w-xl text-lg text-dark-text-secondary">
-      Wybierz usługę, opisz projekt, dodaj zdjęcia — odpowiemy w 24 godziny.
-    </p>
+  <div class="relative mx-auto grid max-w-7xl grid-cols-1 gap-10 px-4 py-20 sm:px-10 sm:py-[104px] lg:grid-cols-[1.2fr_0.8fr] lg:items-center lg:gap-[60px]">
+    <div>
+      <p class="kicker kicker-on-dark">Wycena online</p>
+      <h2 id="quote-cta-heading" class="mt-[18px] text-3xl leading-[1.02] tracking-[-0.025em] text-[#f7f5f1] sm:text-5xl lg:text-[60px]">
+        Sześć pytań, widełki cenowe od razu
+      </h2>
+      <p class="mt-5 max-w-[52ch] text-base leading-[1.7] text-[#c8c2b6] sm:text-lg">
+        Kreator pokazuje przedział ceny w trakcie wypełniania — jeszcze przed wysłaniem formularza.
+        Dokładną ofertę dostajesz mailem w ciągu 24 godzin.
+      </p>
+    </div>
 
-    <div class="mt-8">
-      <Button href="/wycena" variant="outline" size="lg">
-        Wyceń swój projekt
+    <div class="grid gap-3.5">
+      <Button href="/wycena" variant="on-dark" size="lg" class="w-full">
+        Zacznij wycenę →
       </Button>
+      <Button href="tel:+48123456789" variant="on-dark-outline" size="lg" class="w-full">
+        Albo zadzwoń
+      </Button>
+      <p class="mt-1.5 text-center text-[12.5px] text-dark-text-secondary">Pon–Pt 7:00–18:00 · Sob 8:00–14:00</p>
     </div>
   </div>
 </section>

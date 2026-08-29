@@ -1,7 +1,7 @@
 ---
 interface Props {
   href?: string;
-  variant: 'primary' | 'cta' | 'outline';
+  variant: 'dark' | 'gold-outline' | 'neutral-outline' | 'on-dark' | 'on-dark-outline';
   size?: 'sm' | 'md' | 'lg';
   class?: string;
 }
@@ -9,23 +9,22 @@ interface Props {
 const { href, variant, size = 'md', class: className } = Astro.props;
 
 const baseClasses =
-  'inline-flex items-center justify-center font-semibold rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2';
+  'inline-flex items-center justify-center gap-2 rounded-[4px] font-serif font-normal transition-colors';
 
-// Warianty zaprojektowane pod ciemne sekcje „wizytówkowe" (hero, banery CTA) —
-// jedyne miejsca, gdzie ten komponent jest dziś używany. Złoty akcent pojawia
-// się tylko jako obwódka/podkreślenie, nigdy jako duże wypełnienie.
+// Warianty wg handoffu: kolor jako obwódka, nie wypełnienie. Jedyne dopuszczalne
+// duże wypełnienia to przycisk `dark` (na jasnym tle) i `on-dark` (na ciemnym tle).
 const variantClasses: Record<typeof variant, string> = {
-  cta: 'border-b-2 border-primary bg-background text-text hover:bg-surface focus-visible:ring-primary',
-  primary:
-    'border-2 border-dark-accent bg-transparent text-dark-text hover:bg-dark-accent/10 focus-visible:ring-dark-accent',
-  outline:
-    'border-2 border-dark-text/50 text-dark-text hover:bg-dark-text hover:text-dark focus-visible:ring-dark-text',
+  dark: 'border border-transparent bg-ink text-background hover:bg-ink-hover',
+  'gold-outline': 'border border-primary bg-transparent text-primary-dark hover:bg-accent-soft',
+  'neutral-outline': 'border border-text/22 bg-transparent text-text hover:bg-text/7',
+  'on-dark': 'border border-transparent bg-background text-ink hover:bg-white',
+  'on-dark-outline': 'border border-dark-text/45 bg-transparent text-dark-text hover:border-dark-accent hover:text-dark-accent',
 };
 
 const sizeClasses: Record<NonNullable<Props['size']>, string> = {
-  sm: 'px-3 py-1.5 text-sm',
-  md: 'px-5 py-2.5 text-base',
-  lg: 'px-7 py-3.5 text-lg',
+  sm: 'px-4 py-2 text-sm',
+  md: 'px-6 py-3.5 text-base',
+  lg: 'px-[30px] py-5 text-lg',
 };
 
 const classes = [baseClasses, variantClasses[variant], sizeClasses[size], className]

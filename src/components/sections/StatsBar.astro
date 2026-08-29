@@ -1,0 +1,29 @@
+---
+const stats = [
+  { value: '5 lat', label: 'na Podkarpaciu' },
+  { value: '60+', label: 'zrealizowanych zleceń' },
+  { value: '4', label: 'województwa' },
+  { value: '24 h', label: 'na odpowiedź z wyceną' },
+];
+
+// Hairline między kartami: pion między kolumnami, poziom między wierszami na
+// mobile (siatka 2×2), tylko pion na desktop (siatka 1×4).
+function dividerClasses(i: number): string {
+  const classes: string[] = [];
+  if (i % 2 === 1) classes.push('border-l');
+  if (i >= 2) classes.push('border-t sm:border-t-0');
+  if (i === 2) classes.push('sm:border-l');
+  return classes.join(' ');
+}
+---
+
+<section class="border-b border-hairline bg-background" aria-label="Kluczowe liczby">
+  <div class="mx-auto grid max-w-7xl grid-cols-2 px-4 sm:grid-cols-4 sm:px-10">
+    {stats.map((stat, i) => (
+      <div class={`border-hairline py-6 pl-4 sm:py-[34px] sm:pl-[26px] ${dividerClasses(i)}`}>
+        <p class="font-serif text-4xl leading-none tracking-[-0.02em] tabular-nums text-text sm:text-[46px]">{stat.value}</p>
+        <p class="mt-2.5 text-[11px] tracking-[0.16em] text-text-muted uppercase">{stat.label}</p>
+      </div>
+    ))}
+  </div>
+</section>
