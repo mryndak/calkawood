@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+import { getImage } from 'astro:assets';
 import PageLayout from '@/layouts/PageLayout.astro';
 import Button from '@/components/ui/Button.astro';
 import GalleryLightbox from '@/components/islands/GalleryLightbox.tsx';
@@ -18,14 +19,30 @@ function metaLine(project: (typeof projects)[number]): string {
   return parts.join(' · ');
 }
 
-const galleryProjects = projects.map((project) => ({
-  id: project.id,
-  title: project.data.title,
-  meta: metaLine(project),
-  category: project.data.category,
-  image: project.data.images[0],
-  placeholderNote: project.data.placeholderNote,
-}));
+// Wyspa React nie może renderować komponentu <Image> Astro, więc miniaturę
+// (siatka) i pełny podgląd (lightbox) optymalizujemy tutaj (WebP,
+// odpowiedni rozmiar) i przekazujemy już gotowe URL-e jako zwykłe stringi.
+const galleryProjects = await Promise.all(
+  projects.map(async (project) => {
+    const original = project.data.images[0];
+    const image = original
+      ? {
+          src: (await getImage({ src: original.src, width: 800, format: 'webp' })).src,
+          fullSrc: (await getImage({ src: original.src, width: 1600, format: 'webp' })).src,
+          alt: original.alt,
+        }
+      : undefined;
+
+    return {
+      id: project.id,
+      title: project.data.title,
+      meta: metaLine(project),
+      category: project.data.category,
+      image,
+      placeholderNote: project.data.placeholderNote,
+    };
+  })
+);
 
 const categories = ['domy', 'sauny', 'tarasy', 'zadaszenia', 'wnetrza'];
 

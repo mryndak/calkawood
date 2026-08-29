@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
 import PhotoPlaceholder from '@/components/ui/PhotoPlaceholder.astro';
 
 const allProjects = await getCollection('projects');
@@ -43,13 +44,13 @@ function metaLine(project: (typeof projects)[number]): string {
       <a href={`/realizacje?kategoria=${project.data.category}`} class="block">
         {project.data.images[0] ? (
           <div class="plate">
-            <img
+            <Image
               src={project.data.images[0].src}
               alt={project.data.images[0].alt}
               loading="lazy"
               decoding="async"
-              width="400"
-              height="300"
+              width={400}
+              height={300}
               class="h-[300px] w-full object-cover"
             />
           </div>

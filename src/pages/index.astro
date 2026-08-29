@@ -11,6 +11,11 @@ import Testimonials from '@/components/sections/Testimonials.astro';
 import ServiceAreaMap from '@/components/sections/ServiceAreaMap.astro';
 
 import { getCollection } from 'astro:content';
+import { getImage } from 'astro:assets';
+import schemaImageSource from '@/assets/photos/taras-dom-nowoczesny.jpeg';
+
+const schemaImage = await getImage({ src: schemaImageSource, width: 1200, format: 'jpg' });
+const schemaImageUrl = new URL(schemaImage.src, Astro.site).href;
 
 const testimonials = await getCollection('testimonials');
 const ratingCount = testimonials.length;
@@ -24,7 +29,7 @@ const structuredData = {
   "name": "CalkaWood",
   "description": "Usługi stolarsko-budowlane na Podkarpaciu: domy drewniane, sauny, tarasy, zadaszenia i wnętrza.",
   "telephone": "+48123456789",
-  "image": "https://calkawood.pl/images/projects/taras-dom-nowoczesny.jpeg",
+  "image": schemaImageUrl,
   "areaServed": [
     { "@type": "State", "name": "małopolskie" },
     { "@type": "State", "name": "podkarpackie" },
