@@ -26,7 +26,7 @@ const navLinks = [
 
 <header class="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-primary/10 shadow-sm">
   <nav aria-label="Nawigacja główna" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-    <div class="flex h-24 items-center justify-between">
+    <div class="flex h-16 items-center justify-between sm:h-24">
       <!-- Logo: znak (SVG) + wordmark jako prawdziwy tekst (fonty ładują się niezależnie od SVG) -->
       <a
         href="/"
@@ -110,4 +110,4 @@ const navLinks = [
 <MobileMenu client:idle links={navLinks} phone={PHONE_NUMBER} />
 
 <!-- Spacer to compensate for fixed header height -->
-<div class="h-24" aria-hidden="true"></div>
+<div class="h-16 sm:h-24" aria-hidden="true"></div>
