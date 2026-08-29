@@ -1,16 +1,35 @@
 @import "tailwindcss";
 
-/* CalkaWood — Design Tokens */
+/* CalkaWood — Design Tokens (paleta marki: papierowa biel + akcent złoto/drewno + sekcje ciemne) */
 @theme {
-  --color-primary: #C8915A;
-  --color-primary-dark: #7A4E2A;
-  --color-accent: #4A7C59;
-  --color-background: #FDFBF7;
-  --color-text: #2D2D2D;
-  --color-cta: #E07B39;
-  --color-cta-hover: #C96A2F;
+  /* Baza — jasne tło (całej strony) */
+  --color-background: #f3f2f2;
+  --color-surface: #eae9e9; /* powierzchnie w obrębie jasnego tła: karty, wyróżnione bloki, paski */
+  --color-text: #201f1d;
+  --color-text-secondary: #605d5d;
+  --color-text-muted: #7d7979; /* podpisy, metadane */
+
+  /* Akcent (złoto/drewno) — tylko jako kreska, obwódka, podkreślenie, mały znak; nie jako duże wypełnienia */
+  --color-primary: #b68235; /* bazowy */
+  --color-primary-dark: #7d5411; /* jedyny bezpieczny wariant dla tekstu (kontrast) */
+  --color-accent: #a06f24; /* hover / pressed */
+  --color-accent-soft: #fff3e4; /* delikatne tła */
+  --color-accent-border: #ffe3bf; /* obramowania */
+  --color-cta: #b68235; /* alias primary — obwódki, ringi fokusu, drobne znaki (gwiazdki, progres) */
+
+  /* Ciemne tło — sekcje „wizytówkowe" (hero, stopka, banery CTA) */
+  --color-dark: #17150f;
+  --color-dark-text: #e8e4dc;
+  --color-dark-text-secondary: #a09a8d;
+  --color-dark-accent: #c99a4f;
+
+  /* Przyciski pełne (jedyne dopuszczalne duże wypełnienia — zawsze ciemne, nigdy złote) */
+  --color-ink: #17150f;
+  --color-ink-hover: #2c2820;
 
   --font-sans: "Inter", system-ui, sans-serif;
+  --font-serif: "Cormorant Garamond", Garamond, serif; /* wordmark logo */
+  --font-tagline: "Lora", Georgia, serif; /* podpis pod logo */
 }
 
 /* Base reset */
@@ -20,12 +39,21 @@
   }
 
   a {
-    @apply text-primary-dark hover:text-primary transition-colors;
+    @apply text-primary-dark hover:text-accent transition-colors;
   }
 
   /* Default focus indicator for keyboard navigation (a11y) */
   :focus-visible {
     @apply outline-2 outline-offset-2 outline-primary;
+  }
+}
+
+/* Passe-partout dla zdjęć — cieplejsza, delikatna „oprawa" wokół kadru */
+@layer components {
+  .plate {
+    background-color: var(--color-accent-soft);
+    border: 1px solid var(--color-accent-border);
+    padding: 0.5rem;
   }
 }
 

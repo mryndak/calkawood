@@ -329,7 +329,7 @@ export default function PhotoUpload({
             e.stopPropagation();
             handleBrowseClick();
           }}
-          className="rounded-md bg-cta px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-cta-hover focus:outline-none focus:ring-2 focus:ring-cta focus:ring-offset-2"
+          className="rounded-md bg-ink px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-ink-hover focus:outline-none focus:ring-2 focus:ring-cta focus:ring-offset-2"
           disabled={files.length >= maxFiles}
         >
           Wybierz pliki

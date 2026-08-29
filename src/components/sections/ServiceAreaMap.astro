@@ -1,20 +1,23 @@
 ---
 /**
- * Sekcja mapy obszaru działania — schematyczna mapa SVG powiatów Podkarpacia
- * z wyróżnionymi powiatami obsługiwanymi przez CalkaWood.
+ * Sekcja mapy obszaru działania — interaktywna mapa OpenStreetMap (Leaflet)
+ * z rzeczywistymi granicami administracyjnymi 4 obsługiwanych województw:
+ * małopolskiego, podkarpackiego, świętokrzyskiego i lubelskiego.
  */
+import { CAPITALS, VOIVODESHIP_BOUNDARIES, VOIVODESHIP_COLORS } from '@/data/serviceAreaBoundaries';
 
-const coveredPowiaty = [
-  'Rzeszów (miasto)',
-  'Krosno (miasto)',
-  'brzozowski',
-  'dębicki',
-  'jasielski',
-  'łańcucki',
-  'ropczycko-sędziszowski',
-  'rzeszowski',
-  'strzyżowski',
+const coveredVoivodeships = [
+  { key: 'malopolskie', name: 'małopolskie', examples: 'Kraków, Tarnów, Nowy Sącz' },
+  { key: 'podkarpackie', name: 'podkarpackie', examples: 'Rzeszów, Krosno, Tarnobrzeg' },
+  { key: 'swietokrzyskie', name: 'świętokrzyskie', examples: 'Kielce, Sandomierz, Ostrowiec Świętokrzyski' },
+  { key: 'lubelskie', name: 'lubelskie', examples: 'Lublin, Zamość, Puławy' },
 ];
+
+const mapDataJson = JSON.stringify({
+  boundaries: VOIVODESHIP_BOUNDARIES,
+  colors: VOIVODESHIP_COLORS,
+  capitals: CAPITALS,
+});
 ---
 
 <section class="bg-background px-4 py-16 sm:px-6 lg:px-8" aria-labelledby="service-area-heading">
@@ -24,257 +27,57 @@ const coveredPowiaty = [
     </h2>
 
     <p class="mx-auto mt-3 max-w-2xl text-center text-sm text-text/70 sm:text-base">
-      Działamy na terenie województwa podkarpackiego — Rzeszów, Krosno i okoliczne powiaty.
+      Działamy na terenie czterech województw: małopolskiego, podkarpackiego, świętokrzyskiego i lubelskiego.
     </p>
 
     <div class="mt-10 flex flex-col items-center gap-8 lg:flex-row lg:items-start lg:gap-12">
-      <!-- Mapa SVG -->
+      <!-- Mapa OpenStreetMap -->
       <div class="w-full max-w-md flex-shrink-0 lg:w-1/2">
-        <svg
-          viewBox="0 0 500 400"
-          class="h-auto w-full"
+        <div
+          class="service-area-leaflet aspect-[5/4] w-full overflow-hidden rounded-xl border border-text/10 bg-text/5"
+          data-map={mapDataJson}
           role="img"
-          aria-label="Schematyczna mapa powiatów Podkarpacia z zaznaczonym obszarem działania CalkaWood"
-          xmlns="http://www.w3.org/2000/svg"
+          aria-label="Mapa obszaru działania CalkaWood obejmująca województwa małopolskie, podkarpackie, świętokrzyskie i lubelskie"
         >
-          <!-- Tło regionu -->
-          <rect x="0" y="0" width="500" height="400" fill="none" />
+        </div>
 
-          <!-- Powiaty NIEOBSŁUGIWANE (jasny szary) -->
-          <!-- Powiat stalowowolski (północny-wschód) -->
-          <path
-            d="M360,30 L430,30 L450,70 L430,110 L370,110 L350,70 Z"
-            fill="#E5E7EB"
-            stroke="#9CA3AF"
-            stroke-width="1.5"
-          />
-          <text x="395" y="75" text-anchor="middle" class="fill-gray-500 text-[9px]">stalowowolski</text>
-
-          <!-- Powiat niżański (północ) -->
-          <path
-            d="M270,20 L350,25 L355,70 L340,100 L280,100 L260,65 Z"
-            fill="#E5E7EB"
-            stroke="#9CA3AF"
-            stroke-width="1.5"
-          />
-          <text x="305" y="65" text-anchor="middle" class="fill-gray-500 text-[9px]">niżański</text>
-
-          <!-- Powiat tarnobrzeski (północny-zachód) -->
-          <path
-            d="M150,20 L260,20 L255,65 L240,90 L170,85 L140,55 Z"
-            fill="#E5E7EB"
-            stroke="#9CA3AF"
-            stroke-width="1.5"
-          />
-          <text x="200" y="55" text-anchor="middle" class="fill-gray-500 text-[9px]">tarnobrzeski</text>
-
-          <!-- Powiat mielecki (północny-zachód) -->
-          <path
-            d="M50,40 L145,25 L140,55 L130,90 L80,100 L40,75 Z"
-            fill="#E5E7EB"
-            stroke="#9CA3AF"
-            stroke-width="1.5"
-          />
-          <text x="92" y="65" text-anchor="middle" class="fill-gray-500 text-[9px]">mielecki</text>
-
-          <!-- Powiat kolbuszowski (północ-centrum) -->
-          <path
-            d="M170,85 L240,90 L250,130 L220,155 L165,145 L145,110 Z"
-            fill="#E5E7EB"
-            stroke="#9CA3AF"
-            stroke-width="1.5"
-          />
-          <text x="198" y="120" text-anchor="middle" class="fill-gray-500 text-[9px]">kolbuszowski</text>
-
-          <!-- Powiat leżajski (północny-wschód) -->
-          <path
-            d="M280,100 L340,100 L350,140 L320,165 L270,155 L260,120 Z"
-            fill="#E5E7EB"
-            stroke="#9CA3AF"
-            stroke-width="1.5"
-          />
-          <text x="305" y="135" text-anchor="middle" class="fill-gray-500 text-[9px]">leżajski</text>
-
-          <!-- Powiat przeworski (wschód) -->
-          <path
-            d="M350,140 L430,130 L445,175 L420,210 L360,200 L340,170 Z"
-            fill="#E5E7EB"
-            stroke="#9CA3AF"
-            stroke-width="1.5"
-          />
-          <text x="392" y="175" text-anchor="middle" class="fill-gray-500 text-[9px]">przeworski</text>
-
-          <!-- Powiat lubaczowski (daleki wschód) -->
-          <path
-            d="M430,110 L490,100 L500,160 L480,200 L445,175 L430,130 Z"
-            fill="#E5E7EB"
-            stroke="#9CA3AF"
-            stroke-width="1.5"
-          />
-          <text x="467" y="150" text-anchor="middle" class="fill-gray-500 text-[9px]">lubaczowski</text>
-
-          <!-- Powiat jarosławski (wschód) -->
-          <path
-            d="M420,210 L480,200 L490,250 L460,280 L410,270 L400,240 Z"
-            fill="#E5E7EB"
-            stroke="#9CA3AF"
-            stroke-width="1.5"
-          />
-          <text x="445" y="245" text-anchor="middle" class="fill-gray-500 text-[9px]">jarosławski</text>
-
-          <!-- Powiat przemyski (daleki wschód-południe) -->
-          <path
-            d="M410,270 L460,280 L470,330 L450,370 L395,360 L385,310 Z"
-            fill="#E5E7EB"
-            stroke="#9CA3AF"
-            stroke-width="1.5"
-          />
-          <text x="430" y="325" text-anchor="middle" class="fill-gray-500 text-[9px]">przemyski</text>
-
-          <!-- Powiat bieszczadzki (daleki południe-wschód) -->
-          <path
-            d="M330,340 L395,360 L390,395 L330,395 L295,380 L300,350 Z"
-            fill="#E5E7EB"
-            stroke="#9CA3AF"
-            stroke-width="1.5"
-          />
-          <text x="340" y="375" text-anchor="middle" class="fill-gray-500 text-[9px]">bieszczadzki</text>
-
-          <!-- Powiat leski (południe) -->
-          <path
-            d="M250,340 L300,350 L295,380 L260,395 L225,380 L230,350 Z"
-            fill="#E5E7EB"
-            stroke="#9CA3AF"
-            stroke-width="1.5"
-          />
-          <text x="260" y="370" text-anchor="middle" class="fill-gray-500 text-[9px]">leski</text>
-
-          <!-- Powiat sanocki (południe-centrum) -->
-          <path
-            d="M200,300 L280,310 L300,350 L250,340 L230,350 L185,330 Z"
-            fill="#E5E7EB"
-            stroke="#9CA3AF"
-            stroke-width="1.5"
-          />
-          <text x="240" y="330" text-anchor="middle" class="fill-gray-500 text-[9px]">sanocki</text>
-
-          <!-- ===== Powiaty OBSŁUGIWANE (kolor accent) ===== -->
-
-          <!-- Powiat dębicki (zachód) -->
-          <path
-            d="M40,100 L130,90 L145,145 L120,180 L60,170 L35,135 Z"
-            fill="#4A7C59"
-            fill-opacity="0.25"
-            stroke="#4A7C59"
-            stroke-width="2"
-          />
-          <text x="85" y="140" text-anchor="middle" class="fill-accent text-[10px] font-semibold">dębicki</text>
-
-          <!-- Powiat ropczycko-sędziszowski (zachód-centrum) -->
-          <path
-            d="M80,100 L145,110 L165,145 L150,175 L120,180 L85,155 Z"
-            fill="#4A7C59"
-            fill-opacity="0.25"
-            stroke="#4A7C59"
-            stroke-width="2"
-          />
-          <text x="125" y="150" text-anchor="middle" class="fill-accent text-[8px] font-semibold">ropczycko-s.</text>
-
-          <!-- Powiat strzyżowski (centrum-zachód) -->
-          <path
-            d="M120,180 L165,175 L180,220 L155,255 L110,240 L100,200 Z"
-            fill="#4A7C59"
-            fill-opacity="0.25"
-            stroke="#4A7C59"
-            stroke-width="2"
-          />
-          <text x="140" y="220" text-anchor="middle" class="fill-accent text-[10px] font-semibold">strzyżowski</text>
-
-          <!-- Powiat rzeszowski (centrum) -->
-          <path
-            d="M165,145 L250,130 L270,175 L260,220 L200,230 L180,220 L165,175 Z"
-            fill="#4A7C59"
-            fill-opacity="0.25"
-            stroke="#4A7C59"
-            stroke-width="2"
-          />
-          <text x="215" y="185" text-anchor="middle" class="fill-accent text-[10px] font-semibold">rzeszowski</text>
-
-          <!-- Miasto Rzeszów (centrum, mniejszy) -->
-          <circle cx="225" cy="170" r="14" fill="#4A7C59" fill-opacity="0.4" stroke="#4A7C59" stroke-width="2.5" />
-          <text x="225" y="174" text-anchor="middle" class="fill-white text-[8px] font-bold">Rzeszów</text>
-
-          <!-- Powiat łańcucki (centrum-wschód) -->
-          <path
-            d="M270,155 L340,170 L345,210 L310,225 L270,215 L260,180 Z"
-            fill="#4A7C59"
-            fill-opacity="0.25"
-            stroke="#4A7C59"
-            stroke-width="2"
-          />
-          <text x="305" y="195" text-anchor="middle" class="fill-accent text-[10px] font-semibold">łańcucki</text>
-
-          <!-- Powiat brzozowski (południe-centrum) -->
-          <path
-            d="M155,255 L230,260 L250,300 L200,300 L170,290 L145,270 Z"
-            fill="#4A7C59"
-            fill-opacity="0.25"
-            stroke="#4A7C59"
-            stroke-width="2"
-          />
-          <text x="195" y="280" text-anchor="middle" class="fill-accent text-[10px] font-semibold">brzozowski</text>
-
-          <!-- Powiat jasielski (daleki zachód-południe) -->
-          <path
-            d="M35,200 L110,240 L130,290 L90,320 L30,300 L20,250 Z"
-            fill="#4A7C59"
-            fill-opacity="0.25"
-            stroke="#4A7C59"
-            stroke-width="2"
-          />
-          <text x="72" y="275" text-anchor="middle" class="fill-accent text-[10px] font-semibold">jasielski</text>
-
-          <!-- Miasto Krosno -->
-          <circle cx="145" cy="300" r="12" fill="#4A7C59" fill-opacity="0.4" stroke="#4A7C59" stroke-width="2.5" />
-          <text x="145" y="304" text-anchor="middle" class="fill-white text-[7px] font-bold">Krosno</text>
-
-          <!-- Powiat krośnieński (wokół Krosna) -->
-          <path
-            d="M110,270 L155,255 L170,290 L185,330 L145,340 L110,320 L100,290 Z"
-            fill="#4A7C59"
-            fill-opacity="0.15"
-            stroke="#4A7C59"
-            stroke-width="1.5"
-            stroke-dasharray="4,2"
-          />
-        </svg>
+        <p class="mt-2 text-center text-xs text-text/50">
+          Mapa © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer" class="underline">OpenStreetMap</a> contributors, style © <a href="https://carto.com/attributions" target="_blank" rel="noopener noreferrer" class="underline">CARTO</a> — przybliż lub przesuń, aby zobaczyć szczegóły.
+        </p>
       </div>
 
-      <!-- Lista powiatów -->
+      <!-- Lista województw -->
       <div class="w-full lg:w-1/2">
         <h3 class="text-lg font-semibold text-text">
-          Obsługiwane powiaty
+          Obsługiwane województwa
         </h3>
         <p class="mt-1 text-sm text-text/70">
-          Realizujemy zlecenia na terenie poniższych powiatów województwa podkarpackiego:
+          Realizujemy zlecenia na terenie poniższych województw:
         </p>
 
-        <ul class="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2" role="list">
-          {coveredPowiaty.map((powiat) => (
-            <li class="flex items-center gap-2 text-sm text-text">
-              <span class="inline-block h-3 w-3 flex-shrink-0 rounded-full bg-accent" aria-hidden="true"></span>
-              <span>Powiat {powiat}</span>
+        <ul class="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2" role="list">
+          {coveredVoivodeships.map((v) => (
+            <li class="flex items-start gap-2 text-sm text-text">
+              <span
+                class="mt-1 inline-block h-3 w-3 flex-shrink-0 rounded-full"
+                style={`background-color:${VOIVODESHIP_COLORS[v.key]}`}
+                aria-hidden="true"
+              ></span>
+              <span>
+                <span class="font-medium">Województwo {v.name}</span>
+                <span class="block text-text/60">{v.examples}</span>
+              </span>
             </li>
           ))}
         </ul>
 
         <p class="mt-6 text-sm text-text/60">
-          Nie widzisz swojego powiatu? Zadzwoń — w wielu przypadkach dojedziemy dalej.
+          Nie widzisz swojego regionu? Zadzwoń — w wielu przypadkach dojedziemy dalej.
         </p>
 
         <a
           href="tel:+48123456789"
-          class="mt-4 inline-flex items-center gap-2 rounded-lg bg-cta px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-cta-hover focus:outline-none focus:ring-2 focus:ring-cta/50 focus:ring-offset-2"
+          class="mt-4 inline-flex items-center gap-2 rounded-lg bg-ink px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-ink-hover focus:outline-none focus:ring-2 focus:ring-cta/50 focus:ring-offset-2"
           aria-label="Zadzwoń do CalkaWood, aby zapytać o obsługę Twojego regionu"
         >
           📞 Zadzwoń i zapytaj
@@ -283,3 +86,91 @@ const coveredPowiaty = [
     </div>
   </div>
 </section>
+
+<style>
+  .service-area-leaflet :global(.leaflet-container) {
+    height: 100%;
+    width: 100%;
+    font-family: inherit;
+    background: #f4f1ea;
+  }
+
+  .service-area-leaflet :global(.service-area-label) {
+    border: none;
+    background: transparent;
+    box-shadow: none;
+    font-weight: 600;
+    font-size: 11px;
+    color: #7d5411;
+    text-shadow:
+      -1px -1px 0 #fff,
+      1px -1px 0 #fff,
+      -1px 1px 0 #fff,
+      1px 1px 0 #fff;
+    white-space: nowrap;
+  }
+</style>
+
+<script>
+  import L from 'leaflet';
+  import 'leaflet/dist/leaflet.css';
+
+  type CapitalPoint = { voivodeship: string; city: string; lat: number; lng: number };
+  type MapData = {
+    boundaries: Record<string, [number, number][]>;
+    colors: Record<string, string>;
+    capitals: CapitalPoint[];
+  };
+
+  const CAPITAL_MARKER_COLOR = '#7d5411';
+
+  const POLAND_BOUNDS = L.latLngBounds([48.95, 14.1], [54.9, 24.2]);
+
+  const containers = document.querySelectorAll<HTMLElement>('.service-area-leaflet[data-map]');
+
+  containers.forEach((el) => {
+    const data = JSON.parse(el.dataset.map ?? '{}') as MapData;
+
+    const map = L.map(el, {
+      scrollWheelZoom: false,
+    });
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution:
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+      subdomains: 'abcd',
+      maxZoom: 19,
+    }).addTo(map);
+
+    for (const [key, latlngs] of Object.entries(data.boundaries)) {
+      const color = data.colors[key] ?? '#4A7C59';
+      L.polygon(latlngs, {
+        color,
+        weight: 2.5,
+        fillColor: color,
+        fillOpacity: 0.3,
+      }).addTo(map);
+    }
+
+    for (const capital of data.capitals) {
+      L.circleMarker([capital.lat, capital.lng], {
+        radius: 6,
+        color: '#ffffff',
+        weight: 2,
+        fillColor: CAPITAL_MARKER_COLOR,
+        fillOpacity: 0.95,
+      })
+        .addTo(map)
+        .bindTooltip(capital.voivodeship, {
+          permanent: true,
+          direction: 'top',
+          className: 'service-area-label',
+          offset: [0, -6],
+        });
+    }
+
+    map.fitBounds(POLAND_BOUNDS, { padding: [4, 4] });
+
+    new ResizeObserver(() => map.invalidateSize()).observe(el);
+  });
+</script>

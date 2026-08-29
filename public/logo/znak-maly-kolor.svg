@@ -5,10 +5,10 @@
   </mask>
   <g mask="url(#w)">
     <g fill="none" stroke="#444141" stroke-linecap="round">
-      <circle cx="56" cy="63" r="7" stroke-width="4"></circle>
-      <circle cx="57" cy="62" r="18" stroke-width="4"></circle>
-      <circle cx="58" cy="61" r="29" stroke-width="4"></circle>
-      <circle cx="59" cy="60" r="40" stroke-width="4"></circle>
+    <circle cx="56" cy="63" r="7" stroke-width="4"></circle>
+    <circle cx="57" cy="62" r="18" stroke-width="4"></circle>
+    <circle cx="58" cy="61" r="29" stroke-width="4"></circle>
+    <circle cx="59" cy="60" r="40" stroke-width="4"></circle>
     </g>
     <circle cx="60" cy="60" r="53" fill="none" stroke="#b68235" stroke-width="5"></circle>
   </g>

@@ -392,7 +392,7 @@ export default function QuoteForm({ services, maxFiles, maxFileSize }: QuoteForm
         {currentStep < TOTAL_STEPS ? (
           <button
             type="submit"
-            className="inline-flex items-center gap-2 rounded-lg bg-cta px-6 py-2.5 text-sm font-semibold text-white hover:bg-cta-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cta focus-visible:ring-offset-2"
+            className="inline-flex items-center gap-2 rounded-lg bg-ink px-6 py-2.5 text-sm font-semibold text-white hover:bg-ink-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cta focus-visible:ring-offset-2"
           >
             Dalej
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -403,7 +403,7 @@ export default function QuoteForm({ services, maxFiles, maxFileSize }: QuoteForm
           <button
             type="submit"
             disabled={isSubmitting}
-            className="inline-flex items-center gap-2 rounded-lg bg-cta px-6 py-2.5 text-sm font-semibold text-white hover:bg-cta-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cta focus-visible:ring-offset-2"
+            className="inline-flex items-center gap-2 rounded-lg bg-ink px-6 py-2.5 text-sm font-semibold text-white hover:bg-ink-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cta focus-visible:ring-offset-2"
           >
             {isSubmitting ? (
               <>
@@ -572,7 +572,7 @@ function StepDescription({
             </p>
           )}
           <span
-            className={`text-xs ${charCount < minChars ? 'text-text/50' : 'text-accent'}`}
+            className={`text-xs ${charCount < minChars ? 'text-text/50' : 'text-primary-dark'}`}
             aria-live="polite"
             aria-atomic="true"
           >

@@ -132,7 +132,7 @@ export default function GalleryLightbox({ images, categories }: GalleryLightboxP
           aria-pressed={activeCategory === null}
           className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
             activeCategory === null
-              ? 'bg-cta text-white'
+              ? 'bg-ink text-white'
               : 'bg-white border border-gray-300 text-text hover:border-primary'
           }`}
         >
@@ -146,7 +146,7 @@ export default function GalleryLightbox({ images, categories }: GalleryLightboxP
             aria-pressed={activeCategory === category}
             className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
               activeCategory === category
-                ? 'bg-cta text-white border-2 border-primary'
+                ? 'bg-ink text-white border-2 border-primary'
                 : 'bg-white border border-gray-300 text-text hover:border-primary'
             }`}
           >

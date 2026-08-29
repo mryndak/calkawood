@@ -127,8 +127,35 @@ export default function MobileMenu({ links, phone }: MobileMenuProps) {
       className="fixed inset-0 z-50 flex flex-col bg-background/98 backdrop-blur-sm"
     >
       {/* Header z przyciskiem zamknięcia */}
-      <div className="flex items-center justify-between px-4 h-16 border-b border-primary/10">
-        <span className="text-xl font-bold text-primary-dark">CalkaWood</span>
+      <div className="flex items-center justify-between px-4 h-20 border-b border-primary/10">
+        <div className="flex items-center gap-2.5">
+          <svg viewBox="0 0 120 120" className="h-9 w-9" role="img" aria-hidden="true">
+            <mask id="mobile-logo-mask">
+              <rect width="120" height="120" fill="#fff"></rect>
+              <polygon points="55,63 132,31 132,95" fill="#000"></polygon>
+            </mask>
+            <g mask="url(#mobile-logo-mask)">
+              <g fill="none" stroke="#444141" strokeLinecap="round">
+                <circle cx="55" cy="63" r="5" strokeWidth="1.1"></circle>
+                <circle cx="55.4" cy="62.7" r="9.5" strokeWidth="0.9"></circle>
+                <circle cx="55.8" cy="62.4" r="13.5" strokeWidth="1.3"></circle>
+                <circle cx="56.2" cy="62.1" r="17" strokeWidth="0.9"></circle>
+                <circle cx="56.6" cy="61.8" r="21.5" strokeWidth="1"></circle>
+                <circle cx="57" cy="61.5" r="25" strokeWidth="1.4"></circle>
+                <circle cx="57.4" cy="61.2" r="29.5" strokeWidth="0.9"></circle>
+                <circle cx="57.8" cy="60.9" r="33" strokeWidth="1"></circle>
+                <circle cx="58.2" cy="60.6" r="37.5" strokeWidth="1.3"></circle>
+                <circle cx="58.6" cy="60.3" r="41" strokeWidth="0.9"></circle>
+                <circle cx="59" cy="60" r="45.5" strokeWidth="1"></circle>
+                <circle cx="59.4" cy="59.7" r="49" strokeWidth="1.2"></circle>
+              </g>
+              <circle cx="60" cy="60" r="53.5" fill="none" stroke="#b68235" strokeWidth="2.4"></circle>
+            </g>
+          </svg>
+          <span className="font-serif text-xl tracking-[0.08em] text-text">
+            CAŁKA<span className="text-primary-dark">WOOD</span>
+          </span>
+        </div>
         <button
           ref={closeButtonRef}
           type="button"
@@ -205,7 +232,7 @@ export default function MobileMenu({ links, phone }: MobileMenuProps) {
         <a
           href={phoneHref}
           onClick={closeMenu}
-          className="flex items-center justify-center gap-3 rounded-lg bg-cta px-6 py-4 text-lg font-semibold text-white hover:bg-cta-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cta focus-visible:ring-offset-2"
+          className="flex items-center justify-center gap-3 rounded-lg bg-ink px-6 py-4 text-lg font-semibold text-white hover:bg-ink-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cta focus-visible:ring-offset-2"
           aria-label={`Zadzwoń: ${phone}`}
         >
           <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">

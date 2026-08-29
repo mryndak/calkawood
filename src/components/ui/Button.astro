@@ -11,12 +11,15 @@ const { href, variant, size = 'md', class: className } = Astro.props;
 const baseClasses =
   'inline-flex items-center justify-center font-semibold rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2';
 
+// Warianty zaprojektowane pod ciemne sekcje „wizytówkowe" (hero, banery CTA) —
+// jedyne miejsca, gdzie ten komponent jest dziś używany. Złoty akcent pojawia
+// się tylko jako obwódka/podkreślenie, nigdy jako duże wypełnienie.
 const variantClasses: Record<typeof variant, string> = {
+  cta: 'border-b-2 border-primary bg-background text-text hover:bg-surface focus-visible:ring-primary',
   primary:
-    'bg-primary text-white hover:bg-primary-dark focus-visible:ring-primary',
-  cta: 'bg-cta text-white hover:bg-cta-hover focus-visible:ring-cta',
+    'border-2 border-dark-accent bg-transparent text-dark-text hover:bg-dark-accent/10 focus-visible:ring-dark-accent',
   outline:
-    'border-2 border-primary text-primary-dark hover:bg-primary hover:text-white focus-visible:ring-primary',
+    'border-2 border-dark-text/50 text-dark-text hover:bg-dark-text hover:text-dark focus-visible:ring-dark-text',
 };
 
 const sizeClasses: Record<NonNullable<Props['size']>, string> = {

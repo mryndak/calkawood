@@ -137,7 +137,7 @@
     "copyright": "© {year} CalkaWood. Wszelkie prawa zastrzeżone.",
     "privacy": "Polityka prywatności",
     "terms": "Regulamin",
-    "serviceArea": "Działamy na Podkarpaciu: Rzeszów, Krosno i okolice."
+    "serviceArea": "Działamy w województwach: małopolskim, podkarpackim, świętokrzyskim i lubelskim."
   },
   "errors": {
     "generic": "Wystąpił błąd. Spróbuj ponownie lub zadzwoń.",
@@ -255,7 +255,7 @@
     },
     "contact": {
       "title": "Kontakt — CalkaWood",
-      "description": "Skontaktuj się z CalkaWood. Telefon, formularz kontaktowy, obszar działania na Podkarpaciu."
+      "description": "Skontaktuj się z CalkaWood. Telefon, formularz kontaktowy, obszar działania w województwach małopolskim, podkarpackim, świętokrzyskim i lubelskim."
     },
     "privacy": {
       "title": "Polityka prywatności — CalkaWood",
@@ -328,7 +328,7 @@
   },
   "serviceArea": {
     "title": "Obszar działania",
-    "description": "Działamy na terenie województwa podkarpackiego.",
-    "regions": "Rzeszów, Krosno oraz powiaty: brzozowski, dębicki, jasielski, łańcucki, ropczycko-sędziszowski, rzeszowski, strzyżowski."
+    "description": "Działamy na terenie czterech województw: małopolskiego, podkarpackiego, świętokrzyskiego i lubelskiego.",
+    "regions": "Województwa: małopolskie (Kraków, Tarnów, Nowy Sącz), podkarpackie (Rzeszów, Krosno, Tarnobrzeg), świętokrzyskie (Kielce, Sandomierz), lubelskie (Lublin, Zamość, Puławy)."
   }
 }

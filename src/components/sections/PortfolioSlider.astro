@@ -31,15 +31,17 @@ const projects = allProjects
           {/* TODO: Replace <img> with <Image /> from astro:assets once real image files
               are placed in src/assets/projects/. This will enable automatic WebP/AVIF
               conversion and responsive srcset generation. */}
-          <img
-            src={project.data.images[0]?.src ?? '/images/projects/placeholder.jpg'}
-            alt={project.data.images[0]?.alt ?? project.data.title}
-            loading="lazy"
-            decoding="async"
-            width="400"
-            height="192"
-            class="h-48 w-full object-cover"
-          />
+          <div class="plate">
+            <img
+              src={project.data.images[0]?.src ?? '/images/projects/placeholder.jpg'}
+              alt={project.data.images[0]?.alt ?? project.data.title}
+              loading="lazy"
+              decoding="async"
+              width="400"
+              height="192"
+              class="h-48 w-full rounded object-cover"
+            />
+          </div>
           <div class="p-4">
             <h3 class="text-sm font-semibold text-primary-dark leading-snug">
               {project.data.title}
@@ -52,7 +54,7 @@ const projects = allProjects
     <div class="mt-8 text-center">
       <a
         href="/realizacje"
-        class="inline-flex items-center gap-1 font-semibold text-primary-dark hover:text-primary transition-colors"
+        class="inline-flex items-center gap-1 font-semibold text-primary-dark hover:text-accent transition-colors"
       >
         Zobacz wszystkie realizacje
         <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
