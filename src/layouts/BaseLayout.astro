@@ -1,6 +1,8 @@
 ---
+import { getImage } from 'astro:assets';
 import '@/styles/global.css';
 import SEOHead from '@/components/ui/SEOHead.astro';
+import defaultOgSource from '@/assets/photos/zadaszenie-taras-meble.jpeg';
 
 interface Props {
   title: string;
@@ -8,6 +10,7 @@ interface Props {
   canonical?: string;
   ogImage?: string;
   structuredData?: object;
+  noindex?: boolean;
 }
 
 const {
@@ -16,7 +19,19 @@ const {
   canonical,
   ogImage,
   structuredData,
+  noindex = false,
 } = Astro.props;
+
+// Kanoniczny URL domyślnie to bieżąca ścieżka bez query stringa (np.
+// /realizacje?kategoria=domy kanonizuje się do /realizacje), chyba że
+// strona jawnie poda inny.
+const canonicalUrl = canonical ?? new URL(Astro.url.pathname, Astro.site).href;
+
+// Domyślne zdjęcie do Open Graph/Twitter Card, gdy strona nie poda własnego —
+// bez tego udostępnienie linku (Facebook, Messenger, WhatsApp) nie pokazuje
+// żadnej miniatury.
+const defaultOgImage = await getImage({ src: defaultOgSource, width: 1200, height: 630, format: 'jpg' });
+const resolvedOgImage = ogImage ?? new URL(defaultOgImage.src, Astro.site).href;
 
 const analyticsUrl = import.meta.env.PUBLIC_ANALYTICS_URL;
 ---
@@ -36,9 +51,10 @@ const analyticsUrl = import.meta.env.PUBLIC_ANALYTICS_URL;
     <SEOHead
       title={title}
       description={description}
-      canonical={canonical}
-      ogImage={ogImage}
+      canonical={canonicalUrl}
+      ogImage={resolvedOgImage}
       structuredData={structuredData}
+      noindex={noindex}
     />
   </head>
   <body class="flex min-h-screen flex-col">

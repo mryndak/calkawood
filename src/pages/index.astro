@@ -10,16 +10,27 @@ import QuoteCTA from '@/components/sections/QuoteCTA.astro';
 import Testimonials from '@/components/sections/Testimonials.astro';
 import ServiceAreaMap from '@/components/sections/ServiceAreaMap.astro';
 
+import { getCollection } from 'astro:content';
+
+const testimonials = await getCollection('testimonials');
+const ratingCount = testimonials.length;
+const averageRating = ratingCount
+  ? testimonials.reduce((sum, t) => sum + t.data.rating, 0) / ratingCount
+  : undefined;
+
 const structuredData = {
   "@context": "https://schema.org",
-  "@type": "LocalBusiness",
+  "@type": "HomeAndConstructionBusiness",
   "name": "CalkaWood",
-  "description": "Usługi stolarsko-budowlane na Podkarpaciu",
+  "description": "Usługi stolarsko-budowlane na Podkarpaciu: domy drewniane, sauny, tarasy, zadaszenia i wnętrza.",
   "telephone": "+48123456789",
-  "areaServed": {
-    "@type": "State",
-    "name": "podkarpackie"
-  },
+  "image": "https://calkawood.pl/images/projects/taras-dom-nowoczesny.jpeg",
+  "areaServed": [
+    { "@type": "State", "name": "małopolskie" },
+    { "@type": "State", "name": "podkarpackie" },
+    { "@type": "State", "name": "świętokrzyskie" },
+    { "@type": "State", "name": "lubelskie" }
+  ],
   "serviceType": [
     "Domy drewniane",
     "Sauny",
@@ -27,13 +38,20 @@ const structuredData = {
     "Zadaszenia i pergole",
     "Podłogi i wnętrza"
   ],
-  "url": "https://calkawood.pl"
+  "url": "https://calkawood.pl",
+  ...(averageRating && {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": averageRating.toFixed(1),
+      "reviewCount": ratingCount
+    }
+  })
 };
 ---
 
 <PageLayout
-  title="Strona główna"
-  description="CalkaWood — stolarka na wymiar, tarasy, podłogi, budowa szkieletowa. Solidne usługi stolarsko-budowlane na Podkarpaciu."
+  title="Domy drewniane, tarasy i sauny — Podkarpacie"
+  description="Stolarka na wymiar, tarasy, podłogi i budowa szkieletowa. Ponad 5 lat doświadczenia na Podkarpaciu. Bezpłatna wycena online."
   structuredData={structuredData}
 >
   <Hero />
