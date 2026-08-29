@@ -68,8 +68,16 @@ export default function MobileMenu({ links, phone }: MobileMenuProps) {
       closeButtonRef.current?.focus();
     });
 
-    // Blokuj scroll body
-    document.body.style.overflow = 'hidden';
+    // Blokuj scroll body — `overflow: hidden` samo w sobie NIE blokuje
+    // przewijania na iOS Safari, dlatego dodatkowo "zamrażamy" body przez
+    // position: fixed i po zamknięciu przywracamy pozycję scrolla.
+    const scrollY = window.scrollY;
+    const { style } = document.body;
+    style.position = 'fixed';
+    style.top = `-${scrollY}px`;
+    style.left = '0';
+    style.right = '0';
+    style.overflow = 'hidden';
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -103,7 +111,12 @@ export default function MobileMenu({ links, phone }: MobileMenuProps) {
 
     document.addEventListener('keydown', handleKeyDown);
     return () => {
-      document.body.style.overflow = '';
+      style.position = '';
+      style.top = '';
+      style.left = '';
+      style.right = '';
+      style.overflow = '';
+      window.scrollTo(0, scrollY);
       document.removeEventListener('keydown', handleKeyDown);
     };
   }, [isOpen, closeMenu]);
