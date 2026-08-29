@@ -4,7 +4,7 @@ import { z } from 'astro/zod';
 
 const projects = defineCollection({
   loader: file('src/content/projects.json'),
-  schema: z.object({
+  schema: ({ image }) => z.object({
     id: z.string(),
     title: z.string(),
     category: z.enum(['domy', 'sauny', 'tarasy', 'zadaszenia', 'wnetrza']),
@@ -12,7 +12,10 @@ const projects = defineCollection({
     area: z.number().optional(),
     description: z.string().optional(),
     images: z.array(z.object({
-      src: z.string(),
+      // Ścieżka względem src/content/ — image() zwraca ImageMetadata,
+      // dzięki czemu Astro może zoptymalizować format/rozmiar (patrz
+      // PortfolioSlider.astro i realizacje.astro).
+      src: image(),
       alt: z.string(),
     })),
     // Opis kadru dla realizacji bez dostarczonego zdjęcia — pokazywana zamiast

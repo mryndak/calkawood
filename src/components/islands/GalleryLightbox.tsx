@@ -8,7 +8,7 @@ interface GalleryProject {
   title: string;
   meta: string;
   category: string;
-  image?: { src: string; alt: string };
+  image?: { src: string; fullSrc: string; alt: string };
   placeholderNote?: string;
 }
 
@@ -232,7 +232,7 @@ export default function GalleryLightbox({ projects, categories, initialCategory 
 
           <div className="relative z-10 flex max-h-[90vh] max-w-5xl flex-col items-center">
             <img
-              src={current.image!.src}
+              src={current.image!.fullSrc}
               alt={current.image!.alt}
               className="max-h-[80vh] max-w-full rounded-sm object-contain shadow-2xl"
             />

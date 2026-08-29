@@ -6,7 +6,7 @@
     "location": "Rzeszów",
     "area": 38,
     "images": [
-      { "src": "/images/projects/taras-dom-nowoczesny.jpeg", "alt": "Taras z modrzewia syberyjskiego przy nowoczesnym domu w Rzeszowie" }
+      { "src": "../assets/photos/taras-dom-nowoczesny.jpeg", "alt": "Taras z modrzewia syberyjskiego przy nowoczesnym domu w Rzeszowie" }
     ],
     "date": "2025-05-10",
     "featured": true
@@ -18,7 +18,7 @@
     "location": "Krosno",
     "area": 26,
     "images": [
-      { "src": "/images/projects/zadaszenie-taras-meble.jpeg", "alt": "Zadaszenie tarasu z drewna klejonego z meblami ogrodowymi w Krośnie" }
+      { "src": "../assets/photos/zadaszenie-taras-meble.jpeg", "alt": "Zadaszenie tarasu z drewna klejonego z meblami ogrodowymi w Krośnie" }
     ],
     "date": "2025-04-02",
     "featured": true
@@ -30,7 +30,7 @@
     "location": "Brzozów",
     "area": 18,
     "images": [
-      { "src": "/images/projects/pergola-taras-slup.jpeg", "alt": "Pergola wsparta na drewnianym słupie przy elewacji domu w Brzozowie" }
+      { "src": "../assets/photos/pergola-taras-slup.jpeg", "alt": "Pergola wsparta na drewnianym słupie przy elewacji domu w Brzozowie" }
     ],
     "date": "2024-09-18",
     "featured": true
@@ -42,7 +42,7 @@
     "location": "Sanok",
     "area": 42,
     "images": [
-      { "src": "/images/projects/taras-zlote-swiatlo.jpeg", "alt": "Taras z olejowanej sosny w złotym świetle zachodzącego słońca, Sanok" }
+      { "src": "../assets/photos/taras-zlote-swiatlo.jpeg", "alt": "Taras z olejowanej sosny w złotym świetle zachodzącego słońca, Sanok" }
     ],
     "date": "2024-08-05",
     "featured": false
@@ -54,7 +54,7 @@
     "location": "Dębica",
     "area": 31,
     "images": [
-      { "src": "/images/projects/taras-balustrada.jpeg", "alt": "Taras drewniany z balustradą listwową w Dębicy" }
+      { "src": "../assets/photos/taras-balustrada.jpeg", "alt": "Taras drewniany z balustradą listwową w Dębicy" }
     ],
     "date": "2024-07-22",
     "featured": false
@@ -66,7 +66,7 @@
     "location": "Jasło",
     "area": 34,
     "images": [
-      { "src": "/images/projects/taras-zadaszony-perspektywa.jpeg", "alt": "Zadaszony podcień z deską modrzewiową, widok perspektywiczny, Jasło" }
+      { "src": "../assets/photos/taras-zadaszony-perspektywa.jpeg", "alt": "Zadaszony podcień z deską modrzewiową, widok perspektywiczny, Jasło" }
     ],
     "date": "2024-06-14",
     "featured": false
@@ -77,7 +77,7 @@
     "category": "wnetrza",
     "location": "Krosno",
     "images": [
-      { "src": "/images/projects/schody-wnetrze.jpeg", "alt": "Drewniane schody wewnętrzne w Krośnie" }
+      { "src": "../assets/photos/schody-wnetrze.jpeg", "alt": "Drewniane schody wewnętrzne w Krośnie" }
     ],
     "date": "2025-02-20",
     "featured": false
@@ -89,7 +89,7 @@
     "location": "Rzeszów",
     "area": 24,
     "images": [
-      { "src": "/images/projects/taras-jacuzzi.jpeg", "alt": "Taras drewniany pod wanną jacuzzi w Rzeszowie" }
+      { "src": "../assets/photos/taras-jacuzzi.jpeg", "alt": "Taras drewniany pod wanną jacuzzi w Rzeszowie" }
     ],
     "date": "2025-06-30",
     "featured": false
@@ -101,7 +101,7 @@
     "location": "Strzyżów",
     "area": 52,
     "images": [
-      { "src": "/images/projects/taras-narozny.jpeg", "alt": "Taras narożny prowadzony wokół domu w Strzyżowie" }
+      { "src": "../assets/photos/taras-narozny.jpeg", "alt": "Taras narożny prowadzony wokół domu w Strzyżowie" }
     ],
     "date": "2024-05-11",
     "featured": false
@@ -113,7 +113,7 @@
     "location": "Brzozów",
     "area": 16,
     "images": [
-      { "src": "/images/projects/schody-taras-wejscie.jpeg", "alt": "Taras wejściowy ze stopniami do domu w Brzozowie" }
+      { "src": "../assets/photos/schody-taras-wejscie.jpeg", "alt": "Taras wejściowy ze stopniami do domu w Brzozowie" }
     ],
     "date": "2023-09-08",
     "featured": false
@@ -125,7 +125,7 @@
     "location": "Łańcut",
     "area": 29,
     "images": [
-      { "src": "/images/projects/taras-deski-rytm.jpeg", "alt": "Taras z gładkiej deski drewnianej w rytmicznym układzie, Łańcut" }
+      { "src": "../assets/photos/taras-deski-rytm.jpeg", "alt": "Taras z gładkiej deski drewnianej w rytmicznym układzie, Łańcut" }
     ],
     "date": "2023-07-19",
     "featured": false
@@ -137,7 +137,7 @@
     "location": "Rzeszów",
     "area": 46,
     "images": [
-      { "src": "/images/projects/taras-kontrast-deski.jpeg", "alt": "Dwupoziomowy taras z kontrastowym układem desek w Rzeszowie" }
+      { "src": "../assets/photos/taras-kontrast-deski.jpeg", "alt": "Dwupoziomowy taras z kontrastowym układem desek w Rzeszowie" }
     ],
     "date": "2023-05-27",
     "featured": false
