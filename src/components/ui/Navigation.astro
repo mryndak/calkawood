@@ -100,10 +100,14 @@ const navLinks = [
       </div>
     </div>
   </nav>
-
-  <!-- Mobile menu (React island) -->
-  <MobileMenu client:idle links={navLinks} phone={PHONE_NUMBER} />
 </header>
+
+<!-- Mobile menu (React island) — renderowane POZA <header>, bo header ma
+     backdrop-blur (backdrop-filter). Elementy z backdrop-filter/filter/
+     transform tworzą nowy containing block dla potomków position:fixed —
+     nowsze wersje Safari/iOS to respektują, przez co nakładka menu byłaby
+     ograniczona do wysokości samego paska nagłówka zamiast całego ekranu. -->
+<MobileMenu client:idle links={navLinks} phone={PHONE_NUMBER} />
 
 <!-- Spacer to compensate for fixed header height -->
 <div class="h-24" aria-hidden="true"></div>
