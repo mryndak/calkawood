@@ -85,13 +85,28 @@ jobs:
             app.js package.json package-lock.json \
             "${REMOTE}/"
 
-      - name: Install deps, run migrations & restart on server
+      - name: Install production deps on server
+        run: |
+          ssh -i ~/.ssh/deploy_key \
+            ${{ secrets.MYDEVIL_USER }}@${{ secrets.MYDEVIL_HOST }} \
+            'source ~/.bash_profile && cd ${{ secrets.MYDEVIL_PATH }} && npm install --omit=dev'
+
+      # Osobny krok (nie połączony `&&` z instalacją/restartem), żeby awaria
+      # migracji była widoczna jako osobny, jednoznaczny krok w logu Actions —
+      # łatwiej zdiagnozować niż jeden duży złączony krok.
+      - name: Run database migrations on server
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: |
           ssh -i ~/.ssh/deploy_key \
             ${{ secrets.MYDEVIL_USER }}@${{ secrets.MYDEVIL_HOST }} \
-            "source ~/.bash_profile && cd ${{ secrets.MYDEVIL_PATH }} && npm install --omit=dev && DATABASE_URL=\"$DATABASE_URL\" npx node-pg-migrate up && devil www restart calkawood.pl"
+            "source ~/.bash_profile && cd ${{ secrets.MYDEVIL_PATH }} && DATABASE_URL=\"$DATABASE_URL\" npx node-pg-migrate up"
+
+      - name: Restart application on server
+        run: |
+          ssh -i ~/.ssh/deploy_key \
+            ${{ secrets.MYDEVIL_USER }}@${{ secrets.MYDEVIL_HOST }} \
+            'devil www restart calkawood.pl'
 
       - name: Cleanup SSH key
         if: always()
