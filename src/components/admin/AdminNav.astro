@@ -1,0 +1,30 @@
+---
+import i18n from '@/i18n';
+
+interface Props {
+  active: 'quotes' | 'messages';
+}
+
+const { active } = Astro.props;
+
+const tabs = [
+  { key: 'quotes' as const, label: i18n.admin.nav.quotes, href: '/admin' },
+  { key: 'messages' as const, label: i18n.admin.nav.messages, href: '/admin/kontakt' },
+];
+---
+
+<nav class="flex gap-1" aria-label="Sekcje panelu administracyjnego">
+  {tabs.map((tab) => (
+    <a
+      href={tab.href}
+      aria-current={tab.key === active ? 'page' : undefined}
+      class={`px-3 py-1.5 text-sm rounded-md transition-colors ${
+        tab.key === active
+          ? 'bg-amber-100 text-amber-800 font-medium'
+          : 'text-stone-500 hover:bg-stone-100 hover:text-stone-700'
+      }`}
+    >
+      {tab.label}
+    </a>
+  ))}
+</nav>

@@ -3,6 +3,7 @@ import { contactRequestSchema } from '@/lib/contact-validation';
 import { checkRateLimit } from '@/lib/rate-limit';
 import { isHoneypotFilled } from '@/lib/security';
 import { verifyRecaptcha } from '@/lib/recaptcha';
+import { saveContactMessage } from '@/lib/db';
 import { sendContactNotification } from '@/lib/email';
 import { handleApiError } from '@/lib/errors';
 
@@ -54,21 +55,22 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
       );
     }
 
-    // 6. Send email — brak zapisu do bazy jako fallbacku, więc błąd wysyłki
-    // musi trafić do użytkownika (inaczej wiadomość ginie bez śladu).
+    // 6. Save to database — widoczna w /admin/kontakt niezależnie od wysyłki maila
+    const messageId = await saveContactMessage({
+      ...result.data,
+      ip_address: clientAddress,
+    });
+
+    // 7. Send email notification (non-blocking on failure — wiadomość już zapisana)
     try {
-      await sendContactNotification(result.data);
+      await sendContactNotification({ ...result.data, id: messageId });
     } catch (emailError) {
-      console.error('[Email] Nie udało się wysłać wiadomości kontaktowej', emailError);
-      return new Response(
-        JSON.stringify({ error: 'Nie udało się wysłać wiadomości. Spróbuj ponownie lub zadzwoń.' }),
-        { status: 502, headers: { 'Content-Type': 'application/json' } },
-      );
+      console.error('[Email] Nie udało się wysłać powiadomienia o wiadomości kontaktowej', messageId, emailError);
     }
 
-    // 7. Return success
+    // 8. Return success
     return new Response(
-      JSON.stringify({ success: true }),
+      JSON.stringify({ success: true, id: messageId }),
       { status: 200, headers: { 'Content-Type': 'application/json' } },
     );
   } catch (error) {

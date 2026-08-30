@@ -117,6 +117,10 @@
       "submit": "Zaloguj się",
       "error": "Nieprawidłowe hasło."
     },
+    "nav": {
+      "quotes": "Wyceny",
+      "messages": "Wiadomości"
+    },
     "panel": {
       "title": "Zapytania wycenowe",
       "logout": "Wyloguj"
@@ -147,6 +151,25 @@
       "createdAt": "Data utworzenia",
       "updatedAt": "Ostatnia zmiana",
       "changeStatus": "Zmień status"
+    },
+    "messagesPanel": {
+      "title": "Wiadomości kontaktowe"
+    },
+    "messagesTable": {
+      "date": "Data",
+      "name": "Imię",
+      "phone": "Telefon",
+      "message": "Wiadomość",
+      "status": "Status",
+      "actions": "Akcje",
+      "details": "Szczegóły",
+      "noResults": "Brak wiadomości."
+    },
+    "messageStatus": {
+      "nowa": "Nowa",
+      "odpowiedziano": "Odpowiedziano",
+      "markAnswered": "Oznacz jako odpowiedziane",
+      "markNew": "Cofnij do „Nowa”"
     }
   },
   "a11y": {

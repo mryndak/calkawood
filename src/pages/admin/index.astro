@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import AdminNav from '@/components/admin/AdminNav.astro';
 import { getQuoteRequests, getQuoteRequestsCount } from '@/lib/db';
 import { isAuthenticated } from '@/lib/admin-auth';
 import type { QuoteStatus } from '@/lib/types';
@@ -57,8 +58,11 @@ function formatDate(date: Date): string {
   <main class="min-h-screen bg-stone-50">
     <!-- Header -->
     <header class="bg-white border-b border-stone-200 sticky top-0 z-10">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
-        <h1 class="text-xl font-bold text-stone-800">{i18n.admin.panel.title}</h1>
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-5">
+          <h1 class="text-xl font-bold text-stone-800">{i18n.admin.panel.title}</h1>
+          <AdminNav active="quotes" />
+        </div>
         <div class="flex items-center gap-4">
           <span class="text-sm text-stone-500">
             {total} zapytań łącznie

@@ -29,5 +29,18 @@ export interface QuoteListItem {
   created_at: Date;
 }
 
+export type ContactStatus = 'nowa' | 'odpowiedziano';
+
+export interface ContactMessageRow {
+  id: number;
+  imie: string;
+  telefon: string;
+  wiadomosc: string;
+  status: ContactStatus;
+  ip_address: string | null;
+  created_at: Date;
+  updated_at: Date;
+}
+
 // Re-export for convenience
 export type { QuoteRequest, ServiceCategory };

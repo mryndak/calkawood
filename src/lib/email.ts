@@ -89,26 +89,35 @@ function buildNotificationHtml(
 
 /**
  * Wysyła powiadomienie email o nowej wiadomości z formularza kontaktowego.
- * W przeciwieństwie do sendQuoteNotification, brak zapisu w bazie jako
- * fallbacku — błąd wysyłki oznacza utratę wiadomości, więc funkcja rzuca
- * wyjątek zamiast go połykać (wywołujący musi to obsłużyć i poinformować
- * użytkownika, żeby zadzwonił zamiast pisać ponownie).
+ * Wiadomość jest już zapisana w bazie (patrz saveContactMessage), więc błąd
+ * wysyłki jest tylko logowany — nie blokuje odpowiedzi do użytkownika ani nie
+ * powoduje utraty wiadomości (widoczna w /admin/kontakt niezależnie od maila).
  */
-export async function sendContactNotification(contact: ContactRequest): Promise<void> {
-  const fromEmail = import.meta.env.RESEND_FROM_EMAIL || 'wycena@calkawood.pl';
+export async function sendContactNotification(
+  contact: ContactRequest & { id: number }
+): Promise<boolean> {
+  try {
+    const fromEmail = import.meta.env.RESEND_FROM_EMAIL || 'wycena@calkawood.pl';
 
-  const html = buildContactNotificationHtml(contact);
+    const html = buildContactNotificationHtml(contact);
 
-  await getResendClient().emails.send({
-    from: fromEmail,
-    to: fromEmail,
-    subject: `Nowa wiadomość z formularza kontaktowego — ${contact.imie}`,
-    html,
-  });
+    await getResendClient().emails.send({
+      from: fromEmail,
+      to: fromEmail,
+      subject: `Nowa wiadomość z formularza kontaktowego #${contact.id} — ${contact.imie}`,
+      html,
+    });
+
+    return true;
+  } catch (error) {
+    console.error('[Email] Nie udało się wysłać powiadomienia o wiadomości kontaktowej', contact.id, error);
+    return false;
+  }
 }
 
-function buildContactNotificationHtml(contact: ContactRequest): string {
+function buildContactNotificationHtml(contact: ContactRequest & { id: number }): string {
   const rows: Array<[string, string]> = [
+    ['ID', String(contact.id)],
     ['Imię', contact.imie],
     ['Telefon', contact.telefon],
     ['Wiadomość', contact.wiadomosc],

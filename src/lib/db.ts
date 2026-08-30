@@ -1,6 +1,7 @@
 import postgres from 'postgres';
 import type { QuoteRequest } from './quote-validation';
-import type { QuoteRequestRow, QuoteStatus } from './types';
+import type { ContactRequest } from './contact-validation';
+import type { QuoteRequestRow, QuoteStatus, ContactMessageRow, ContactStatus } from './types';
 
 const sql = postgres(import.meta.env.DATABASE_URL, {
   max: 5,
@@ -93,6 +94,79 @@ export async function getQuoteById(
       status, zdjecia, ip_address,
       created_at, updated_at
     FROM quote_requests
+    WHERE id = ${id}
+  `;
+
+  return rows.length > 0 ? rows[0] : null;
+}
+
+/**
+ * Zapisuje nową wiadomość z formularza kontaktowego i zwraca przypisane ID.
+ */
+export async function saveContactMessage(
+  data: ContactRequest & { ip_address?: string }
+): Promise<number> {
+  const [row] = await sql`
+    INSERT INTO contact_messages (imie, telefon, wiadomosc, ip_address)
+    VALUES (${data.imie}, ${data.telefon}, ${data.wiadomosc}, ${data.ip_address ?? null})
+    RETURNING id
+  `;
+
+  return row.id as number;
+}
+
+/**
+ * Pobiera listę wiadomości kontaktowych posortowaną od najnowszych.
+ */
+export async function getContactMessages(options: {
+  limit: number;
+  offset: number;
+}): Promise<ContactMessageRow[]> {
+  const rows = await sql<ContactMessageRow[]>`
+    SELECT id, imie, telefon, wiadomosc, status, ip_address, created_at, updated_at
+    FROM contact_messages
+    ORDER BY created_at DESC
+    LIMIT ${options.limit}
+    OFFSET ${options.offset}
+  `;
+
+  return rows;
+}
+
+/**
+ * Zwraca łączną liczbę wiadomości kontaktowych.
+ */
+export async function getContactMessagesCount(): Promise<number> {
+  const [row] = await sql<{ count: string }[]>`
+    SELECT COUNT(*) as count FROM contact_messages
+  `;
+
+  return parseInt(row.count, 10);
+}
+
+/**
+ * Aktualizuje status wiadomości kontaktowej (czy odpowiedziano).
+ */
+export async function updateContactStatus(
+  id: number,
+  status: ContactStatus
+): Promise<void> {
+  await sql`
+    UPDATE contact_messages
+    SET status = ${status}
+    WHERE id = ${id}
+  `;
+}
+
+/**
+ * Pobiera pojedynczą wiadomość kontaktową po ID. Zwraca null jeśli nie znaleziono.
+ */
+export async function getContactMessageById(
+  id: number
+): Promise<ContactMessageRow | null> {
+  const rows = await sql<ContactMessageRow[]>`
+    SELECT id, imie, telefon, wiadomosc, status, ip_address, created_at, updated_at
+    FROM contact_messages
     WHERE id = ${id}
   `;
 

@@ -1,0 +1,236 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import AdminNav from '@/components/admin/AdminNav.astro';
+import { getContactMessages, getContactMessagesCount } from '@/lib/db';
+import { isAuthenticated } from '@/lib/admin-auth';
+import type { ContactStatus } from '@/lib/types';
+import i18n from '@/i18n';
+
+// Kontrola dostępu — tylko zalogowany administrator.
+if (!isAuthenticated(Astro.request)) {
+  return Astro.redirect('/admin/login');
+}
+
+// Paginacja
+const url = new URL(Astro.request.url);
+const page = Math.max(1, parseInt(url.searchParams.get('page') ?? '1', 10) || 1);
+const limit = 20;
+const offset = (page - 1) * limit;
+
+const [messages, total] = await Promise.all([
+  getContactMessages({ limit, offset }),
+  getContactMessagesCount(),
+]);
+
+const totalPages = Math.ceil(total / limit);
+
+const statusColors: Record<ContactStatus, string> = {
+  'nowa': 'bg-blue-100 text-blue-800',
+  'odpowiedziano': 'bg-green-100 text-green-800',
+};
+
+// Status to prosty przełącznik dwustanowy — brak sensu w rozbudowanym
+// dropdownie jak przy statusach wyceny (patrz /admin).
+function nextStatus(status: ContactStatus): ContactStatus {
+  return status === 'nowa' ? 'odpowiedziano' : 'nowa';
+}
+
+function formatDate(date: Date): string {
+  return new Date(date).toLocaleDateString('pl-PL', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+}
+---
+
+<BaseLayout title={`${i18n.admin.messagesPanel.title} | CalkaWood`} description="Panel administracyjny CalkaWood" noindex>
+  <main class="min-h-screen bg-stone-50">
+    <!-- Header -->
+    <header class="bg-white border-b border-stone-200 sticky top-0 z-10">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-5">
+          <h1 class="text-xl font-bold text-stone-800">{i18n.admin.messagesPanel.title}</h1>
+          <AdminNav active="messages" />
+        </div>
+        <div class="flex items-center gap-4">
+          <span class="text-sm text-stone-500">
+            {total} wiadomości łącznie
+          </span>
+          <form method="POST" action="/api/admin/logout">
+            <button
+              type="submit"
+              class="px-3 py-1.5 text-sm bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-md transition-colors"
+            >
+              {i18n.admin.panel.logout}
+            </button>
+          </form>
+        </div>
+      </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+      {messages.length === 0 ? (
+        <div class="text-center py-12 bg-white rounded-lg border border-stone-200">
+          <p class="text-stone-500">{i18n.admin.messagesTable.noResults}</p>
+        </div>
+      ) : (
+        <>
+          <div class="bg-white rounded-lg border border-stone-200 overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead>
+                  <tr class="bg-stone-50 border-b border-stone-200">
+                    <th class="text-left px-4 py-3 font-medium text-stone-600">{i18n.admin.messagesTable.date}</th>
+                    <th class="text-left px-4 py-3 font-medium text-stone-600">{i18n.admin.messagesTable.name}</th>
+                    <th class="text-left px-4 py-3 font-medium text-stone-600">{i18n.admin.messagesTable.phone}</th>
+                    <th class="text-left px-4 py-3 font-medium text-stone-600">{i18n.admin.messagesTable.message}</th>
+                    <th class="text-left px-4 py-3 font-medium text-stone-600">{i18n.admin.messagesTable.status}</th>
+                    <th class="text-left px-4 py-3 font-medium text-stone-600">{i18n.admin.messagesTable.actions}</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-stone-100">
+                  {messages.map((message) => (
+                    <tr class="hover:bg-stone-50 group" data-message-id={message.id}>
+                      <td class="px-4 py-3 text-stone-600 whitespace-nowrap">
+                        {formatDate(message.created_at)}
+                      </td>
+                      <td class="px-4 py-3 text-stone-800 font-medium">
+                        {message.imie}
+                      </td>
+                      <td class="px-4 py-3">
+                        <a href={`tel:${message.telefon}`} class="text-amber-700 hover:text-amber-900 underline">
+                          {message.telefon}
+                        </a>
+                      </td>
+                      <td class="px-4 py-3 text-stone-700 max-w-[320px] truncate">
+                        {message.wiadomosc}
+                      </td>
+                      <td class="px-4 py-3">
+                        <span class={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${statusColors[message.status]}`}>
+                          {i18n.admin.messageStatus[message.status]}
+                        </span>
+                      </td>
+                      <td class="px-4 py-3">
+                        <div class="flex items-center gap-3">
+                          <button
+                            type="button"
+                            class="status-toggle text-xs text-amber-700 hover:text-amber-900 underline"
+                            data-id={message.id}
+                            data-next={nextStatus(message.status)}
+                          >
+                            {message.status === 'nowa' ? i18n.admin.messageStatus.markAnswered : i18n.admin.messageStatus.markNew}
+                          </button>
+                          <button
+                            type="button"
+                            class="details-toggle text-xs text-amber-700 hover:text-amber-900 underline"
+                            data-id={message.id}
+                            aria-expanded="false"
+                            aria-controls={`details-${message.id}`}
+                          >
+                            {i18n.admin.messagesTable.details}
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <!-- Szczegóły (ukryte) -->
+                    <tr id={`details-${message.id}`} class="details-row hidden">
+                      <td colspan="6" class="px-4 py-4 bg-stone-50 border-t border-stone-100">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                          <div>
+                            <h4 class="font-medium text-stone-700 mb-1">{i18n.admin.messagesTable.message}</h4>
+                            <p class="text-stone-600 whitespace-pre-wrap">{message.wiadomosc}</p>
+                          </div>
+                          <div class="text-xs text-stone-400">
+                            <span>{i18n.admin.details.createdAt}: {formatDate(message.created_at)}</span>
+                            {message.updated_at && (
+                              <span class="ml-3">{i18n.admin.details.updatedAt}: {formatDate(message.updated_at)}</span>
+                            )}
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {totalPages > 1 && (
+            <nav class="mt-4 flex items-center justify-between" aria-label="Paginacja">
+              <p class="text-sm text-stone-600">
+                Strona {page} z {totalPages} ({total} wyników)
+              </p>
+              <div class="flex gap-2">
+                {page > 1 && (
+                  <a
+                    href={`/admin/kontakt?page=${page - 1}`}
+                    class="px-3 py-1.5 text-sm bg-white border border-stone-300 rounded-md hover:bg-stone-50 text-stone-700"
+                  >
+                    ← Poprzednia
+                  </a>
+                )}
+                {page < totalPages && (
+                  <a
+                    href={`/admin/kontakt?page=${page + 1}`}
+                    class="px-3 py-1.5 text-sm bg-white border border-stone-300 rounded-md hover:bg-stone-50 text-stone-700"
+                  >
+                    Następna →
+                  </a>
+                )}
+              </div>
+            </nav>
+          )}
+        </>
+      )}
+    </div>
+  </main>
+
+  <!-- Inline skrypt: toggle szczegółów i zmiana statusu -->
+  <script is:inline>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.details-toggle').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const id = btn.dataset.id;
+          const row = document.getElementById(`details-${id}`);
+          if (!row) return;
+
+          const isHidden = row.classList.contains('hidden');
+          row.classList.toggle('hidden');
+          btn.setAttribute('aria-expanded', String(isHidden));
+        });
+      });
+
+      document.querySelectorAll('.status-toggle').forEach((btn) => {
+        btn.addEventListener('click', async () => {
+          const id = btn.dataset.id;
+          const newStatus = btn.dataset.next;
+          if (!newStatus) return;
+
+          btn.disabled = true;
+
+          try {
+            const response = await fetch(`/api/admin/messages/${id}`, {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ status: newStatus }),
+            });
+
+            if (response.ok) {
+              window.location.reload();
+            } else {
+              const data = await response.json();
+              alert(data.error || 'Wystąpił błąd przy zmianie statusu.');
+              btn.disabled = false;
+            }
+          } catch {
+            alert('Błąd połączenia. Spróbuj ponownie.');
+            btn.disabled = false;
+          }
+        });
+      });
+    });
+  </script>
+</BaseLayout>
