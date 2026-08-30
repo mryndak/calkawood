@@ -34,6 +34,12 @@ const defaultOgImage = await getImage({ src: defaultOgSource, width: 1200, heigh
 const resolvedOgImage = ogImage ?? new URL(defaultOgImage.src, Astro.site).href;
 
 const analyticsUrl = import.meta.env.PUBLIC_ANALYTICS_URL;
+
+// Google Analytics — nieaktywne, dopóki PUBLIC_GA_MEASUREMENT_ID jest puste
+// (patrz .env.example). Consent Mode startuje z domyślną odmową, żeby GA nie
+// zapisywał cookies, zanim strona nie doda baneru zgody i nie zaktualizuje
+// polityki prywatności.
+const gaMeasurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
 ---
 
 <!doctype html>
@@ -56,6 +62,18 @@ const analyticsUrl = import.meta.env.PUBLIC_ANALYTICS_URL;
       structuredData={structuredData}
       noindex={noindex}
     />
+    {gaMeasurementId && (
+      <>
+        <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`} is:inline></script>
+        <script define:vars={{ gaMeasurementId }} is:inline>
+          window.dataLayer = window.dataLayer || [];
+          function gtag() { dataLayer.push(arguments); }
+          gtag('consent', 'default', { analytics_storage: 'denied' });
+          gtag('js', new Date());
+          gtag('config', gaMeasurementId);
+        </script>
+      </>
+    )}
   </head>
   <body class="flex min-h-screen flex-col">
     <slot />

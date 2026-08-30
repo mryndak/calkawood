@@ -2,6 +2,7 @@ import type { APIRoute } from 'astro';
 import { contactRequestSchema } from '@/lib/contact-validation';
 import { checkRateLimit } from '@/lib/rate-limit';
 import { isHoneypotFilled } from '@/lib/security';
+import { verifyRecaptcha } from '@/lib/recaptcha';
 import { sendContactNotification } from '@/lib/email';
 import { handleApiError } from '@/lib/errors';
 
@@ -34,7 +35,16 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
       );
     }
 
-    // 4. Validate with Zod
+    // 4. reCAPTCHA — nieaktywna, dopóki RECAPTCHA_SECRET_KEY nie jest ustawiony
+    const recaptchaOk = await verifyRecaptcha(body['g-recaptcha-response'], clientAddress);
+    if (!recaptchaOk) {
+      return new Response(
+        JSON.stringify({ error: 'Potwierdź, że nie jesteś robotem, i spróbuj ponownie.' }),
+        { status: 400, headers: { 'Content-Type': 'application/json' } },
+      );
+    }
+
+    // 5. Validate with Zod
     const result = contactRequestSchema.safeParse(body);
     if (!result.success) {
       const fieldErrors = result.error.flatten().fieldErrors;
@@ -44,7 +54,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
       );
     }
 
-    // 5. Send email — brak zapisu do bazy jako fallbacku, więc błąd wysyłki
+    // 6. Send email — brak zapisu do bazy jako fallbacku, więc błąd wysyłki
     // musi trafić do użytkownika (inaczej wiadomość ginie bez śladu).
     try {
       await sendContactNotification(result.data);
@@ -56,7 +66,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
       );
     }
 
-    // 6. Return success
+    // 7. Return success
     return new Response(
       JSON.stringify({ success: true }),
       { status: 200, headers: { 'Content-Type': 'application/json' } },

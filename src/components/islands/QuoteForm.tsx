@@ -2,9 +2,10 @@
 // QuoteForm — React island, sześciokrokowy kreator wyceny z widełkami cenowymi na żywo
 // Validates: Requirements 5.1–5.10, 8.3, 13.4, 15.1
 
-import { useState, useCallback, useMemo, useRef } from 'react';
+import { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import { CircleCheck, Info } from 'lucide-react';
 import { quoteRequestSchema } from '@/lib/quote-validation';
+import { loadRecaptcha } from '@/lib/recaptcha-client';
 import {
   TERMS,
   MIN_AREA,
@@ -41,6 +42,9 @@ const MATERIAL_OPTIONS: Array<{ value: EstimateMaterial; desc: string }> = [
 const TERMIN_OPTIONS: EstimateTerm[] = [...TERMS];
 
 const TOTAL_STEPS = 6;
+
+// Puste — captcha nieaktywna, dopóki nie ustawisz kluczy (patrz .env.example).
+const RECAPTCHA_SITE_KEY = import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY as string | undefined;
 
 // --- Typy ---
 
@@ -124,6 +128,28 @@ export default function QuoteForm({ maxFiles, maxFileSize }: QuoteFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSent, setIsSent] = useState(false);
   const announceRef = useRef<HTMLDivElement>(null);
+  const recaptchaContainerRef = useRef<HTMLDivElement>(null);
+  const recaptchaWidgetId = useRef<number | null>(null);
+
+  // Widget renderuje się dopiero na kroku 6 (kontener wcześniej nie istnieje
+  // w DOM) i przy każdym powrocie do kroku 6 od nowa, bo React odmontowuje
+  // poprzedni <div> razem z resztą kroku.
+  useEffect(() => {
+    if (step !== 6 || !RECAPTCHA_SITE_KEY) return;
+    let cancelled = false;
+
+    loadRecaptcha().then(() => {
+      if (cancelled || !recaptchaContainerRef.current || recaptchaWidgetId.current !== null) return;
+      recaptchaWidgetId.current = window.grecaptcha!.render(recaptchaContainerRef.current, {
+        sitekey: RECAPTCHA_SITE_KEY,
+      });
+    });
+
+    return () => {
+      cancelled = true;
+      recaptchaWidgetId.current = null;
+    };
+  }, [step]);
 
   const update = useCallback(<K extends keyof FormData>(field: K, value: FormData[K]) => {
     setData((prev) => ({ ...prev, [field]: value }));
@@ -166,6 +192,14 @@ export default function QuoteForm({ maxFiles, maxFileSize }: QuoteFormProps) {
       return;
     }
 
+    const recaptchaToken = RECAPTCHA_SITE_KEY
+      ? window.grecaptcha?.getResponse(recaptchaWidgetId.current ?? undefined)
+      : undefined;
+    if (RECAPTCHA_SITE_KEY && !recaptchaToken) {
+      setGlobalError('Potwierdź, że nie jesteś robotem.');
+      return;
+    }
+
     setIsSubmitting(true);
     setGlobalError(null);
     setErrors({});
@@ -182,6 +216,7 @@ export default function QuoteForm({ maxFiles, maxFileSize }: QuoteFormProps) {
       body.append('zgoda_rodo', 'true');
       body.append('website', data.website);
       if (data.opis.trim()) body.append('opis', data.opis.trim());
+      if (recaptchaToken) body.append('g-recaptcha-response', recaptchaToken);
       for (const file of data.zdjecia) body.append('zdjecia', file);
 
       const response = await fetch('/api/wycena', { method: 'POST', body });
@@ -204,6 +239,7 @@ export default function QuoteForm({ maxFiles, maxFileSize }: QuoteFormProps) {
         } else {
           setGlobalError(payload.error ?? 'Formularz zawiera błędy. Popraw zaznaczone pola.');
         }
+        window.grecaptcha?.reset(recaptchaWidgetId.current ?? undefined);
         return;
       }
 
@@ -213,6 +249,7 @@ export default function QuoteForm({ maxFiles, maxFileSize }: QuoteFormProps) {
       }
 
       setGlobalError('Wystąpił błąd serwera. Spróbuj ponownie później lub zadzwoń.');
+      window.grecaptcha?.reset(recaptchaWidgetId.current ?? undefined);
     } catch {
       setGlobalError('Brak połączenia z internetem. Sprawdź połączenie i spróbuj ponownie.');
     } finally {
@@ -450,6 +487,8 @@ export default function QuoteForm({ maxFiles, maxFileSize }: QuoteFormProps) {
                 {errors.zgoda_rodo && (
                   <p role="alert" className="-mt-3 text-sm text-red-700">{errors.zgoda_rodo}</p>
                 )}
+
+                {RECAPTCHA_SITE_KEY && <div ref={recaptchaContainerRef} />}
 
                 {/* Honeypot */}
                 <div aria-hidden="true" style={{ position: 'absolute', left: '-9999px' }}>
