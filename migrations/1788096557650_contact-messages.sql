@@ -2,9 +2,9 @@
 
 -- Tabela wiadomości z formularza kontaktowego (/kontakt), widoczna w
 -- /admin/kontakt. Reużywa funkcji update_updated_at() z migracji
--- init-quote-requests.
+-- init-quote-requests. Idempotentne DDL — patrz komentarz w tamtej migracji.
 
-CREATE TABLE contact_messages (
+CREATE TABLE IF NOT EXISTS contact_messages (
   id            SERIAL PRIMARY KEY,
   imie          VARCHAR(100) NOT NULL,
   telefon       VARCHAR(20) NOT NULL,
@@ -15,9 +15,10 @@ CREATE TABLE contact_messages (
   updated_at    TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
-CREATE INDEX idx_contact_messages_status ON contact_messages(status);
-CREATE INDEX idx_contact_messages_created_at ON contact_messages(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_contact_messages_status ON contact_messages(status);
+CREATE INDEX IF NOT EXISTS idx_contact_messages_created_at ON contact_messages(created_at DESC);
 
+DROP TRIGGER IF EXISTS trigger_contact_messages_updated_at ON contact_messages;
 CREATE TRIGGER trigger_contact_messages_updated_at
   BEFORE UPDATE ON contact_messages
   FOR EACH ROW EXECUTE FUNCTION update_updated_at();
