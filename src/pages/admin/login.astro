@@ -3,7 +3,13 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import i18n from '@/i18n';
 
 const url = new URL(Astro.request.url);
-const hasError = url.searchParams.get('error') === 'invalid';
+const errorParam = url.searchParams.get('error');
+const errorMessage =
+  errorParam === 'ratelimit'
+    ? i18n.admin.login.rateLimitError
+    : errorParam === 'invalid'
+      ? i18n.admin.login.error
+      : null;
 ---
 
 <BaseLayout title={`${i18n.admin.login.title} | CalkaWood`} description="Panel administracyjny CalkaWood" noindex>
@@ -14,9 +20,9 @@ const hasError = url.searchParams.get('error') === 'invalid';
           {i18n.admin.login.title}
         </h1>
 
-        {hasError && (
+        {errorMessage && (
           <div class="mb-4 p-3 bg-red-50 border border-red-200 rounded text-red-700 text-sm" role="alert">
-            {i18n.admin.login.error}
+            {errorMessage}
           </div>
         )}
 

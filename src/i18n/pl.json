@@ -115,7 +115,8 @@
       "title": "Panel administracyjny",
       "password": "Hasło",
       "submit": "Zaloguj się",
-      "error": "Nieprawidłowe hasło."
+      "error": "Nieprawidłowe hasło.",
+      "rateLimitError": "Zbyt wiele prób logowania. Spróbuj ponownie za kilka minut."
     },
     "nav": {
       "quotes": "Wyceny",

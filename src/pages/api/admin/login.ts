@@ -4,8 +4,19 @@ import {
   createSession,
   getSessionCookieHeader,
 } from '@/lib/admin-auth';
+import { checkRateLimit } from '@/lib/rate-limit';
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, clientAddress }) => {
+  // Ochrona przed brute-force hasła — bez tego timing-safe porównanie
+  // chroni tylko przed atakiem czasowym, nie przed próbami "na ilość".
+  const rateCheck = checkRateLimit(`admin-login:${clientAddress}`, 5, 15 * 60 * 1000);
+  if (!rateCheck.allowed) {
+    return new Response(null, {
+      status: 303,
+      headers: { Location: '/admin/login?error=ratelimit' },
+    });
+  }
+
   const contentType = request.headers.get('content-type') ?? '';
 
   let password = '';
