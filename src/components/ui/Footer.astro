@@ -28,6 +28,10 @@ const legalLinks = [
   { label: 'Regulamin', href: '/regulamin' },
 ];
 
+// Widoczne tylko, gdy jest co ustawiać — baner cookies pokazuje się wyłącznie
+// przy skonfigurowanym Google Analytics (patrz CookieConsentBanner.astro).
+const showCookieSettings = Boolean(import.meta.env.PUBLIC_GA_MEASUREMENT_ID);
+
 // TODO: podmienić Instagram na docelowy adres profilu, gdy będzie gotowy.
 const socialLinks = [
   { label: 'Facebook', href: 'https://www.facebook.com/profile.php?id=61593752109796' },
@@ -145,7 +149,26 @@ const socialLinks = [
             </a>
           </li>
         ))}
+        {showCookieSettings && (
+          <li>
+            <button
+              type="button"
+              id="cookie-settings-link"
+              class="transition-colors hover:text-dark-text"
+            >
+              Ustawienia cookies
+            </button>
+          </li>
+        )}
       </ul>
     </div>
   </div>
 </footer>
+
+{showCookieSettings && (
+  <script>
+    document.getElementById('cookie-settings-link')?.addEventListener('click', () => {
+      window.dispatchEvent(new Event('cookie-consent:open'));
+    });
+  </script>
+)}

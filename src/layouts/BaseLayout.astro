@@ -2,6 +2,7 @@
 import { getImage } from 'astro:assets';
 import '@/styles/global.css';
 import SEOHead from '@/components/ui/SEOHead.astro';
+import CookieConsentBanner from '@/components/ui/CookieConsentBanner.astro';
 import defaultOgSource from '@/assets/photos/zadaszenie-taras-meble.jpeg';
 
 interface Props {
@@ -77,6 +78,7 @@ const gaMeasurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
   </head>
   <body class="flex min-h-screen flex-col">
     <slot />
+    <CookieConsentBanner />
     {analyticsUrl && (
       <script
         defer

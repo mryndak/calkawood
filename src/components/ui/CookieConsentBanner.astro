@@ -1,0 +1,106 @@
+---
+// Baner zgody na cookies — renderuje się tylko wtedy, gdy Google Analytics
+// jest skonfigurowane (PUBLIC_GA_MEASUREMENT_ID ustawione), bo to jedyne
+// cookie na stronie wymagające uprzedniej zgody (patrz /polityka-prywatnosci,
+// sekcja 7). Dopóki GA jest wyłączone, baner nie ma czego pytać i się nie
+// pokazuje.
+const gaEnabled = Boolean(import.meta.env.PUBLIC_GA_MEASUREMENT_ID);
+---
+
+{gaEnabled && (
+  <div
+    id="cookie-consent-banner"
+    role="region"
+    aria-label="Zgoda na pliki cookies"
+    hidden
+    class="fixed inset-x-0 bottom-0 z-[90] border-t border-hairline bg-background px-4 py-5 shadow-[0_-4px_16px_rgba(0,0,0,0.08)] sm:px-10"
+  >
+    <div class="mx-auto flex max-w-7xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <p class="max-w-[70ch] text-sm leading-[1.6] text-text-secondary">
+        Używamy Google Analytics tylko za Twoją zgodą, żeby wiedzieć, które strony są przydatne.
+        Szczegóły w{' '}
+        <a href="/polityka-prywatnosci" class="text-primary-dark underline decoration-1 underline-offset-[3px] hover:text-accent">
+          polityce prywatności
+        </a>.
+      </p>
+      <div class="flex shrink-0 items-center gap-3">
+        <button
+          type="button"
+          id="cookie-consent-reject"
+          class="rounded-[4px] border border-text/22 px-5 py-2.5 font-serif text-sm text-text transition-colors hover:border-primary"
+        >
+          Odrzuć
+        </button>
+        <button
+          type="button"
+          id="cookie-consent-accept"
+          class="rounded-[4px] bg-ink px-5 py-2.5 font-serif text-sm text-background transition-colors hover:bg-ink-hover"
+        >
+          Akceptuj
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    declare global {
+      interface Window {
+        gtag?: (...args: unknown[]) => void;
+      }
+    }
+
+    const STORAGE_KEY = 'cookie-consent';
+
+    function applyConsent(value: 'granted' | 'denied') {
+      window.gtag?.('consent', 'update', { analytics_storage: value });
+    }
+
+    function getStoredConsent(): 'granted' | 'denied' | null {
+      try {
+        const value = localStorage.getItem(STORAGE_KEY);
+        return value === 'granted' || value === 'denied' ? value : null;
+      } catch {
+        return null;
+      }
+    }
+
+    function storeConsent(value: 'granted' | 'denied') {
+      try {
+        localStorage.setItem(STORAGE_KEY, value);
+      } catch {
+        // localStorage niedostępny (np. tryb prywatny) — zgoda ważna tylko na tę wizytę.
+      }
+    }
+
+    const banner = document.getElementById('cookie-consent-banner');
+    const acceptBtn = document.getElementById('cookie-consent-accept');
+    const rejectBtn = document.getElementById('cookie-consent-reject');
+
+    function hideBanner() {
+      banner?.setAttribute('hidden', '');
+    }
+
+    function showBanner() {
+      banner?.removeAttribute('hidden');
+    }
+
+    function choose(value: 'granted' | 'denied') {
+      storeConsent(value);
+      applyConsent(value);
+      hideBanner();
+    }
+
+    const stored = getStoredConsent();
+    if (stored) {
+      applyConsent(stored);
+    } else {
+      showBanner();
+    }
+
+    acceptBtn?.addEventListener('click', () => choose('granted'));
+    rejectBtn?.addEventListener('click', () => choose('denied'));
+
+    // Link "Ustawienia cookies" w stopce pozwala zmienić wybór później.
+    window.addEventListener('cookie-consent:open', showBanner);
+  </script>
+)}
