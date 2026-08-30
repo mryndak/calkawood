@@ -496,8 +496,8 @@ export default function QuoteForm({ maxFiles, maxFileSize }: QuoteFormProps) {
                 {isSubmitting ? 'Wysyłanie…' : 'Wyślij zapytanie'}
               </button>
             )}
-            <a href="tel:+48123456789" className="ml-auto text-[13.5px] text-text-muted">
-              Wolisz porozmawiać? +48 123 456 789
+            <a href="tel:+48661084830" className="ml-auto text-[13.5px] text-text-muted">
+              Wolisz porozmawiać? 661 084 830
             </a>
           </div>
         </div>
@@ -674,7 +674,7 @@ function SentScreen({ onRestart }: { onRestart: () => void }) {
           </p>
           <div className="flex flex-wrap gap-3.5">
             <a
-              href="tel:+48123456789"
+              href="tel:+48661084830"
               className="rounded-[4px] bg-ink px-6 py-[15px] font-serif text-base text-background"
             >
               Nie chcę czekać — dzwonię

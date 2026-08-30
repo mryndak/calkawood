@@ -1,97 +1,152 @@
 ---
+import { Image } from 'astro:assets';
 import PageLayout from '@/layouts/PageLayout.astro';
 import Button from '@/components/ui/Button.astro';
+import Testimonials from '@/components/sections/Testimonials.astro';
+import QuoteCTA from '@/components/sections/QuoteCTA.astro';
 import { Phone } from '@lucide/astro';
+import montazImg from '@/assets/photos/montaz-deski-praca.jpeg';
 import t from '@/i18n';
+
+const skills = [
+  { title: 'Stolarka na wymiar', description: 'Altany, pergole, wiaty, zadaszenia, drzwi, blaty, antresole.' },
+  { title: 'Tarasy', description: 'Drewniane, kompozytowe, betonowe, kamienne.' },
+  { title: 'Podłogi i wnętrza', description: 'Montaż paneli, renowacja podłóg, remonty.' },
+  { title: 'Budowa szkieletowa', description: 'Domy i budynki gospodarcze w technologii kanadyjskiej.' },
+];
+
+const values = [
+  {
+    title: 'Sumienność',
+    description: 'Każdy projekt realizuję terminowo i z pełnym zaangażowaniem. Traktuję zlecenia klientów tak, jakbym budował dla siebie.',
+  },
+  {
+    title: 'Rzetelność',
+    description: 'Jasna komunikacja, uczciwa wycena i dotrzymywanie ustaleń. Nie obiecuję tego, czego nie jestem w stanie wykonać.',
+  },
+  {
+    title: 'Dbałość o detale',
+    description: 'Wykończenie ma znaczenie. Dbam o precyzję, estetykę i trwałość każdego elementu — od fundamentu po ostatnie szlify.',
+  },
+];
 ---
 
 <PageLayout title={t.meta.about.title} description={t.meta.about.description}>
-  <section class="mx-auto max-w-3xl px-4 py-16 sm:px-10 sm:py-[84px]">
-    <p class="kicker">O mnie</p>
-    <h1 class="mt-[18px] text-4xl leading-[1.01] tracking-[-0.025em] text-text sm:text-6xl">
-      Wojciech Całka
-    </h1>
-
-    <p class="mt-6 max-w-[65ch] text-lg leading-[1.75] text-text-secondary">
-      Nazywam się <strong class="font-semibold text-text">Wojciech Całka</strong> i prowadzę firmę{' '}
-      <strong class="font-semibold text-text">CalkaWood</strong> — jednoosobową działalność
-      stolarsko-budowlaną na Podkarpaciu. Od ponad 5 lat realizuję projekty z drewna i nie tylko,
-      łącząc rzemiosło z nowoczesnym podejściem do materiałów i technologii.
-    </p>
-
-    <h2 class="mt-16 text-2xl leading-[1.1] text-text sm:text-4xl">Doświadczenie zawodowe</h2>
-
-    <p class="mt-4 max-w-[65ch] text-base leading-[1.75] text-text-secondary">
-      Przez lata zdobywałem doświadczenie pracując przy różnorodnych projektach — od
-      niewielkich elementów stolarki na wymiar, przez tarasy i podłogi, aż po budowę
-      domów w technologii szkieletowej. Każde zlecenie traktuję indywidualnie, dobierając
-      materiały i rozwiązania do potrzeb klienta.
-    </p>
-
-    <ul class="mt-6 space-y-3 border-t border-hairline pt-6 text-base leading-[1.6] text-text-secondary">
-      <li class="flex items-start gap-3">
-        <span class="mt-2.5 inline-block h-1 w-1 flex-shrink-0 rounded-full bg-primary" aria-hidden="true"></span>
-        <span><strong class="font-semibold text-text">Stolarka na wymiar</strong> — altany, pergole, wiaty, zadaszenia, drzwi, blaty, antresole</span>
-      </li>
-      <li class="flex items-start gap-3">
-        <span class="mt-2.5 inline-block h-1 w-1 flex-shrink-0 rounded-full bg-primary" aria-hidden="true"></span>
-        <span><strong class="font-semibold text-text">Tarasy</strong> — drewniane, kompozytowe, betonowe, kamienne</span>
-      </li>
-      <li class="flex items-start gap-3">
-        <span class="mt-2.5 inline-block h-1 w-1 flex-shrink-0 rounded-full bg-primary" aria-hidden="true"></span>
-        <span><strong class="font-semibold text-text">Podłogi i wnętrza</strong> — montaż paneli, renowacja podłóg, remonty</span>
-      </li>
-      <li class="flex items-start gap-3">
-        <span class="mt-2.5 inline-block h-1 w-1 flex-shrink-0 rounded-full bg-primary" aria-hidden="true"></span>
-        <span><strong class="font-semibold text-text">Budowa szkieletowa</strong> — domy i budynki gospodarcze w technologii kanadyjskiej</span>
-      </li>
-    </ul>
-
-    <h2 class="mt-16 text-2xl leading-[1.1] text-text sm:text-4xl">Wartości, którymi się kieruję</h2>
-
-    <div class="mt-6 grid grid-cols-1 gap-8 border-t border-hairline pt-8 sm:grid-cols-3 sm:gap-10">
+  <!-- Nagłówek -->
+  <section class="mx-auto max-w-7xl px-4 pt-16 sm:px-10 sm:pt-[84px]">
+    <div class="grid grid-cols-1 gap-8 border-b border-hairline pb-11 sm:grid-cols-2 sm:items-end sm:gap-[70px]">
       <div>
-        <p class="font-serif text-xl text-text">Sumienność</p>
-        <p class="mt-2 text-sm leading-relaxed text-text-secondary">
-          Każdy projekt realizuję terminowo i z pełnym zaangażowaniem. Traktuję zlecenia
-          klientów tak, jakbym budował dla siebie.
+        <p class="kicker">O mnie</p>
+        <h1 class="mt-[18px] text-4xl leading-none tracking-[-0.025em] text-text sm:text-6xl lg:text-[72px]">
+          Wojciech Całka
+        </h1>
+      </div>
+      <p class="max-w-[52ch] text-base leading-[1.75] text-text-secondary">
+        Od ponad 5 lat prowadzę na Podkarpaciu firmę stolarsko-budowlaną pod marką{' '}
+        <strong class="font-semibold text-text">CalkaWood</strong> — formalnie{' '}
+        <strong class="font-semibold text-text">MLC GROUP Wojciech Całka</strong>. Łączę rzemiosło
+        z nowoczesnym podejściem do materiałów i technologii.
+      </p>
+    </div>
+  </section>
+
+  <!-- Doświadczenie -->
+  <section class="bg-background px-4 py-20 sm:px-6 lg:px-8 sm:py-28" aria-label="Doświadczenie zawodowe">
+    <div class="mx-auto grid max-w-7xl grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-16 lg:divide-x lg:divide-hairline">
+      <div class="lg:pr-16">
+        <h2 class="text-3xl text-text sm:text-4xl lg:text-[46px]">Doświadczenie zawodowe</h2>
+        <p class="mt-5 text-base leading-[1.75] text-text-secondary sm:text-lg sm:leading-[1.8]">
+          Przez lata zdobywałem doświadczenie pracując przy różnorodnych projektach — od
+          niewielkich elementów stolarki na wymiar, przez tarasy i podłogi, aż po budowę
+          domów w technologii szkieletowej. Każde zlecenie traktuję indywidualnie, dobierając
+          materiały i rozwiązania do potrzeb klienta.
         </p>
       </div>
-
-      <div>
-        <p class="font-serif text-xl text-text">Rzetelność</p>
-        <p class="mt-2 text-sm leading-relaxed text-text-secondary">
-          Jasna komunikacja, uczciwa wycena i dotrzymywanie ustaleń. Nie obiecuję tego,
-          czego nie jestem w stanie wykonać.
-        </p>
-      </div>
-
-      <div>
-        <p class="font-serif text-xl text-text">Dbałość o detale</p>
-        <p class="mt-2 text-sm leading-relaxed text-text-secondary">
-          Wykończenie ma znaczenie. Dbam o precyzję, estetykę i trwałość każdego elementu
-          — od fundamentu po ostatnie szlify.
-        </p>
+      <div class="lg:pl-16">
+        <div class="plate aspect-[4/3]">
+          <Image
+            src={montazImg}
+            alt="Wojciech Całka przy montażu deski tarasowej"
+            class="h-full w-full object-cover"
+            width={700}
+            height={525}
+            loading="lazy"
+          />
+        </div>
       </div>
     </div>
+  </section>
 
-    <h2 class="mt-16 text-2xl leading-[1.1] text-text sm:text-4xl">Region działania</h2>
+  <!-- Czym się zajmuję -->
+  <section class="border-y border-hairline bg-surface" aria-labelledby="skills-heading">
+    <div class="mx-auto max-w-7xl px-4 py-20 sm:px-10 sm:py-[100px]">
+      <div class="grid grid-cols-1 gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-[70px]">
+        <div>
+          <p class="kicker">Zakres prac</p>
+          <h2 id="skills-heading" class="mt-[18px] text-3xl leading-[1.03] tracking-[-0.025em] text-text sm:text-5xl">
+            Czym się zajmuję
+          </h2>
+        </div>
 
-    <p class="mt-4 max-w-[65ch] text-base leading-[1.75] text-text-secondary">
-      Działam na terenie województwa podkarpackiego — Rzeszów, Krosno i okoliczne powiaty
-      (brzozowski, dębicki, jasielski, łańcucki, ropczycko-sędziszowski, rzeszowski,
-      strzyżowski). W przypadku większych projektów dojadę dalej — wystarczy zadzwonić
-      i ustalić szczegóły.
-    </p>
+        <div class="grid grid-cols-1 border-t border-hairline sm:grid-cols-2">
+          {skills.map((skill) => (
+            <div class="border-b border-hairline py-[22px] sm:pr-8">
+              <p class="font-serif text-xl text-text">{skill.title}</p>
+              <p class="mt-1.5 text-sm leading-relaxed text-text-secondary">{skill.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <div class="mt-14 border-t border-hairline pt-10 text-center">
-      <p class="text-base text-text-secondary">Masz projekt do omówienia?</p>
-      <div class="mt-4 inline-flex">
-        <Button href="tel:+48123456789" variant="dark" size="lg" aria-label="Zadzwoń pod numer +48 123 456 789">
+  <!-- Wartości -->
+  <section class="bg-background px-4 py-20 sm:px-6 lg:px-8 sm:py-28" aria-labelledby="values-heading">
+    <div class="mx-auto max-w-7xl">
+      <p class="kicker">Podejście</p>
+      <h2 id="values-heading" class="mt-[18px] text-3xl leading-[1.02] tracking-[-0.025em] text-text sm:text-5xl">
+        Wartości, którymi się kieruję
+      </h2>
+
+      <div class="mt-10 grid grid-cols-1 gap-8 border-t border-hairline pt-10 sm:grid-cols-3 sm:gap-10">
+        {values.map((value) => (
+          <div>
+            <p class="font-serif text-xl text-text">{value.title}</p>
+            <p class="mt-2 text-sm leading-relaxed text-text-secondary">{value.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <Testimonials />
+
+  <!-- Region działania -->
+  <section class="bg-background px-4 py-20 sm:px-6 lg:px-8 sm:py-28" aria-labelledby="region-heading">
+    <div class="mx-auto max-w-7xl">
+      <div class="grid grid-cols-1 gap-8 border-b border-hairline pb-10 sm:grid-cols-2 sm:items-end sm:gap-[70px]">
+        <div>
+          <p class="kicker">Zasięg</p>
+          <h2 id="region-heading" class="mt-[18px] text-3xl leading-[1.02] tracking-[-0.025em] text-text sm:text-5xl">
+            Region działania
+          </h2>
+        </div>
+        <p class="max-w-[52ch] text-base leading-[1.75] text-text-secondary">
+          Działam na terenie województwa podkarpackiego — Rzeszów, Krosno i okoliczne powiaty
+          (brzozowski, dębicki, jasielski, łańcucki, ropczycko-sędziszowski, rzeszowski,
+          strzyżowski). W przypadku większych projektów dojadę dalej — wystarczy zadzwonić
+          i ustalić szczegóły.
+        </p>
+      </div>
+
+      <div class="mt-10 flex justify-center">
+        <Button href="tel:+48661084830" variant="dark" size="lg" aria-label="Zadzwoń pod numer 661 084 830">
           <Phone class="h-4 w-4" stroke-width={1.6} aria-hidden="true" />
-          +48 123 456 789
+          661 084 830
         </Button>
       </div>
     </div>
   </section>
+
+  <QuoteCTA />
 </PageLayout>

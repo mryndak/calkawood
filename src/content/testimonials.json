@@ -1,26 +1,26 @@
 [
   {
-    "id": "jan-kowalski",
-    "author": "Jan Kowalski",
-    "location": "Brzozów",
-    "content": "Zamawiałem altanę ogrodową i jestem bardzo zadowolony z efektu. Pan Wojciech podszedł do tematu profesjonalnie — od doradztwa przy wyborze drewna, przez projekt, aż po montaż. Wszystko terminowo i starannie wykończone. Polecam każdemu, kto szuka solidnego rzemieślnika na Podkarpaciu.",
+    "id": "iza-fixly",
+    "author": "Iza",
+    "location": "Fixly.pl",
+    "content": "Super fachowiec, jesteśmy bardzo zadowoleni z tarasu. Jakość w stosunku do ceny wypadła bardzo dobrze, szybki termin realizacji. Na plus komunikatywnosc i rozwiazuwanie na bieżąco problemów, np ukrywanie mankamentów elewacji. Zdjęcia po ok pół roku użytkowania tarasu.",
     "rating": 5,
-    "date": "2024-09-02"
+    "date": "2024-12-06"
   },
   {
-    "id": "anna-nowak",
-    "author": "Anna Nowak",
-    "location": "Rzeszów",
-    "content": "Zleciliśmy wykonanie tarasu kompozytowego przy domu. Realizacja przebiegła sprawnie, ekipa przyjechała punktualnie i zostawiła po sobie porządek. Taras wygląda pięknie i jest bardzo praktyczny. Widać, że firma ma doświadczenie i dba o każdy detal.",
+    "id": "jakub-fixly",
+    "author": "Jakub",
+    "location": "Fixly.pl",
+    "content": "Bdb wykonany taras, rzetelnie, przystępne ceny, co do terminu też można się dogadać. Polecam",
     "rating": 5,
-    "date": "2024-07-15"
+    "date": "2024-09-15"
   },
   {
-    "id": "marek-wisniewski",
-    "author": "Marek Wiśniewski",
-    "location": "Krosno",
-    "content": "Podłoga dębowa w salonie wyszła bardzo dobrze. Fachowe doradztwo przy wyborze wykończenia, rzetelna wycena bez ukrytych kosztów. Jedyny minus — termin przesunął się o tydzień z powodu opóźnienia dostawy materiału, ale finalny efekt rekompensuje oczekiwanie.",
-    "rating": 4,
-    "date": "2024-05-20"
+    "id": "ewelina-fixly",
+    "author": "Ewelina",
+    "location": "Fixly.pl",
+    "content": "Wojciech! Bardzo dokładny wykonawca. Budowa domku przebiegła sprawnie i pomyślnie. Wszystko dopięte na ostatni guzik. Gdy coś nie było jasne wykonawca służył pomocą i potrafił świetnie doradzić. Zadowolenie gwarantowane. Polecam.",
+    "rating": 5,
+    "date": "2024-09-15"
   }
 ]
