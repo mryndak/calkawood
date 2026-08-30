@@ -1,7 +1,14 @@
 # Deploy CalkaWood to MyDevil.net
 #
 # Po push do `main`: build na runnerze → wysyłka build output na MyDevil →
-# instalacja zależności produkcyjnych NA SERWERZE → restart aplikacji.
+# instalacja zależności produkcyjnych NA SERWERZE → migracje bazy danych
+# (node-pg-migrate, katalog migrations/) → restart aplikacji.
+#
+# Migracje uruchamiają się NA SERWERZE (przez SSH), nie z runnera GitHub —
+# Postgres na współdzielonym hostingu zwykle nie przyjmuje połączeń z
+# zewnątrz, a serwer ma do niego lokalny dostęp tak samo jak aplikacja
+# w runtime. node-pg-migrate śledzi zastosowane migracje w tabeli
+# `pgmigrations`, więc bezpiecznie uruchamia tylko te, których jeszcze nie było.
 #
 # ═══════════════════════════════════════════════════════════════
 # WYMAGANE SEKRETY (GitHub → Settings → Secrets and variables → Actions):
@@ -17,7 +24,9 @@
 #   MYDEVIL_PATH      - Ścieżka docelowa na serwerze, np.
 #                       /usr/home/LOGIN/domains/calkawood.pl/public_nodejs
 #
-#   DATABASE_URL      - Connection string PostgreSQL (przekazywany przy build).
+#   DATABASE_URL      - Connection string PostgreSQL. Używany przy build ORAZ
+#                       przekazywany na serwer do uruchomienia migracji
+#                       (node-pg-migrate) przed restartem aplikacji.
 #
 #   RESEND_API_KEY    - Klucz API Resend (przekazywany przy build).
 # ═══════════════════════════════════════════════════════════════
@@ -60,9 +69,10 @@ jobs:
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -H ${{ secrets.MYDEVIL_HOST }} >> ~/.ssh/known_hosts
 
-      # Wgrywamy TYLKO build output + manifesty zależności i entry point.
-      # node_modules NIE jest kopiowane — instalujemy je na serwerze (FreeBSD),
-      # by binaria natywne (np. sharp) pasowały do platformy serwera.
+      # Wgrywamy TYLKO build output + manifesty zależności, entry point i
+      # migracje. node_modules NIE jest kopiowane — instalujemy je na
+      # serwerze (FreeBSD), by binaria natywne (np. sharp) pasowały do
+      # platformy serwera.
       - name: Deploy build output via rsync
         env:
           SSH_CMD: ssh -i ~/.ssh/deploy_key
@@ -70,15 +80,18 @@ jobs:
         run: |
           rsync -avz --delete -e "$SSH_CMD" dist/ "${REMOTE}/dist/"
           rsync -avz --delete -e "$SSH_CMD" dist/client/ "${REMOTE}/public/"
+          rsync -avz --delete -e "$SSH_CMD" migrations/ "${REMOTE}/migrations/"
           rsync -avz -e "$SSH_CMD" \
             app.js package.json package-lock.json \
             "${REMOTE}/"
 
-      - name: Install production deps & restart on server
+      - name: Install deps, run migrations & restart on server
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: |
           ssh -i ~/.ssh/deploy_key \
             ${{ secrets.MYDEVIL_USER }}@${{ secrets.MYDEVIL_HOST }} \
-            'source ~/.bash_profile && cd ${{ secrets.MYDEVIL_PATH }} && npm install --omit=dev && devil www restart calkawood.pl'
+            "source ~/.bash_profile && cd ${{ secrets.MYDEVIL_PATH }} && npm install --omit=dev && DATABASE_URL=\"$DATABASE_URL\" npx node-pg-migrate up && devil www restart calkawood.pl"
 
       - name: Cleanup SSH key
         if: always()

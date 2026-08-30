@@ -10,7 +10,10 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "test": "vitest --run"
+    "test": "vitest --run",
+    "migrate:up": "node-pg-migrate up",
+    "migrate:down": "node-pg-migrate down",
+    "migrate:create": "node-pg-migrate create -j sql"
   },
   "dependencies": {
     "@astrojs/node": "^11.0.0",
@@ -23,6 +26,8 @@
     "astro": "^7.0.3",
     "leaflet": "^1.9.4",
     "lucide-react": "^1.37.0",
+    "node-pg-migrate": "^9.0.0",
+    "pg": "^8.23.0",
     "postgres": "3.4.7",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",

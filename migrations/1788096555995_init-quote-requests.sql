@@ -1,9 +1,15 @@
--- CalkaWood: Migracja bazy danych
--- Tabela zapytań wycenowych (quote_requests)
---
--- Schemat dla NOWEJ instalacji (uwzględnia już migracje/002). Jeśli baza już
--- istnieje z wcześniejszą wersją tabeli, użyj zamiast tego
--- scripts/migrate-002-wycena-widelki.sql (ALTER, nie niszczy danych).
+-- Up Migration
+
+-- Tabela zapytań wycenowych (kreator wyceny online, /wycena) i wspólna
+-- funkcja triggera updated_at, reużywana też przez kolejne migracje.
+
+CREATE OR REPLACE FUNCTION update_updated_at()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = NOW();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
 
 CREATE TABLE quote_requests (
   id            SERIAL PRIMARY KEY,
@@ -24,20 +30,15 @@ CREATE TABLE quote_requests (
   updated_at    TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
--- Indeksy
 CREATE INDEX idx_quote_requests_status ON quote_requests(status);
 CREATE INDEX idx_quote_requests_created_at ON quote_requests(created_at DESC);
 CREATE INDEX idx_quote_requests_usluga ON quote_requests(usluga);
 
--- Trigger automatycznej aktualizacji updated_at
-CREATE OR REPLACE FUNCTION update_updated_at()
-RETURNS TRIGGER AS $$
-BEGIN
-  NEW.updated_at = NOW();
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
 CREATE TRIGGER trigger_quote_requests_updated_at
   BEFORE UPDATE ON quote_requests
   FOR EACH ROW EXECUTE FUNCTION update_updated_at();
+
+-- Down Migration
+
+DROP TABLE IF EXISTS quote_requests;
+-- update_updated_at() celowo zostaje — używa jej też migracja contact-messages.
