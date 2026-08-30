@@ -1,0 +1,215 @@
+---
+export const prerender = true;
+
+import { Image } from 'astro:assets';
+import PageLayout from '@/layouts/PageLayout.astro';
+import PhotoPlaceholder from '@/components/ui/PhotoPlaceholder.astro';
+import Button from '@/components/ui/Button.astro';
+import QuoteCTA from '@/components/sections/QuoteCTA.astro';
+import { SERVICE_PAGES, SERVICE_CATEGORY_ORDER, type ServiceCategory } from '@/data/servicePages';
+import t from '@/i18n';
+
+import tarasDomNowoczesny from '@/assets/photos/taras-dom-nowoczesny.jpeg';
+import tarasZloteSwiatlo from '@/assets/photos/taras-zlote-swiatlo.jpeg';
+import tarasBalustrada from '@/assets/photos/taras-balustrada.jpeg';
+import zadaszenieTarasMeble from '@/assets/photos/zadaszenie-taras-meble.jpeg';
+import pergolaTarasSlup from '@/assets/photos/pergola-taras-slup.jpeg';
+import schodyTarasWejscie from '@/assets/photos/schody-taras-wejscie.jpeg';
+import schodyWnetrze from '@/assets/photos/schody-wnetrze.jpeg';
+import montazDeskiPraca from '@/assets/photos/montaz-deski-praca.jpeg';
+
+export function getStaticPaths() {
+  return SERVICE_CATEGORY_ORDER.map((category) => ({ params: { category } }));
+}
+
+const { category } = Astro.params as { category: ServiceCategory };
+const content = SERVICE_PAGES[category];
+const meta = t.meta[category];
+
+// Zdjęcia realne tam, gdzie są (tarasy, zadaszenia, wnętrza) — dla domów
+// i saun realizacje w portfolio na razie nie mają dostarczonych fotografii
+// (patrz src/content/projects.json), więc PhotoPlaceholder zamiast fałszywych
+// kadrów, tak samo jak w ServicesOverview.astro na stronie głównej.
+const PHOTOS_BY_CATEGORY: Record<ServiceCategory, Array<{ src: ImageMetadata; alt: string }>> = {
+  domy: [],
+  sauny: [],
+  tarasy: [
+    { src: tarasDomNowoczesny, alt: 'Taras z modrzewia syberyjskiego przy nowoczesnym domu' },
+    { src: tarasZloteSwiatlo, alt: 'Taras z olejowanej sosny w złotym świetle zachodzącego słońca' },
+    { src: tarasBalustrada, alt: 'Taras drewniany z balustradą listwową' },
+  ],
+  zadaszenia: [
+    { src: zadaszenieTarasMeble, alt: 'Zadaszenie tarasu z drewna klejonego z meblami ogrodowymi' },
+    { src: pergolaTarasSlup, alt: 'Pergola wsparta na drewnianym słupie przy elewacji domu' },
+  ],
+  wnetrza: [
+    { src: schodyWnetrze, alt: 'Drewniane schody wewnętrzne' },
+    { src: schodyTarasWejscie, alt: 'Taras wejściowy ze stopniami do domu' },
+    { src: montazDeskiPraca, alt: 'Montaż deski tarasowej przez rzemieślnika' },
+  ],
+};
+// Zgodne z placeholderNote w src/content/projects.json dla tych samych realizacji.
+const PLACEHOLDER_DESCRIPTIONS: Record<ServiceCategory, string[]> = {
+  domy: ['elewacja domu szkieletowego', 'dom z bali, widok od ogrodu'],
+  sauny: ['sauna ogrodowa, wnętrze', 'sauna beczka w ogrodzie'],
+  tarasy: [],
+  zadaszenia: [],
+  wnetrza: [],
+};
+
+const photos = PHOTOS_BY_CATEGORY[category];
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Service',
+      name: content.h1,
+      description: meta.description,
+      provider: {
+        '@type': 'HomeAndConstructionBusiness',
+        name: 'CalkaWood',
+        telephone: '+48661084830',
+      },
+      areaServed: [
+        { '@type': 'State', name: 'małopolskie' },
+        { '@type': 'State', name: 'podkarpackie' },
+        { '@type': 'State', name: 'świętokrzyskie' },
+        { '@type': 'State', name: 'lubelskie' },
+      ],
+      url: new URL(Astro.url.pathname, Astro.site).href,
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Strona główna', item: new URL('/', Astro.site).href },
+        { '@type': 'ListItem', position: 2, name: 'Usługi', item: new URL('/uslugi', Astro.site).href },
+        { '@type': 'ListItem', position: 3, name: content.kicker, item: new URL(Astro.url.pathname, Astro.site).href },
+      ],
+    },
+    ...(content.faq.length > 0
+      ? [
+          {
+            '@type': 'FAQPage',
+            mainEntity: content.faq.map((item) => ({
+              '@type': 'Question',
+              name: item.question,
+              acceptedAnswer: { '@type': 'Answer', text: item.answer },
+            })),
+          },
+        ]
+      : []),
+  ],
+};
+---
+
+<PageLayout title={meta.title} description={meta.description} structuredData={structuredData}>
+  <!-- Nagłówek -->
+  <section class="mx-auto max-w-7xl px-4 pt-16 sm:px-10 sm:pt-[84px]">
+    <nav aria-label="Okruszki" class="mb-6 flex flex-wrap items-center gap-1.5 text-[13px] text-text-muted">
+      <a href="/" class="hover:text-primary-dark hover:underline">Strona główna</a>
+      <span aria-hidden="true">/</span>
+      <a href="/uslugi" class="hover:text-primary-dark hover:underline">Usługi</a>
+      <span aria-hidden="true">/</span>
+      <span class="text-text">{content.kicker}</span>
+    </nav>
+
+    <div class="grid grid-cols-1 gap-8 border-b border-hairline pb-11 sm:grid-cols-2 sm:items-end sm:gap-[70px]">
+      <div>
+        <p class="kicker">{content.kicker}</p>
+        <h1 class="mt-[18px] text-4xl leading-none tracking-[-0.025em] text-text sm:text-6xl lg:text-[64px]">
+          {content.h1}
+        </h1>
+      </div>
+      <p class="max-w-[52ch] text-base leading-[1.75] text-text-secondary">
+        {content.intro}
+      </p>
+    </div>
+  </section>
+
+  <!-- Co obejmuje usługa -->
+  <section class="bg-background px-4 py-20 sm:px-6 lg:px-8 sm:py-28" aria-labelledby="highlights-heading">
+    <div class="mx-auto max-w-7xl">
+      <h2 id="highlights-heading" class="text-3xl leading-[1.02] tracking-[-0.025em] text-text sm:text-4xl">
+        Co obejmuje ta usługa
+      </h2>
+      <div class="mt-10 grid grid-cols-1 gap-8 border-t border-hairline pt-10 sm:grid-cols-2">
+        {content.highlights.map((item) => (
+          <div>
+            <p class="font-serif text-xl text-text">{item.title}</p>
+            <p class="mt-2 text-sm leading-relaxed text-text-secondary">{item.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Zdjęcia -->
+  <section class="border-y border-hairline bg-surface" aria-labelledby="photos-heading">
+    <div class="mx-auto max-w-7xl px-4 py-20 sm:px-10 sm:py-[100px]">
+      <div class="flex flex-wrap items-end justify-between gap-6">
+        <h2 id="photos-heading" class="text-3xl leading-[1.02] tracking-[-0.025em] text-text sm:text-4xl">
+          Realizacje
+        </h2>
+        <a
+          href={`/realizacje?kategoria=${category}`}
+          class="text-sm text-primary-dark underline decoration-1 underline-offset-[3px] hover:text-accent"
+        >
+          Zobacz wszystkie w galerii →
+        </a>
+      </div>
+
+      {photos.length > 0 ? (
+        <div class="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-3">
+          {photos.map((photo) => (
+            <a href={`/realizacje?kategoria=${category}`} class="plate block aspect-[4/3]">
+              <Image src={photo.src} alt={photo.alt} class="h-full w-full object-cover" width={500} height={375} loading="lazy" />
+            </a>
+          ))}
+        </div>
+      ) : (
+        <div class="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-3">
+          {PLACEHOLDER_DESCRIPTIONS[category].map((description) => (
+            <PhotoPlaceholder description={description} ratio="aspect-[4/3]" />
+          ))}
+        </div>
+      )}
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  {content.faq.length > 0 && (
+    <section class="bg-background px-4 py-20 sm:px-6 lg:px-8 sm:py-28" aria-labelledby="faq-heading">
+      <div class="mx-auto max-w-7xl">
+        <h2 id="faq-heading" class="text-3xl leading-[1.02] tracking-[-0.025em] text-text sm:text-4xl">
+          Najczęstsze pytania
+        </h2>
+        <div class="mt-10 grid grid-cols-1 border-t border-hairline sm:max-w-[75ch]">
+          {content.faq.map((item) => (
+            <div class="border-b border-hairline py-6">
+              <p class="font-serif text-lg text-text">{item.question}</p>
+              <p class="mt-2 text-sm leading-relaxed text-text-secondary">{item.answer}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- CTA -->
+  <section class="bg-surface px-4 py-14 sm:px-6 lg:px-8" aria-label="Wezwanie do działania">
+    <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-6">
+      <p class="max-w-[44ch] font-serif text-xl text-text sm:text-2xl">
+        Masz podobny projekt na myśli?
+      </p>
+      <div class="flex flex-wrap gap-3">
+        <Button href="/wycena" variant="dark" size="lg">Wycena online →</Button>
+        <Button href={`/realizacje?kategoria=${category}`} variant="neutral-outline" size="lg">
+          Zobacz realizacje
+        </Button>
+      </div>
+    </div>
+  </section>
+
+  <QuoteCTA />
+</PageLayout>

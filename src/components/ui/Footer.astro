@@ -6,14 +6,12 @@ const currentYear = new Date().getFullYear();
 const phoneNumber = '+48661084830';
 const phoneFormatted = '661 084 830';
 
-// Osobnych podstron usług nie ma — cała oferta jest opisana na stronie głównej
-// (sekcja „Oferta”), więc linki prowadzą do przefiltrowanej galerii realizacji.
 const offerLinks = [
-  { label: translations.services.domy, href: '/realizacje?kategoria=domy' },
-  { label: translations.services.sauny, href: '/realizacje?kategoria=sauny' },
-  { label: translations.services.tarasy, href: '/realizacje?kategoria=tarasy' },
-  { label: translations.services.zadaszenia, href: '/realizacje?kategoria=zadaszenia' },
-  { label: translations.services.wnetrza, href: '/realizacje?kategoria=wnetrza' },
+  { label: translations.services.domy, href: '/uslugi/domy' },
+  { label: translations.services.sauny, href: '/uslugi/sauny' },
+  { label: translations.services.tarasy, href: '/uslugi/tarasy' },
+  { label: translations.services.zadaszenia, href: '/uslugi/zadaszenia' },
+  { label: translations.services.wnetrza, href: '/uslugi/wnetrza' },
 ];
 
 const companyLinks = [
