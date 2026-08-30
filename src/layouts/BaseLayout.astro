@@ -37,7 +37,7 @@ const analyticsUrl = import.meta.env.PUBLIC_ANALYTICS_URL;
 ---
 
 <!doctype html>
-<html lang="pl">
+<html lang={Astro.currentLocale ?? 'pl'}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />

@@ -4,6 +4,7 @@ import { getImage } from 'astro:assets';
 import PageLayout from '@/layouts/PageLayout.astro';
 import Button from '@/components/ui/Button.astro';
 import GalleryLightbox from '@/components/islands/GalleryLightbox.tsx';
+import t from '@/i18n';
 
 const allProjects = await getCollection('projects');
 
@@ -53,8 +54,8 @@ const initialCategory = categories.includes(requestedCategory ?? '') ? requested
 ---
 
 <PageLayout
-  title="Realizacje — galeria projektów"
-  description="Zobacz nasze realizacje: domy drewniane, sauny, tarasy, zadaszenia i wnętrza — prawdziwe zdjęcia z budów na Podkarpaciu."
+  title={t.meta.portfolio.title}
+  description={t.meta.portfolio.description}
 >
   <section class="mx-auto max-w-7xl px-4 pt-16 sm:px-10 sm:pt-[84px]">
     <div class="grid grid-cols-1 gap-8 border-b border-hairline pb-11 sm:grid-cols-2 sm:items-end sm:gap-[70px]">

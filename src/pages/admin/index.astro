@@ -4,7 +4,7 @@ import { getQuoteRequests, getQuoteRequestsCount } from '@/lib/db';
 import { isAuthenticated } from '@/lib/admin-auth';
 import type { QuoteStatus } from '@/lib/types';
 import { SERVICE_LABELS, MATERIAL_LABELS, TERM_LABELS, estimateRange, formatEstimateRange } from '@/lib/estimate';
-import i18n from '@/i18n/pl.json';
+import i18n from '@/i18n';
 
 // Kontrola dostępu — tylko zalogowany administrator.
 // Bez tego strona renderowałaby dane osobowe klientów publicznie.
@@ -53,7 +53,7 @@ function formatDate(date: Date): string {
 
 ---
 
-<BaseLayout title={i18n.admin.panel.title} description="Panel administracyjny CalkaWood" noindex>
+<BaseLayout title={`${i18n.admin.panel.title} | CalkaWood`} description="Panel administracyjny CalkaWood" noindex>
   <main class="min-h-screen bg-stone-50">
     <!-- Header -->
     <header class="bg-white border-b border-stone-200 sticky top-0 z-10">

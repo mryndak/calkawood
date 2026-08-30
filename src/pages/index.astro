@@ -13,6 +13,7 @@ import ServiceAreaMap from '@/components/sections/ServiceAreaMap.astro';
 import { getCollection } from 'astro:content';
 import { getImage } from 'astro:assets';
 import schemaImageSource from '@/assets/photos/taras-dom-nowoczesny.jpeg';
+import t from '@/i18n';
 
 const schemaImage = await getImage({ src: schemaImageSource, width: 1200, format: 'jpg' });
 const schemaImageUrl = new URL(schemaImage.src, Astro.site).href;
@@ -55,8 +56,8 @@ const structuredData = {
 ---
 
 <PageLayout
-  title="Domy drewniane, tarasy i sauny — Podkarpacie"
-  description="Stolarka na wymiar, tarasy, podłogi i budowa szkieletowa. Ponad 5 lat doświadczenia na Podkarpaciu. Bezpłatna wycena online."
+  title={t.meta.home.title}
+  description={t.meta.home.description}
   structuredData={structuredData}
 >
   <Hero />

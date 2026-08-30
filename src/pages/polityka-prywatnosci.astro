@@ -1,11 +1,9 @@
 ---
 import PageLayout from '@/layouts/PageLayout.astro';
-
-const title = 'Polityka prywatności';
-const description = 'Polityka prywatności CalkaWood. Informacje o zbieraniu danych, celach przetwarzania, prawach użytkowników i plikach cookies.';
+import t from '@/i18n';
 ---
 
-<PageLayout title={title} description={description}>
+<PageLayout title={t.meta.privacy.title} description={t.meta.privacy.description}>
   <section class="px-4 py-16 sm:px-6 lg:px-8">
     <div class="mx-auto max-w-3xl">
       <h1 class="text-3xl font-bold text-text sm:text-4xl">Polityka prywatności</h1>

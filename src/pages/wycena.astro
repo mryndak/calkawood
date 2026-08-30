@@ -2,11 +2,12 @@
 import PageLayout from '@/layouts/PageLayout.astro';
 import QuoteForm from '@/components/islands/QuoteForm.tsx';
 import { MAX_FILES, MAX_FILE_SIZE } from '@/lib/upload';
+import t from '@/i18n';
 ---
 
 <PageLayout
-  title="Wycena online"
-  description="Sześć pytań, widełki cenowe od razu. Wypełnij kreator wyceny online — odpowiemy w ciągu 24 godzin."
+  title={t.meta.quote.title}
+  description={t.meta.quote.description}
 >
   <QuoteForm client:visible maxFiles={MAX_FILES} maxFileSize={MAX_FILE_SIZE} />
 </PageLayout>
