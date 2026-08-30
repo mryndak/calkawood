@@ -9,7 +9,6 @@
  * handoffem — tylko statyczne SVG z makiety zastąpione działającą mapą Leaflet.
  */
 import {
-  CAPITALS,
   SERVICE_AREA_OUTLINE,
   SERVICE_AREA_COLOR,
 } from '@/data/serviceAreaBoundaries';
@@ -33,7 +32,6 @@ const coveredVoivodeships = [
 
 const mapDataJson = JSON.stringify({
   outline: SERVICE_AREA_OUTLINE,
-  capitals: CAPITALS,
   color: SERVICE_AREA_COLOR,
 });
 ---
@@ -86,14 +84,10 @@ const mapDataJson = JSON.stringify({
   import L from 'leaflet';
   import 'leaflet/dist/leaflet.css';
 
-  type CapitalPoint = { voivodeship: string; city: string; lat: number; lng: number };
   type MapData = {
     outline: [number, number][];
-    capitals: CapitalPoint[];
     color: string;
   };
-
-  const CAPITAL_MARKER_COLOR = '#7d5411';
 
   const POLAND_BOUNDS = L.latLngBounds([48.95, 14.1], [54.9, 24.2]);
 
@@ -123,16 +117,6 @@ const mapDataJson = JSON.stringify({
       fillColor: data.color,
       fillOpacity: 0.08,
     }).addTo(map);
-
-    for (const capital of data.capitals) {
-      L.circleMarker([capital.lat, capital.lng], {
-        radius: 6,
-        color: '#ffffff',
-        weight: 2,
-        fillColor: CAPITAL_MARKER_COLOR,
-        fillOpacity: 0.95,
-      }).addTo(map);
-    }
 
     map.fitBounds(POLAND_BOUNDS, { padding: [4, 4] });
 
