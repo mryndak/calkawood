@@ -24,6 +24,17 @@
     "featured": true
   },
   {
+    "id": "altana-ogrodowa-rzeszow",
+    "title": "Altana ogrodowa z drewna świerkowego",
+    "category": "zadaszenia",
+    "location": "Rzeszów",
+    "area": 14,
+    "images": [],
+    "placeholderNote": "altana ogrodowa, widok z zewnątrz",
+    "date": "2024-08-20",
+    "featured": false
+  },
+  {
     "id": "pergola-brzozow",
     "title": "Pergola przy elewacji domu",
     "category": "zadaszenia",
