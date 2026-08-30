@@ -38,7 +38,7 @@
     "saunyDesc": "Sauny ogrodowe i wnętrzowe — fińska, beczkowa, na wymiar.",
     "tarasy": "Tarasy",
     "tarasyDesc": "Tarasy drewniane, kompozytowe, betonowe i kamienne.",
-    "zadaszenia": "Zadaszenia i pergole",
+    "zadaszenia": "Altany i zadaszenia",
     "zadaszeniaDesc": "Altany, pergole, wiaty i zadaszenia na wymiar.",
     "wnetrza": "Podłogi i wnętrza",
     "wnetrzaDesc": "Układanie paneli, podłóg drewnianych, remonty wnętrz."
@@ -62,7 +62,7 @@
     "domy": "Domy",
     "sauny": "Sauny",
     "tarasy": "Tarasy",
-    "zadaszenia": "Zadaszenia",
+    "zadaszenia": "Altany i zadaszenia",
     "wnetrza": "Wnętrza",
     "lightbox": {
       "close": "Zamknij",
@@ -206,8 +206,8 @@
       "description": "Budowa tarasów drewnianych, kompozytowych, betonowych i kamiennych. Profesjonalne wykonanie na Podkarpaciu."
     },
     "zadaszenia": {
-      "title": "Zadaszenia i pergole — altany, wiaty | CalkaWood",
-      "description": "Zadaszenia, pergole, altany ogrodowe i wiaty na wymiar. Realizacje na Podkarpaciu."
+      "title": "Altany i zadaszenia — pergole, wiaty | CalkaWood",
+      "description": "Altany ogrodowe, zadaszenia, pergole i wiaty na wymiar. Realizacje na Podkarpaciu."
     },
     "wnetrza": {
       "title": "Podłogi i wnętrza — panele, remonty | CalkaWood",
@@ -244,7 +244,7 @@
     "domy": "Domy drewniane",
     "sauny": "Sauny",
     "tarasy": "Tarasy",
-    "zadaszenia": "Zadaszenia i pergole",
+    "zadaszenia": "Altany i zadaszenia",
     "wnetrza": "Podłogi i wnętrza",
     "portfolio": "Realizacje",
     "quote": "Wycena online",

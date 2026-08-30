@@ -140,12 +140,16 @@ export const SERVICE_PAGES: Record<ServiceCategory, ServicePageContent> = {
   zadaszenia: {
     slug: 'zadaszenia',
     estimateKey: 'zadaszenie',
-    kicker: 'Zadaszenia i pergole',
-    h1: 'Zadaszenia, pergole i altany ogrodowe na wymiar',
+    kicker: 'Altany i zadaszenia',
+    h1: 'Altany ogrodowe, zadaszenia i pergole na wymiar',
     intro:
-      'Zadaszenia tarasów, pergole przy elewacji, wiaty i altany ogrodowe — konstrukcje z drewna klejonego lub litego, kryte poliwęglanem, ' +
-      'blachodachówką lub gontem, dopasowane do istniejącego domu.',
+      'Altany ogrodowe, zadaszenia tarasów, pergole przy elewacji i wiaty — konstrukcje z drewna klejonego lub litego, kryte poliwęglanem, ' +
+      'blachodachówką lub gontem, dopasowane do istniejącego domu i ogrodu.',
     highlights: [
+      {
+        title: 'Altana ogrodowa',
+        description: 'Samodzielny obiekt w ogrodzie — miejsce na grilla, spotkania rodzinne, drugi salon na zewnątrz.',
+      },
       {
         title: 'Zadaszenie tarasu',
         description: 'Osłona przed deszczem i słońcem — wolnostojąca albo oparta o ścianę domu.',
@@ -155,21 +159,21 @@ export const SERVICE_PAGES: Record<ServiceCategory, ServicePageContent> = {
         description: 'Lekka konstrukcja wsparta na słupach, często łączona z roletami zewnętrznymi.',
       },
       {
-        title: 'Altana ogrodowa',
-        description: 'Samodzielny obiekt w ogrodzie — miejsce na grilla, spotkania rodzinne, drugi salon na zewnątrz.',
-      },
-      {
         title: 'Podcienie i wiaty',
         description: 'Zadaszone przejścia i miejsca postojowe, dopasowane konstrukcyjnie do reszty budynku.',
       },
     ],
     faq: [
       {
-        question: 'Jakie pokrycie dachu wybrać do zadaszenia tarasu?',
+        question: 'Z czego budujecie altany ogrodowe?',
+        answer: 'Najczęściej z drewna świerkowego lub sosnowego, w konstrukcji szkieletowej z zadaszeniem dopasowanym do reszty ogrodu — od prostej wiaty po zamkniętą altanę z oknami.',
+      },
+      {
+        question: 'Jakie pokrycie dachu wybrać do altany lub zadaszenia tarasu?',
         answer: 'Poliwęglan komorowy przepuszcza światło i jest najtańszy. Blachodachówka i gont dają pełne zacienienie i pasują wyglądem do dachu domu.',
       },
       {
-        question: 'Ile kosztuje zadaszenie tarasu lub pergola?',
+        question: 'Ile kosztuje altana lub zadaszenie tarasu?',
         answer: 'Orientacyjnie od 680 zł/m², zależnie od konstrukcji i pokrycia dachu. Dokładne widełki cenowe policzysz w kreatorze wyceny online.',
       },
     ],
