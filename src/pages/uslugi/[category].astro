@@ -1,12 +1,13 @@
 ---
-export const prerender = true;
-
+// Bez prerender: reszta serwisu jest w pełni SSR, a strony statyczne
+// (dist/client/uslugi/x/index.html) dostają dodatkowe przekierowanie 301
+// na wersję ze slashem na końcu od serwera plików — SSR unika tej niespójności.
 import { Image } from 'astro:assets';
 import PageLayout from '@/layouts/PageLayout.astro';
 import PhotoPlaceholder from '@/components/ui/PhotoPlaceholder.astro';
 import Button from '@/components/ui/Button.astro';
 import QuoteCTA from '@/components/sections/QuoteCTA.astro';
-import { SERVICE_PAGES, SERVICE_CATEGORY_ORDER, type ServiceCategory } from '@/data/servicePages';
+import { SERVICE_PAGES, type ServiceCategory } from '@/data/servicePages';
 import t from '@/i18n';
 
 import tarasDomNowoczesny from '@/assets/photos/taras-dom-nowoczesny.jpeg';
@@ -18,11 +19,12 @@ import schodyTarasWejscie from '@/assets/photos/schody-taras-wejscie.jpeg';
 import schodyWnetrze from '@/assets/photos/schody-wnetrze.jpeg';
 import montazDeskiPraca from '@/assets/photos/montaz-deski-praca.jpeg';
 
-export function getStaticPaths() {
-  return SERVICE_CATEGORY_ORDER.map((category) => ({ params: { category } }));
+const requestedCategory = Astro.params.category;
+if (!requestedCategory || !(requestedCategory in SERVICE_PAGES)) {
+  return Astro.redirect('/uslugi', 302);
 }
+const category = requestedCategory as ServiceCategory;
 
-const { category } = Astro.params as { category: ServiceCategory };
 const content = SERVICE_PAGES[category];
 const meta = t.meta[category];
 
