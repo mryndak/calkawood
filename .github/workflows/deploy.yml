@@ -29,6 +29,11 @@
 #                       (node-pg-migrate) przed restartem aplikacji.
 #
 #   RESEND_API_KEY    - Klucz API Resend (przekazywany przy build).
+#
+#   ADMIN_PASSWORD    - Hasło do panelu /admin (przekazywane przy build —
+#                       tak jak DATABASE_URL, jest wpiekane w kod SSR przez
+#                       import.meta.env, więc zmiana hasła wymaga nowego
+#                       builda/deployu, nie tylko restartu aplikacji).
 # ═══════════════════════════════════════════════════════════════
 
 name: Deploy to MyDevil
@@ -61,6 +66,7 @@ jobs:
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
 
       - name: Setup SSH key
         run: |
