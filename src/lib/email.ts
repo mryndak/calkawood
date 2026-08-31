@@ -26,12 +26,13 @@ export async function sendQuoteNotification(
   try {
     const serviceLabel = SERVICE_LABELS[quote.usluga] ?? quote.usluga;
     const fromEmail = import.meta.env.RESEND_FROM_EMAIL || 'wycena@calkawood.pl';
+    const toEmail = import.meta.env.NOTIFICATION_EMAIL || 'kontakt@calkawood.pl';
 
     const html = buildNotificationHtml(quote, serviceLabel);
 
     await getResendClient().emails.send({
       from: fromEmail,
-      to: fromEmail,
+      to: toEmail,
       subject: `Nowe zapytanie wycenowe #${quote.id} — ${serviceLabel}`,
       html,
     });
@@ -98,12 +99,13 @@ export async function sendContactNotification(
 ): Promise<boolean> {
   try {
     const fromEmail = import.meta.env.RESEND_FROM_EMAIL || 'wycena@calkawood.pl';
+    const toEmail = import.meta.env.NOTIFICATION_EMAIL || 'kontakt@calkawood.pl';
 
     const html = buildContactNotificationHtml(contact);
 
     await getResendClient().emails.send({
       from: fromEmail,
-      to: fromEmail,
+      to: toEmail,
       subject: `Nowa wiadomość z formularza kontaktowego #${contact.id} — ${contact.imie}`,
       html,
     });
