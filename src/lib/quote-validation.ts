@@ -6,6 +6,10 @@ import { SERVICE_TYPES, MATERIALS, TERMS, MIN_AREA, MAX_AREA } from './estimate'
 // kategorii realizacji (src/content.config.ts).
 export const SERVICE_CATEGORIES = SERVICE_TYPES;
 
+// Polski numer telefonu: 9 cyfr (opcjonalnie w grupach po 3, spacją lub
+// myślnikiem), z opcjonalnym prefiksem +48/48 — prefiks nie jest wymagany.
+export const TELEFON_REGEX = /^(\+?48[\s-]?)?\d{3}[\s-]?\d{3}[\s-]?\d{3}$/;
+
 export const quoteRequestSchema = z.object({
   usluga: z.enum(SERVICE_TYPES),
   powierzchnia: z.coerce
@@ -16,7 +20,7 @@ export const quoteRequestSchema = z.object({
   termin: z.enum(TERMS),
   // Opis miejsca — krok 5, nieobowiązkowy
   opis: z.string().max(2000, 'Opis może mieć maksymalnie 2000 znaków').optional(),
-  telefon: z.string().regex(/^\+?48?\s?\d{3}\s?\d{3}\s?\d{3}$/, 'Nieprawidłowy numer telefonu'),
+  telefon: z.string().regex(TELEFON_REGEX, 'Nieprawidłowy numer telefonu'),
   imie: z.string().min(2, 'Imię musi mieć minimum 2 znaki'),
   email: z.string().email('Nieprawidłowy adres email'),
   zgoda_rodo: z.preprocess(

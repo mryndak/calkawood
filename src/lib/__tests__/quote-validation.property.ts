@@ -4,15 +4,17 @@
 import { describe, it, expect } from 'vitest';
 import fc from 'fast-check';
 import { z } from 'zod';
-import { quoteRequestSchema, SERVICE_CATEGORIES } from '@/lib/quote-validation';
+import { quoteRequestSchema, SERVICE_CATEGORIES, TELEFON_REGEX } from '@/lib/quote-validation';
 import { MATERIALS, TERMS, MIN_AREA, MAX_AREA } from '@/lib/estimate';
 
 const zodEmailValidator = z.string().email();
 
-/** Generates a valid Polish phone number matching /^\+?48?\s?\d{3}\s?\d{3}\s?\d{3}$/ */
+/** Generates a valid Polish phone number matching TELEFON_REGEX */
 const polishPhoneArbitrary = () =>
-  fc.array(fc.constantFrom('0', '1', '2', '3', '4', '5', '6', '7', '8', '9'), { minLength: 9, maxLength: 9 })
-    .map(digits => `+48${digits.join('')}`);
+  fc.tuple(
+    fc.array(fc.constantFrom('0', '1', '2', '3', '4', '5', '6', '7', '8', '9'), { minLength: 9, maxLength: 9 }),
+    fc.boolean(),
+  ).map(([digits, withPrefix]) => `${withPrefix ? '+48' : ''}${digits.join('')}`);
 
 /** Generates a valid quote request that should always pass Zod validation */
 const validQuoteRequestArbitrary = () =>
@@ -81,7 +83,7 @@ describe('Property 6: Quote schema validation (accept valid, reject invalid)', (
     fc.assert(
       fc.property(
         validQuoteRequestArbitrary(),
-        fc.string({ minLength: 1, maxLength: 20 }).filter(s => !/^\+?48?\s?\d{3}\s?\d{3}\s?\d{3}$/.test(s)),
+        fc.string({ minLength: 1, maxLength: 20 }).filter(s => !TELEFON_REGEX.test(s)),
         (request, invalidPhone) => {
           const invalid = { ...request, telefon: invalidPhone };
           const result = quoteRequestSchema.safeParse(invalid);
