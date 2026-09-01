@@ -155,32 +155,35 @@
   },
   {
     "id": "dom-szkieletowy-podkarpacie",
-    "title": "Dom szkieletowy 132 m²",
+    "title": "Dom szkieletowy z elewacją drewnianą",
     "category": "domy",
     "location": "Podkarpacie",
-    "images": [],
-    "placeholderNote": "elewacja domu szkieletowego",
-    "date": "2025-03-01",
+    "images": [
+      { "src": "../assets/photos/dom-szkieletowy-elewacja.jpeg", "alt": "Dom szkieletowy z drewnianą elewacją w trakcie prac wykończeniowych, dach z blachy na rąbek" }
+    ],
+    "date": "2026-07-01",
     "featured": false
   },
   {
-    "id": "dom-z-bali-podkarpacie",
-    "title": "Dom z bali pod klucz",
+    "id": "dom-stodola-podkarpacie",
+    "title": "Dom w stylu stodoły z przeszkloną fasadą",
     "category": "domy",
     "location": "Podkarpacie",
-    "images": [],
-    "placeholderNote": "dom z bali, widok od ogrodu",
-    "date": "2024-11-15",
+    "images": [
+      { "src": "../assets/photos/dom-stodola-przeszklona.jpeg", "alt": "Dom w stylu stodoły z dużym przeszkleniem na szczycie i ciemną elewacją" }
+    ],
+    "date": "2026-07-01",
     "featured": false
   },
   {
-    "id": "sauna-cedr-rzeszow",
-    "title": "Sauna ogrodowa z cedru",
+    "id": "sauna-ogrodowa-podkarpacie",
+    "title": "Sauna ogrodowa z antracytową zabudową",
     "category": "sauny",
-    "location": "Rzeszów",
-    "images": [],
-    "placeholderNote": "sauna ogrodowa, wnętrze",
-    "date": "2025-01-20",
+    "location": "Podkarpacie",
+    "images": [
+      { "src": "../assets/photos/sauna-ogrodowa-zewnetrze.jpeg", "alt": "Kabina sauny ogrodowej z antracytową zabudową zewnętrzną i przeszklonymi drzwiami" }
+    ],
+    "date": "2026-07-01",
     "featured": false
   },
   {

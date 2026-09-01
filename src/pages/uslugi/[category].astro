@@ -19,6 +19,10 @@ import pergolaTarasSlup from '@/assets/photos/pergola-taras-slup.jpeg';
 import schodyTarasWejscie from '@/assets/photos/schody-taras-wejscie.jpeg';
 import schodyWnetrze from '@/assets/photos/schody-wnetrze.jpeg';
 import montazDeskiPraca from '@/assets/photos/montaz-deski-praca.jpeg';
+import domSzkieletowyElewacja from '@/assets/photos/dom-szkieletowy-elewacja.jpeg';
+import domStodolaPrzeszklona from '@/assets/photos/dom-stodola-przeszklona.jpeg';
+import saunaOgrodowaZewnetrze from '@/assets/photos/sauna-ogrodowa-zewnetrze.jpeg';
+import saunaOgrodowaWnetrze from '@/assets/photos/sauna-ogrodowa-wnetrze.jpeg';
 
 const requestedCategory = Astro.params.category;
 if (!requestedCategory || !(requestedCategory in SERVICE_PAGES)) {
@@ -29,13 +33,15 @@ const category = requestedCategory as ServiceCategory;
 const content = SERVICE_PAGES[category];
 const meta = t.meta[category];
 
-// Zdjęcia realne tam, gdzie są (tarasy, zadaszenia, wnętrza) — dla domów
-// i saun realizacje w portfolio na razie nie mają dostarczonych fotografii
-// (patrz src/content/projects.json), więc PhotoPlaceholder zamiast fałszywych
-// kadrów, tak samo jak w ServicesOverview.astro na stronie głównej.
 const PHOTOS_BY_CATEGORY: Record<ServiceCategory, Array<{ src: ImageMetadata; alt: string }>> = {
-  domy: [],
-  sauny: [],
+  domy: [
+    { src: domSzkieletowyElewacja, alt: 'Dom szkieletowy z drewnianą elewacją w trakcie prac wykończeniowych' },
+    { src: domStodolaPrzeszklona, alt: 'Dom w stylu stodoły z dużym przeszkleniem na szczycie' },
+  ],
+  sauny: [
+    { src: saunaOgrodowaZewnetrze, alt: 'Kabina sauny ogrodowej z antracytową zabudową zewnętrzną' },
+    { src: saunaOgrodowaWnetrze, alt: 'Wnętrze sauny z drewnianymi ławami' },
+  ],
   tarasy: [
     { src: tarasDomNowoczesny, alt: 'Taras z modrzewia syberyjskiego przy nowoczesnym domu' },
     { src: tarasZloteSwiatlo, alt: 'Taras z olejowanej sosny w złotym świetle zachodzącego słońca' },
@@ -51,10 +57,11 @@ const PHOTOS_BY_CATEGORY: Record<ServiceCategory, Array<{ src: ImageMetadata; al
     { src: montazDeskiPraca, alt: 'Montaż deski tarasowej przez rzemieślnika' },
   ],
 };
-// Zgodne z placeholderNote w src/content/projects.json dla tych samych realizacji.
+// Zgodne z placeholderNote w src/content/projects.json dla realizacji bez
+// dostarczonego zdjęcia (patrz "sauna-barrel-krosno" — jedyna pozostała).
 const PLACEHOLDER_DESCRIPTIONS: Record<ServiceCategory, string[]> = {
-  domy: ['elewacja domu szkieletowego', 'dom z bali, widok od ogrodu'],
-  sauny: ['sauna ogrodowa, wnętrze', 'sauna beczka w ogrodzie'],
+  domy: [],
+  sauny: ['sauna beczka w ogrodzie'],
   tarasy: [],
   zadaszenia: [],
   wnetrza: [],

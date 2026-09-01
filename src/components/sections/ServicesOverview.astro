@@ -1,9 +1,10 @@
 ---
 import { Image } from 'astro:assets';
-import PhotoPlaceholder from '@/components/ui/PhotoPlaceholder.astro';
 import tarasyImg from '@/assets/photos/taras-przy-domu.jpeg';
 import zadaszeniaImg from '@/assets/photos/pergola-taras-slup.jpeg';
 import wnetrzaImg from '@/assets/photos/schody-wnetrze.jpeg';
+import domyImg from '@/assets/photos/dom-szkieletowy-elewacja.jpeg';
+import saunyImg from '@/assets/photos/sauna-ogrodowa-zewnetrze.jpeg';
 ---
 
 <section class="bg-background px-4 py-20 sm:px-6 lg:px-8 sm:py-28" aria-labelledby="services-heading">
@@ -27,11 +28,15 @@ import wnetrzaImg from '@/assets/photos/schody-wnetrze.jpeg';
         href="/uslugi/domy"
         class="group flex flex-col border border-hairline transition-colors hover:border-primary"
       >
-        <PhotoPlaceholder
-          description="dom szkieletowy w elewacji drewnianej"
-          ratio="aspect-[16/10] sm:aspect-auto sm:h-[400px]"
-          class="w-full"
-        />
+        <div class="plate aspect-[16/10] w-full sm:aspect-auto sm:h-[400px]">
+          <Image
+            src={domyImg}
+            alt="Dom szkieletowy z drewnianą elewacją"
+            class="h-full w-full object-cover"
+            width={700}
+            height={440}
+          />
+        </div>
         <div class="p-6 sm:p-8">
           <div class="flex flex-wrap items-baseline gap-3.5">
             <span class="font-serif text-3xl tracking-[-0.02em] text-text">Domy drewniane</span>
@@ -57,7 +62,15 @@ import wnetrzaImg from '@/assets/photos/schody-wnetrze.jpeg';
           href="/uslugi/sauny"
           class="group flex border border-hairline transition-colors hover:border-primary"
         >
-          <PhotoPlaceholder description="Sauna ogrodowa" ratio="aspect-square" class="w-32 shrink-0 sm:w-40" />
+          <div class="plate aspect-square w-32 shrink-0 sm:w-40">
+            <Image
+              src={saunyImg}
+              alt="Kabina sauny ogrodowej z antracytową zabudową"
+              class="h-full w-full object-cover"
+              width={320}
+              height={320}
+            />
+          </div>
           <div class="p-5">
             <h3 class="font-serif text-xl text-text sm:text-2xl">Sauny</h3>
             <p class="mt-1.5 text-sm text-text-secondary">Ogrodowe i wnętrzowe — fińska, beczkowa, na wymiar.</p>
