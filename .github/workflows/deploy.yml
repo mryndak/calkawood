@@ -82,17 +82,34 @@ jobs:
       # migracje. node_modules NIE jest kopiowane — instalujemy je na
       # serwerze (FreeBSD), by binaria natywne (np. sharp) pasowały do
       # platformy serwera.
+      #
+      # UWAGA: assety (dist/client/) NIE trafiają do public/. Ten katalog
+      # jest na MyDevil serwowany bezpośrednio przez nginx z pominięciem
+      # aplikacji Node — a to właśnie nasza appka (adapter @astrojs/node)
+      # ustawia poprawny Cache-Control (immutable, rok) dla plików pod
+      # /_astro/*. Gdy nginx serwuje je sam z public/, ten nagłówek nigdy
+      # nie jest wysyłany. dist/client/ i tak trafia do dist/ (linia niżej)
+      # — stamtąd czyta je aplikacja Node przy SSR/serwowaniu assetów.
       - name: Deploy build output via rsync
         env:
           SSH_CMD: ssh -i ~/.ssh/deploy_key
           REMOTE: ${{ secrets.MYDEVIL_USER }}@${{ secrets.MYDEVIL_HOST }}:${{ secrets.MYDEVIL_PATH }}
         run: |
           rsync -avz --delete -e "$SSH_CMD" dist/ "${REMOTE}/dist/"
-          rsync -avz --delete -e "$SSH_CMD" dist/client/ "${REMOTE}/public/"
           rsync -avz --delete -e "$SSH_CMD" migrations/ "${REMOTE}/migrations/"
           rsync -avz -e "$SSH_CMD" \
             app.js package.json package-lock.json \
             "${REMOTE}/"
+
+      # Jednorazowe (ale bezpieczne do powtarzania) wyczyszczenie starych
+      # assetów z public/ z poprzednich deployów — inaczej nginx dalej
+      # serwowałby je bezpośrednio, z pominięciem Node, mimo że rsync
+      # wyżej już tam nic nie kopiuje.
+      - name: Purge stale static assets from public/
+        run: |
+          ssh -i ~/.ssh/deploy_key \
+            ${{ secrets.MYDEVIL_USER }}@${{ secrets.MYDEVIL_HOST }} \
+            'rm -rf ${{ secrets.MYDEVIL_PATH }}/public && mkdir -p ${{ secrets.MYDEVIL_PATH }}/public'
 
       - name: Install production deps on server
         run: |
