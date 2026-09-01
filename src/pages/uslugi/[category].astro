@@ -20,9 +20,14 @@ import schodyTarasWejscie from '@/assets/photos/schody-taras-wejscie.jpeg';
 import schodyWnetrze from '@/assets/photos/schody-wnetrze.jpeg';
 import montazDeskiPraca from '@/assets/photos/montaz-deski-praca.jpeg';
 import domSzkieletowyElewacja from '@/assets/photos/dom-szkieletowy-elewacja.jpeg';
+import domSzkieletowyGable from '@/assets/photos/dom-szkieletowy-gable.jpeg';
 import domStodolaPrzeszklona from '@/assets/photos/dom-stodola-przeszklona.jpeg';
+import domStodolaBoczna1 from '@/assets/photos/dom-stodola-boczna-1.jpeg';
+import domStodolaWnetrzeSufit from '@/assets/photos/dom-stodola-wnetrze-sufit.jpeg';
 import saunaOgrodowaZewnetrze from '@/assets/photos/sauna-ogrodowa-zewnetrze.jpeg';
 import saunaOgrodowaWnetrze from '@/assets/photos/sauna-ogrodowa-wnetrze.jpeg';
+import saunaOgrodowaBok from '@/assets/photos/sauna-ogrodowa-bok.jpeg';
+import saunaOgrodowaFront from '@/assets/photos/sauna-ogrodowa-front.jpeg';
 
 const requestedCategory = Astro.params.category;
 if (!requestedCategory || !(requestedCategory in SERVICE_PAGES)) {
@@ -37,10 +42,15 @@ const PHOTOS_BY_CATEGORY: Record<ServiceCategory, Array<{ src: ImageMetadata; al
   domy: [
     { src: domSzkieletowyElewacja, alt: 'Dom szkieletowy z drewnianą elewacją w trakcie prac wykończeniowych' },
     { src: domStodolaPrzeszklona, alt: 'Dom w stylu stodoły z dużym przeszkleniem na szczycie' },
+    { src: domStodolaBoczna1, alt: 'Boczny widok domu w stylu stodoły z przeszkloną ścianą szczytową' },
+    { src: domSzkieletowyGable, alt: 'Szczytowa ściana domu szkieletowego z lukarną i kominem' },
+    { src: domStodolaWnetrzeSufit, alt: 'Wnętrze antresoli pod skosem dachu w domu w stylu stodoły' },
   ],
   sauny: [
     { src: saunaOgrodowaZewnetrze, alt: 'Kabina sauny ogrodowej z antracytową zabudową zewnętrzną' },
     { src: saunaOgrodowaWnetrze, alt: 'Wnętrze sauny z drewnianymi ławami' },
+    { src: saunaOgrodowaBok, alt: 'Sauna ogrodowa z przeszkloną ścianą' },
+    { src: saunaOgrodowaFront, alt: 'Zamknięta zabudowa zewnętrzna sauny ogrodowej' },
   ],
   tarasy: [
     { src: tarasDomNowoczesny, alt: 'Taras z modrzewia syberyjskiego przy nowoczesnym domu' },

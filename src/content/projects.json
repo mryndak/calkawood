@@ -165,6 +165,28 @@
     "featured": false
   },
   {
+    "id": "dom-szkieletowy-okap",
+    "title": "Dom szkieletowy — okap i rynny",
+    "category": "domy",
+    "location": "Podkarpacie",
+    "images": [
+      { "src": "../assets/photos/dom-szkieletowy-front.jpeg", "alt": "Detal okapu i rynien domu szkieletowego z drewnianą elewacją, w trakcie budowy" }
+    ],
+    "date": "2026-07-01",
+    "featured": false
+  },
+  {
+    "id": "dom-szkieletowy-szczyt",
+    "title": "Dom szkieletowy — szczyt z lukarną",
+    "category": "domy",
+    "location": "Podkarpacie",
+    "images": [
+      { "src": "../assets/photos/dom-szkieletowy-gable.jpeg", "alt": "Szczytowa ściana domu szkieletowego z lukarną i kominem, elewacja drewniana" }
+    ],
+    "date": "2026-07-01",
+    "featured": false
+  },
+  {
     "id": "dom-stodola-podkarpacie",
     "title": "Dom w stylu stodoły z przeszkloną fasadą",
     "category": "domy",
@@ -176,12 +198,100 @@
     "featured": false
   },
   {
+    "id": "dom-stodola-boczna-1",
+    "title": "Dom w stylu stodoły — widok z boku",
+    "category": "domy",
+    "location": "Podkarpacie",
+    "images": [
+      { "src": "../assets/photos/dom-stodola-boczna-1.jpeg", "alt": "Boczny widok domu w stylu stodoły z przeszkloną ścianą szczytową" }
+    ],
+    "date": "2026-08-01",
+    "featured": false
+  },
+  {
+    "id": "dom-stodola-boczna-2",
+    "title": "Dom w stylu stodoły — druga strona",
+    "category": "domy",
+    "location": "Podkarpacie",
+    "images": [
+      { "src": "../assets/photos/dom-stodola-boczna-2.jpeg", "alt": "Dom w stylu stodoły, przeszklenie widziane z drugiej strony, w tle łąka" }
+    ],
+    "date": "2026-08-01",
+    "featured": false
+  },
+  {
+    "id": "dom-stodola-elewacja-tylna",
+    "title": "Dom w stylu stodoły — elewacja tylna",
+    "category": "domy",
+    "location": "Podkarpacie",
+    "images": [
+      { "src": "../assets/photos/dom-stodola-front.jpeg", "alt": "Tylna elewacja domu w stylu stodoły z wąskimi oknami" }
+    ],
+    "date": "2026-08-01",
+    "featured": false
+  },
+  {
+    "id": "dom-stodola-wnetrze-1",
+    "title": "Dom w stylu stodoły — wnętrze antresoli",
+    "category": "domy",
+    "location": "Podkarpacie",
+    "images": [
+      { "src": "../assets/photos/dom-stodola-wnetrze-sufit.jpeg", "alt": "Wnętrze antresoli pod skosem dachu, drewniana balustrada, okno szczytowe" }
+    ],
+    "date": "2026-08-01",
+    "featured": false
+  },
+  {
+    "id": "dom-stodola-wnetrze-2",
+    "title": "Dom w stylu stodoły — antresola, inne ujęcie",
+    "category": "domy",
+    "location": "Podkarpacie",
+    "images": [
+      { "src": "../assets/photos/dom-stodola-wnetrze-drzwi.jpeg", "alt": "Wnętrze antresoli domu w stylu stodoły, widoczny komin i balustrada" }
+    ],
+    "date": "2026-08-01",
+    "featured": false
+  },
+  {
     "id": "sauna-ogrodowa-podkarpacie",
     "title": "Sauna ogrodowa z antracytową zabudową",
     "category": "sauny",
     "location": "Podkarpacie",
     "images": [
       { "src": "../assets/photos/sauna-ogrodowa-zewnetrze.jpeg", "alt": "Kabina sauny ogrodowej z antracytową zabudową zewnętrzną i przeszklonymi drzwiami" }
+    ],
+    "date": "2026-07-01",
+    "featured": false
+  },
+  {
+    "id": "sauna-ogrodowa-przeszklenie",
+    "title": "Sauna ogrodowa — przeszklona ściana",
+    "category": "sauny",
+    "location": "Podkarpacie",
+    "images": [
+      { "src": "../assets/photos/sauna-ogrodowa-bok.jpeg", "alt": "Sauna ogrodowa z przeszkloną ścianą, widoczne wnętrze z drewnianymi ławami" }
+    ],
+    "date": "2026-07-01",
+    "featured": false
+  },
+  {
+    "id": "sauna-ogrodowa-zamknieta",
+    "title": "Sauna ogrodowa — zabudowa zewnętrzna",
+    "category": "sauny",
+    "location": "Podkarpacie",
+    "images": [
+      { "src": "../assets/photos/sauna-ogrodowa-front.jpeg", "alt": "Zamknięta antracytowa zabudowa zewnętrzna sauny ogrodowej" }
+    ],
+    "date": "2026-07-01",
+    "featured": false
+  },
+  {
+    "id": "sauna-ogrodowa-wnetrze",
+    "title": "Sauna ogrodowa — wnętrze",
+    "category": "sauny",
+    "location": "Podkarpacie",
+    "images": [
+      { "src": "../assets/photos/sauna-ogrodowa-wnetrze.jpeg", "alt": "Wnętrze sauny ogrodowej z drewnianymi ławami" }
     ],
     "date": "2026-07-01",
     "featured": false
