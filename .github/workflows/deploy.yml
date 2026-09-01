@@ -67,6 +67,9 @@ jobs:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+          # Nie jest sekretem — ID pomiaru GA4 i tak trafia jawnie do
+          # kodu strony po stronie klienta (patrz BaseLayout.astro).
+          PUBLIC_GA_MEASUREMENT_ID: G-HGZKMJK141
 
       - name: Setup SSH key
         run: |
