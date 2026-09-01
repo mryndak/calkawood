@@ -4,6 +4,7 @@
 // na wersję ze slashem na końcu od serwera plików — SSR unika tej niespójności.
 import { Image } from 'astro:assets';
 import PageLayout from '@/layouts/PageLayout.astro';
+import Breadcrumbs from '@/components/ui/Breadcrumbs.astro';
 import PhotoPlaceholder from '@/components/ui/PhotoPlaceholder.astro';
 import Button from '@/components/ui/Button.astro';
 import QuoteCTA from '@/components/sections/QuoteCTA.astro';
@@ -61,6 +62,12 @@ const PLACEHOLDER_DESCRIPTIONS: Record<ServiceCategory, string[]> = {
 
 const photos = PHOTOS_BY_CATEGORY[category];
 
+const breadcrumbs = [
+  { name: t.breadcrumbs.home, href: '/' },
+  { name: t.breadcrumbs.services, href: '/uslugi' },
+  { name: content.kicker, href: Astro.url.pathname },
+];
+
 const structuredData = {
   '@context': 'https://schema.org',
   '@graph': [
@@ -81,14 +88,6 @@ const structuredData = {
       ],
       url: new URL(Astro.url.pathname, Astro.site).href,
     },
-    {
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Strona główna', item: new URL('/', Astro.site).href },
-        { '@type': 'ListItem', position: 2, name: 'Usługi', item: new URL('/uslugi', Astro.site).href },
-        { '@type': 'ListItem', position: 3, name: content.kicker, item: new URL(Astro.url.pathname, Astro.site).href },
-      ],
-    },
     ...(content.faq.length > 0
       ? [
           {
@@ -105,16 +104,15 @@ const structuredData = {
 };
 ---
 
-<PageLayout title={meta.title} description={meta.description} structuredData={structuredData}>
+<PageLayout
+  title={meta.title}
+  description={meta.description}
+  structuredData={structuredData}
+  breadcrumbs={breadcrumbs}
+>
   <!-- Nagłówek -->
   <section class="mx-auto max-w-7xl px-4 pt-16 sm:px-10 sm:pt-[84px]">
-    <nav aria-label="Okruszki" class="mb-6 flex flex-wrap items-center gap-1.5 text-[13px] text-text-muted">
-      <a href="/" class="hover:text-primary-dark hover:underline">Strona główna</a>
-      <span aria-hidden="true">/</span>
-      <a href="/uslugi" class="hover:text-primary-dark hover:underline">Usługi</a>
-      <span aria-hidden="true">/</span>
-      <span class="text-text">{content.kicker}</span>
-    </nav>
+    <Breadcrumbs items={breadcrumbs} />
 
     <div class="grid grid-cols-1 gap-8 border-b border-hairline pb-11 sm:grid-cols-2 sm:items-end sm:gap-[70px]">
       <div>

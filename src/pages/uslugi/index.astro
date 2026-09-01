@@ -1,26 +1,19 @@
 ---
 import PageLayout from '@/layouts/PageLayout.astro';
+import Breadcrumbs from '@/components/ui/Breadcrumbs.astro';
 import QuoteCTA from '@/components/sections/QuoteCTA.astro';
 import { SERVICE_PAGES, SERVICE_CATEGORY_ORDER } from '@/data/servicePages';
 import t from '@/i18n';
 
-const structuredData = {
-  '@context': 'https://schema.org',
-  '@type': 'BreadcrumbList',
-  itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Strona główna', item: new URL('/', Astro.site).href },
-    { '@type': 'ListItem', position: 2, name: 'Usługi', item: new URL('/uslugi', Astro.site).href },
-  ],
-};
+const breadcrumbs = [
+  { name: t.breadcrumbs.home, href: '/' },
+  { name: t.breadcrumbs.services, href: '/uslugi' },
+];
 ---
 
-<PageLayout title={t.meta.services.title} description={t.meta.services.description} structuredData={structuredData}>
+<PageLayout title={t.meta.services.title} description={t.meta.services.description} breadcrumbs={breadcrumbs}>
   <section class="mx-auto max-w-7xl px-4 pt-16 sm:px-10 sm:pt-[84px]">
-    <nav aria-label="Okruszki" class="mb-6 flex flex-wrap items-center gap-1.5 text-[13px] text-text-muted">
-      <a href="/" class="hover:text-primary-dark hover:underline">Strona główna</a>
-      <span aria-hidden="true">/</span>
-      <span class="text-text">Usługi</span>
-    </nav>
+    <Breadcrumbs items={breadcrumbs} />
 
     <div class="grid grid-cols-1 gap-8 border-b border-hairline pb-11 sm:grid-cols-2 sm:items-end sm:gap-[70px]">
       <div>

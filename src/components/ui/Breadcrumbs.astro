@@ -1,0 +1,22 @@
+---
+import type { BreadcrumbItem } from '@/lib/breadcrumbs';
+
+interface Props {
+  items: BreadcrumbItem[];
+}
+
+const { items } = Astro.props;
+---
+
+<nav aria-label="Okruszki" class="mb-6 flex flex-wrap items-center gap-1.5 text-[13px] text-text-muted">
+  {items.map((item, index) => (
+    <Fragment>
+      {index > 0 && <span aria-hidden="true">/</span>}
+      {index === items.length - 1 ? (
+        <span class="text-text">{item.name}</span>
+      ) : (
+        <a href={item.href} class="hover:text-primary-dark hover:underline">{item.name}</a>
+      )}
+    </Fragment>
+  ))}
+</nav>

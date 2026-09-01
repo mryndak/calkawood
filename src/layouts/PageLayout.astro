@@ -2,6 +2,7 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Navigation from '@/components/ui/Navigation.astro';
 import Footer from '@/components/ui/Footer.astro';
+import { buildBreadcrumbList, withBreadcrumbs, type BreadcrumbItem } from '@/lib/breadcrumbs';
 
 interface Props {
   title: string;
@@ -10,9 +11,17 @@ interface Props {
   ogImage?: string;
   structuredData?: object;
   noindex?: boolean;
+  // Strona sama renderuje widoczne okruszki (komponent Breadcrumbs) tam, gdzie
+  // pasują do jej layoutu — ten prop tylko dokleja odpowiadający im
+  // BreadcrumbList do structuredData, żeby nie duplikować listy w dwóch miejscach.
+  breadcrumbs?: BreadcrumbItem[];
 }
 
-const { title, description, canonical, ogImage, structuredData, noindex } = Astro.props;
+const { title, description, canonical, ogImage, structuredData, noindex, breadcrumbs } = Astro.props;
+
+const finalStructuredData = breadcrumbs
+  ? withBreadcrumbs(structuredData, buildBreadcrumbList(breadcrumbs, Astro.site!))
+  : structuredData;
 ---
 
 <BaseLayout
@@ -20,7 +29,7 @@ const { title, description, canonical, ogImage, structuredData, noindex } = Astr
   description={description}
   canonical={canonical}
   ogImage={ogImage}
-  structuredData={structuredData}
+  structuredData={finalStructuredData}
   noindex={noindex}
 >
   <Navigation />
