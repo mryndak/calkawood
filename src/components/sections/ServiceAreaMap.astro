@@ -82,7 +82,11 @@ const mapDataJson = JSON.stringify({
 
 <script>
   import L from 'leaflet';
-  import 'leaflet/dist/leaflet.css';
+  // `?url` zamiast zwykłego importu CSS: Astro/Vite wciąż hashuje i cache'uje
+  // plik, ale nie wstrzykuje go jako blokujący <link> w <head> SSR — mapa jest
+  // poniżej pierwszego ekranu, więc jej CSS ładujemy dopiero tutaj, gdy skrypt
+  // faktycznie startuje (patrz PageSpeed: było to źródło ~180ms render-blocking).
+  import leafletCssHref from 'leaflet/dist/leaflet.css?url';
 
   type MapData = {
     outline: [number, number][];
@@ -92,6 +96,13 @@ const mapDataJson = JSON.stringify({
   const POLAND_BOUNDS = L.latLngBounds([48.95, 14.1], [54.9, 24.2]);
 
   const containers = document.querySelectorAll<HTMLElement>('.service-area-leaflet[data-map]');
+
+  if (containers.length > 0 && !document.querySelector(`link[href="${leafletCssHref}"]`)) {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = leafletCssHref;
+    document.head.appendChild(link);
+  }
 
   containers.forEach((el) => {
     const data = JSON.parse(el.dataset.map ?? '{}') as MapData;
