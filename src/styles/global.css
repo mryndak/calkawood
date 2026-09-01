@@ -1,5 +1,21 @@
 @import "tailwindcss";
 
+/* Czcionki — self-hostowane przez @fontsource zamiast <link> do fonts.googleapis.com
+   w <head> (patrz BaseLayout.astro). Ten sam efekt wizualny, ale bez dwóch zewnętrznych
+   round-tripów (CSS z fonts.googleapis.com, potem pliki z fonts.gstatic.com), które w
+   PageSpeed Insights blokowały renderowanie ~2,9 s na wolniejszych połączeniach. Wagi
+   dobrane 1:1 do tego, co wcześniej ładował link Google Fonts. */
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/600.css";
+@import "@fontsource/inter/700.css";
+@import "@fontsource/cormorant-garamond/400.css";
+@import "@fontsource/cormorant-garamond/400-italic.css";
+@import "@fontsource/cormorant-garamond/600.css";
+@import "@fontsource/lora/400.css";
+@import "@fontsource/lora/500.css";
+@import "@fontsource/lora/600.css";
+
 /* CalkaWood — Design Tokens (paleta marki: papierowa biel + akcent złoto/drewno + sekcje ciemne) */
 @theme {
   /* Baza — jasne tło (całej strony) */
