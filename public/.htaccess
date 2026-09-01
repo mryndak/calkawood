@@ -1,0 +1,23 @@
+# Nagłówki cache dla plików statycznych (moduł .htaccess na MyDevil, patrz
+# https://pomoc.mydevil.net/htaccess/). PageSpeed Insights flagował brak
+# Cache-Control jako "Używaj efektywnego czasu przechowywania w pamięci
+# podręcznej" (~600 KiB strat na każdą pierwszą wizytę).
+
+# Assety Astro/Vite pod /_astro/ mają w nazwie hash treści (np.
+# MobileMenu.DbDHY8eD.js) — zmiana pliku = nowa nazwa, więc mogą być
+# cache'owane bezpiecznie na maksymalny czas jako "immutable".
+<FilesMatch "\.[A-Za-z0-9_-]{6,10}\.(js|css|woff2?|jpe?g|png|webp|avif|svg)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+</FilesMatch>
+
+# Reszta statycznych plików z /public (favicon, logotypy) nie ma hasha w
+# nazwie — mogą zostać podmienione pod tym samym adresem, więc krótszy cache.
+<FilesMatch "\.(ico|jpe?g|png|webp|avif|svg|woff2?)$">
+    Header set Cache-Control "public, max-age=604800"
+</FilesMatch>
+
+# robots.txt i sitemapa muszą zostać odczytane przez Google względnie szybko
+# po aktualizacji (patrz .github/workflows/deploy.yml) — krótki cache.
+<FilesMatch "\.(txt|xml)$">
+    Header set Cache-Control "public, max-age=3600"
+</FilesMatch>
