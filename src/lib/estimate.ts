@@ -14,21 +14,55 @@ export const MIN_AREA = 10;
 export const MAX_AREA = 250;
 export const AREA_STEP = 2;
 
-// [dolna, górna] stawka zł/m²
-const BASE_RATES: Record<EstimateService, [number, number]> = {
-  domy: [3400, 5200],
-  sauna: [3900, 6200],
-  taras: [520, 880],
-  zadaszenie: [680, 1150],
-  wnetrza: [420, 780],
+export interface Pricing {
+  // [dolna, górna] stawka zł/m²
+  rates: Record<EstimateService, [number, number]>;
+  // mnożnik ceny względem sosny
+  multipliers: Record<EstimateMaterial, number>;
+}
+
+export const DEFAULT_PRICING: Pricing = {
+  rates: {
+    domy: [3400, 5200],
+    sauna: [3900, 6200],
+    taras: [520, 880],
+    zadaszenie: [680, 1150],
+    wnetrza: [420, 780],
+  },
+  multipliers: {
+    sosna: 1,
+    modrzew: 1.28,
+    kompozyt: 1.15,
+    dab: 1.5,
+  },
 };
 
-const MATERIAL_MULTIPLIER: Record<EstimateMaterial, number> = {
-  sosna: 1,
-  modrzew: 1.28,
-  kompozyt: 1.15,
-  dab: 1.5,
-};
+/**
+ * Waliduje surowe dane (np. JSON z bazy lub formularz) i zwraca Pricing albo
+ * null, gdy cokolwiek jest niepoprawne (brak pola, nie-liczba, <= 0,
+ * dolna stawka wyższa od górnej).
+ */
+export function parsePricing(input: unknown): Pricing | null {
+  if (!input || typeof input !== 'object') return null;
+  const { rates, multipliers } = input as { rates?: any; multipliers?: any };
+  if (!rates || !multipliers) return null;
+  const ok = (n: unknown): n is number =>
+    typeof n === 'number' && Number.isFinite(n) && n > 0 && n <= 1_000_000;
+
+  const outRates = {} as Pricing['rates'];
+  for (const svc of SERVICE_TYPES) {
+    const pair = rates[svc];
+    if (!Array.isArray(pair) || !ok(pair[0]) || !ok(pair[1]) || pair[0] > pair[1]) return null;
+    outRates[svc] = [pair[0], pair[1]];
+  }
+  const outMult = {} as Pricing['multipliers'];
+  for (const mat of MATERIALS) {
+    const m = multipliers[mat];
+    if (!ok(m) || m > 10) return null;
+    outMult[mat] = m;
+  }
+  return { rates: outRates, multipliers: outMult };
+}
 
 export const SERVICE_LABELS: Record<EstimateService, string> = {
   domy: 'Dom drewniany',
@@ -68,10 +102,11 @@ export interface EstimateRange {
 export function estimateRange(
   service: EstimateService,
   area: number,
-  material: EstimateMaterial
+  material: EstimateMaterial,
+  pricing: Pricing = DEFAULT_PRICING
 ): EstimateRange {
-  const [low, high] = BASE_RATES[service];
-  const multiplier = MATERIAL_MULTIPLIER[material];
+  const [low, high] = pricing.rates[service];
+  const multiplier = pricing.multipliers[material];
   return {
     low: round500(low * area * multiplier),
     high: round500(high * area * multiplier),

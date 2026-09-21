@@ -1,6 +1,7 @@
 import postgres from 'postgres';
 import type { QuoteRequest } from './quote-validation';
 import type { ContactRequest } from './contact-validation';
+import { DEFAULT_PRICING, parsePricing, type Pricing } from './estimate';
 import type { QuoteRequestRow, QuoteStatus, ContactMessageRow, ContactStatus } from './types';
 
 const sql = postgres(import.meta.env.DATABASE_URL, {
@@ -195,6 +196,37 @@ export async function setQuoteCalculatorEnabled(enabled: boolean): Promise<void>
   await sql`
     INSERT INTO site_settings (key, value)
     VALUES ('quote_calculator_enabled', ${String(enabled)})
+    ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value, updated_at = NOW()
+  `;
+}
+
+/**
+ * Stawki i mnożniki kalkulatora wyceny. Przy braku wiersza, błędnych danych
+ * lub błędzie bazy zwraca wartości domyślne.
+ */
+export async function getQuotePricing(): Promise<Pricing> {
+  try {
+    const rows = await sql<{ value: string }[]>`
+      SELECT value FROM site_settings WHERE key = 'quote_pricing'
+    `;
+    if (rows.length === 0) return DEFAULT_PRICING;
+    return parsePricing(JSON.parse(rows[0].value)) ?? DEFAULT_PRICING;
+  } catch {
+    return DEFAULT_PRICING;
+  }
+}
+
+/**
+ * Zapisuje stawki kalkulatora; null przywraca wartości domyślne.
+ */
+export async function setQuotePricing(pricing: Pricing | null): Promise<void> {
+  if (pricing === null) {
+    await sql`DELETE FROM site_settings WHERE key = 'quote_pricing'`;
+    return;
+  }
+  await sql`
+    INSERT INTO site_settings (key, value)
+    VALUES ('quote_pricing', ${JSON.stringify(pricing)})
     ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value, updated_at = NOW()
   `;
 }

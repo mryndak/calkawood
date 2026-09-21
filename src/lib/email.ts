@@ -1,7 +1,8 @@
 import { Resend } from 'resend';
+import { getQuotePricing } from './db';
 import type { QuoteRequest } from './quote-validation';
 import type { ContactRequest } from './contact-validation';
-import { SERVICE_LABELS, MATERIAL_LABELS, TERM_LABELS, formatEstimateRange, estimateRange } from './estimate';
+import { SERVICE_LABELS, MATERIAL_LABELS, TERM_LABELS, formatEstimateRange, estimateRange, type Pricing } from './estimate';
 
 // Leniwa inicjalizacja klienta — konstruktor Resend rzuca synchronicznie,
 // gdy brakuje klucza API. Wywołanie go dopiero przy wysyłce (nie na
@@ -28,7 +29,13 @@ export async function sendQuoteNotification(
     const fromEmail = import.meta.env.RESEND_FROM_EMAIL || 'wycena@calkawood.pl';
     const toEmail = import.meta.env.NOTIFICATION_EMAIL || 'kontakt@calkawood.pl';
 
-    const html = buildNotificationHtml(quote, serviceLabel);
+    let pricing;
+    try {
+      pricing = await getQuotePricing();
+    } catch {
+      pricing = undefined; // domyślne stawki
+    }
+    const html = buildNotificationHtml(quote, serviceLabel, pricing);
 
     await getResendClient().emails.send({
       from: fromEmail,
@@ -46,9 +53,10 @@ export async function sendQuoteNotification(
 
 function buildNotificationHtml(
   quote: QuoteRequest & { id: number },
-  serviceLabel: string
+  serviceLabel: string,
+  pricing?: Pricing
 ): string {
-  const range = estimateRange(quote.usluga, quote.powierzchnia, quote.material);
+  const range = estimateRange(quote.usluga, quote.powierzchnia, quote.material, pricing);
 
   const rows: Array<[string, string | undefined]> = [
     ['ID', String(quote.id)],

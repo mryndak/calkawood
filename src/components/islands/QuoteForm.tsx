@@ -19,6 +19,7 @@ import {
   type EstimateService,
   type EstimateMaterial,
   type EstimateTerm,
+  type Pricing,
 } from '@/lib/estimate';
 import PhotoUpload from './PhotoUpload';
 
@@ -81,6 +82,7 @@ const INITIAL_DATA: FormData = {
 interface QuoteFormProps {
   maxFiles: number;
   maxFileSize: number;
+  pricing: Pricing;
 }
 
 function validateStep(step: number, data: FormData): FieldErrors {
@@ -120,7 +122,7 @@ function validateStep(step: number, data: FormData): FieldErrors {
   return errors;
 }
 
-export default function QuoteForm({ maxFiles, maxFileSize }: QuoteFormProps) {
+export default function QuoteForm({ maxFiles, maxFileSize, pricing }: QuoteFormProps) {
   const [step, setStep] = useState(1);
   const [data, setData] = useState<FormData>(INITIAL_DATA);
   const [errors, setErrors] = useState<FieldErrors>({});
@@ -263,9 +265,10 @@ export default function QuoteForm({ maxFiles, maxFileSize }: QuoteFormProps) {
       estimateRange(
         (data.usluga || 'taras') as EstimateService,
         data.powierzchnia,
-        (data.material || 'sosna') as EstimateMaterial
+        (data.material || 'sosna') as EstimateMaterial,
+        pricing
       ),
-    [data.usluga, data.powierzchnia, data.material]
+    [data.usluga, data.powierzchnia, data.material, pricing]
   );
 
   if (isSent) {

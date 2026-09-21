@@ -1,7 +1,8 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import AdminNav from '@/components/admin/AdminNav.astro';
-import { getQuoteCalculatorEnabled } from '@/lib/db';
+import { getQuoteCalculatorEnabled, getQuotePricing } from '@/lib/db';
+import { SERVICE_TYPES, SERVICE_LABELS, MATERIALS, MATERIAL_LABELS } from '@/lib/estimate';
 import { isAuthenticated } from '@/lib/admin-auth';
 import i18n from '@/i18n';
 
@@ -10,6 +11,8 @@ if (!isAuthenticated(Astro.request)) {
 }
 
 const enabled = await getQuoteCalculatorEnabled();
+const pricing = await getQuotePricing();
+const pricingError = new URL(Astro.request.url).searchParams.get('error') === 'pricing';
 const saved = new URL(Astro.request.url).searchParams.get('saved') === '1';
 ---
 
@@ -33,6 +36,11 @@ const saved = new URL(Astro.request.url).searchParams.get('saved') === '1';
       {saved && (
         <p class="mb-4 rounded-md bg-green-100 px-4 py-2 text-sm text-green-800" role="status">Zapisano.</p>
       )}
+      {pricingError && (
+        <p class="mb-4 rounded-md bg-red-100 px-4 py-2 text-sm text-red-800" role="alert">
+          Nieprawidłowe wartości: stawki i mnożniki muszą być liczbami większymi od zera, a stawka dolna nie może przekraczać górnej.
+        </p>
+      )}
       <form method="POST" action="/api/admin/settings" class="bg-white rounded-lg border border-stone-200 p-5">
         <label class="flex items-start gap-3 cursor-pointer">
           <input
@@ -52,6 +60,40 @@ const saved = new URL(Astro.request.url).searchParams.get('saved') === '1';
         <button type="submit" class="mt-5 px-4 py-2 text-sm bg-amber-600 hover:bg-amber-700 text-white rounded-md transition-colors">
           Zapisz
         </button>
+      </form>
+
+      <form method="POST" action="/api/admin/pricing" class="mt-6 bg-white rounded-lg border border-stone-200 p-5">
+        <h2 class="font-medium text-stone-800">Stawki kalkulatora wyceny</h2>
+        <p class="mt-1 text-sm text-stone-500">
+          Cena = stawka za m² × powierzchnia × mnożnik materiału, zaokrąglona do 500 zł. Zmiana działa od razu w kalkulatorze, mailach i panelu zapytań.
+        </p>
+
+        <h3 class="mt-5 text-sm font-medium text-stone-700">Stawki bazowe (zł/m², sosna)</h3>
+        <div class="mt-2 grid grid-cols-[1fr_7rem_7rem] items-center gap-x-3 gap-y-2 text-sm">
+          <span></span><span class="text-stone-500">od</span><span class="text-stone-500">do</span>
+          {SERVICE_TYPES.map((svc) => (
+            <>
+              <label class="text-stone-700" for={`rate_${svc}_low`}>{SERVICE_LABELS[svc]}</label>
+              <input id={`rate_${svc}_low`} name={`rate_${svc}_low`} type="number" min="1" step="1" required value={pricing.rates[svc][0]} class="rounded border border-stone-300 px-2 py-1" />
+              <input name={`rate_${svc}_high`} aria-label={`${SERVICE_LABELS[svc]} — stawka górna`} type="number" min="1" step="1" required value={pricing.rates[svc][1]} class="rounded border border-stone-300 px-2 py-1" />
+            </>
+          ))}
+        </div>
+
+        <h3 class="mt-5 text-sm font-medium text-stone-700">Mnożniki materiału</h3>
+        <div class="mt-2 grid grid-cols-[1fr_7rem] items-center gap-x-3 gap-y-2 text-sm">
+          {MATERIALS.map((mat) => (
+            <>
+              <label class="text-stone-700" for={`mult_${mat}`}>{MATERIAL_LABELS[mat]}</label>
+              <input id={`mult_${mat}`} name={`mult_${mat}`} type="number" min="0.01" max="10" step="0.01" required value={pricing.multipliers[mat]} class="rounded border border-stone-300 px-2 py-1" />
+            </>
+          ))}
+        </div>
+
+        <div class="mt-5 flex items-center gap-3">
+          <button type="submit" class="px-4 py-2 text-sm bg-amber-600 hover:bg-amber-700 text-white rounded-md transition-colors">Zapisz stawki</button>
+          <button type="submit" name="reset" value="1" formnovalidate class="px-4 py-2 text-sm bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-md transition-colors">Przywróć domyślne</button>
+        </div>
       </form>
     </div>
   </main>

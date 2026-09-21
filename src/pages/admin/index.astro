@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import AdminNav from '@/components/admin/AdminNav.astro';
-import { getQuoteRequests, getQuoteRequestsCount } from '@/lib/db';
+import { getQuoteRequests, getQuoteRequestsCount, getQuotePricing } from '@/lib/db';
 import { isAuthenticated } from '@/lib/admin-auth';
 import type { QuoteStatus } from '@/lib/types';
 import { SERVICE_LABELS, MATERIAL_LABELS, TERM_LABELS, estimateRange, formatEstimateRange } from '@/lib/estimate';
@@ -19,6 +19,7 @@ const page = Math.max(1, parseInt(url.searchParams.get('page') ?? '1', 10) || 1)
 const limit = 20;
 const offset = (page - 1) * limit;
 
+const pricing = await getQuotePricing();
 const [quotes, total] = await Promise.all([
   getQuoteRequests({ limit, offset }),
   getQuoteRequestsCount(),
@@ -163,7 +164,7 @@ function formatDate(date: Date): string {
                                 <li><span class="text-stone-500">Termin:</span> {TERM_LABELS[quote.termin] ?? quote.termin}</li>
                                 <li>
                                   <span class="text-stone-500">Widełki:</span>{' '}
-                                  {formatEstimateRange(estimateRange(quote.usluga, quote.powierzchnia, quote.material))}
+                                  {formatEstimateRange(estimateRange(quote.usluga, quote.powierzchnia, quote.material, pricing))}
                                 </li>
                               </ul>
                             </div>
