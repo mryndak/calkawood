@@ -3,11 +3,14 @@ import { Phone } from '@lucide/astro';
 import t from '@/i18n';
 import Button from '@/components/ui/Button.astro';
 import MobileMenu from '@/components/islands/MobileMenu.tsx';
+import { getQuoteCalculatorEnabled } from '@/lib/db';
+
+const quoteEnabled = await getQuoteCalculatorEnabled();
 
 const PHONE_NUMBER = '661 084 830';
 const PHONE_HREF = 'tel:+48661084830';
 
-const navLinks = [
+const allNavLinks = [
   { label: t.nav.home, href: '/' },
   { label: t.nav.services, href: '/uslugi' },
   { label: t.nav.portfolio, href: '/realizacje' },
@@ -15,6 +18,7 @@ const navLinks = [
   { label: t.nav.about, href: '/o-mnie' },
   { label: t.nav.contact, href: '/kontakt' },
 ];
+const navLinks = quoteEnabled ? allNavLinks : allNavLinks.filter((link) => link.href !== '/wycena');
 ---
 
 <!-- Skip to content link — first focusable element for keyboard users -->
@@ -79,11 +83,13 @@ const navLinks = [
         </a>
 
         <!-- Wycena online (desktop) -->
-        <div class="hidden lg:inline-flex">
-          <Button href="/wycena" variant="dark" size="sm">
-            Wycena online
-          </Button>
-        </div>
+        {quoteEnabled && (
+          <div class="hidden lg:inline-flex">
+            <Button href="/wycena" variant="dark" size="sm">
+              Wycena online
+            </Button>
+          </div>
+        )}
 
         <!-- Hamburger button (mobile/tablet, <1024px) -->
         <button

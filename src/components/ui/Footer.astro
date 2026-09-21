@@ -1,6 +1,9 @@
 ---
 import { Phone } from '@lucide/astro';
 import translations from '@/i18n';
+import { getQuoteCalculatorEnabled } from '@/lib/db';
+
+const quoteEnabled = await getQuoteCalculatorEnabled();
 
 const currentYear = new Date().getFullYear();
 const phoneNumber = '+48661084830';
@@ -14,12 +17,13 @@ const offerLinks = [
   { label: translations.services.wnetrza, href: '/uslugi/wnetrza' },
 ];
 
-const companyLinks = [
+const allCompanyLinks = [
   { label: translations.nav.about, href: '/o-mnie' },
   { label: translations.nav.portfolio, href: '/realizacje' },
   { label: translations.nav.quote, href: '/wycena' },
   { label: translations.nav.contact, href: '/kontakt' },
 ];
+const companyLinks = quoteEnabled ? allCompanyLinks : allCompanyLinks.filter((link) => link.href !== '/wycena');
 
 const legalLinks = [
   { label: 'Polityka prywatności', href: '/polityka-prywatnosci' },

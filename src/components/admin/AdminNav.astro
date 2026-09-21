@@ -2,7 +2,7 @@
 import i18n from '@/i18n';
 
 interface Props {
-  active: 'quotes' | 'messages';
+  active: 'quotes' | 'messages' | 'settings';
 }
 
 const { active } = Astro.props;
@@ -10,6 +10,7 @@ const { active } = Astro.props;
 const tabs = [
   { key: 'quotes' as const, label: i18n.admin.nav.quotes, href: '/admin' },
   { key: 'messages' as const, label: i18n.admin.nav.messages, href: '/admin/kontakt' },
+  { key: 'settings' as const, label: i18n.admin.nav.settings, href: '/admin/ustawienia' },
 ];
 ---
 

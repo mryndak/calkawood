@@ -1,0 +1,58 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import AdminNav from '@/components/admin/AdminNav.astro';
+import { getQuoteCalculatorEnabled } from '@/lib/db';
+import { isAuthenticated } from '@/lib/admin-auth';
+import i18n from '@/i18n';
+
+if (!isAuthenticated(Astro.request)) {
+  return Astro.redirect('/admin/login');
+}
+
+const enabled = await getQuoteCalculatorEnabled();
+const saved = new URL(Astro.request.url).searchParams.get('saved') === '1';
+---
+
+<BaseLayout title={`${i18n.admin.nav.settings} | CalkaWood`} description="Panel administracyjny CalkaWood" noindex>
+  <main class="min-h-screen bg-stone-50">
+    <header class="bg-white border-b border-stone-200 sticky top-0 z-10">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-5">
+          <h1 class="text-xl font-bold text-stone-800">{i18n.admin.nav.settings}</h1>
+          <AdminNav active="settings" />
+        </div>
+        <form method="POST" action="/api/admin/logout">
+          <button type="submit" class="px-3 py-1.5 text-sm bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-md transition-colors">
+            {i18n.admin.panel.logout}
+          </button>
+        </form>
+      </div>
+    </header>
+
+    <div class="max-w-2xl mx-auto px-4 sm:px-6 py-6">
+      {saved && (
+        <p class="mb-4 rounded-md bg-green-100 px-4 py-2 text-sm text-green-800" role="status">Zapisano.</p>
+      )}
+      <form method="POST" action="/api/admin/settings" class="bg-white rounded-lg border border-stone-200 p-5">
+        <label class="flex items-start gap-3 cursor-pointer">
+          <input
+            type="checkbox"
+            name="quote_calculator_enabled"
+            checked={enabled}
+            class="mt-1 h-4 w-4 accent-amber-600"
+          />
+          <span>
+            <span class="block font-medium text-stone-800">Kalkulator wyceny na stronie głównej</span>
+            <span class="block text-sm text-stone-500">
+              Pokazuje przycisk „Wycena online” w sekcji powitalnej oraz sekcję z kreatorem wyceny.
+              Sama podstrona /wycena pozostaje dostępna.
+            </span>
+          </span>
+        </label>
+        <button type="submit" class="mt-5 px-4 py-2 text-sm bg-amber-600 hover:bg-amber-700 text-white rounded-md transition-colors">
+          Zapisz
+        </button>
+      </form>
+    </div>
+  </main>
+</BaseLayout>

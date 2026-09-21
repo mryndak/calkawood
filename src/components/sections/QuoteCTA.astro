@@ -2,8 +2,12 @@
 import { Image } from 'astro:assets';
 import Button from '@/components/ui/Button.astro';
 import textureImg from '@/assets/photos/tekstura-drewno-szare.jpeg';
+import { getQuoteCalculatorEnabled } from '@/lib/db';
+
+const quoteEnabled = await getQuoteCalculatorEnabled();
 ---
 
+{quoteEnabled && (
 <section class="relative overflow-hidden bg-dark" aria-labelledby="quote-cta-heading">
   <Image
     src={textureImg}
@@ -38,3 +42,4 @@ import textureImg from '@/assets/photos/tekstura-drewno-szare.jpeg';
     </div>
   </div>
 </section>
+)}

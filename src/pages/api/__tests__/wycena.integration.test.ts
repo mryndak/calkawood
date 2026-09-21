@@ -17,6 +17,7 @@ import { resetRateLimitStore } from '@/lib/rate-limit';
 
 vi.mock('@/lib/db', () => ({
   saveQuoteRequest: vi.fn().mockResolvedValue(42),
+  getQuoteCalculatorEnabled: vi.fn().mockResolvedValue(true),
 }));
 
 vi.mock('@/lib/email', () => ({

@@ -3,6 +3,7 @@
 // (dist/client/uslugi/x/index.html) dostają dodatkowe przekierowanie 301
 // na wersję ze slashem na końcu od serwera plików — SSR unika tej niespójności.
 import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
 import PageLayout from '@/layouts/PageLayout.astro';
 import Breadcrumbs from '@/components/ui/Breadcrumbs.astro';
 import PhotoPlaceholder from '@/components/ui/PhotoPlaceholder.astro';
@@ -10,24 +11,10 @@ import Button from '@/components/ui/Button.astro';
 import QuoteCTA from '@/components/sections/QuoteCTA.astro';
 import { SERVICE_PAGES, type ServiceCategory } from '@/data/servicePages';
 import t from '@/i18n';
+import { getQuoteCalculatorEnabled } from '@/lib/db';
 
-import tarasDomNowoczesny from '@/assets/photos/taras-dom-nowoczesny.jpeg';
-import tarasZloteSwiatlo from '@/assets/photos/taras-zlote-swiatlo.jpeg';
-import tarasBalustrada from '@/assets/photos/taras-balustrada.jpeg';
-import zadaszenieTarasMeble from '@/assets/photos/zadaszenie-taras-meble.jpeg';
-import pergolaTarasSlup from '@/assets/photos/pergola-taras-slup.jpeg';
-import schodyTarasWejscie from '@/assets/photos/schody-taras-wejscie.jpeg';
-import schodyWnetrze from '@/assets/photos/schody-wnetrze.jpeg';
-import montazDeskiPraca from '@/assets/photos/montaz-deski-praca.jpeg';
-import domSzkieletowyElewacja from '@/assets/photos/dom-szkieletowy-elewacja.jpeg';
-import domSzkieletowyGable from '@/assets/photos/dom-szkieletowy-gable.jpeg';
-import domStodolaPrzeszklona from '@/assets/photos/dom-stodola-przeszklona.jpeg';
-import domStodolaBoczna1 from '@/assets/photos/dom-stodola-boczna-1.jpeg';
-import domStodolaWnetrzeSufit from '@/assets/photos/dom-stodola-wnetrze-sufit.jpeg';
-import saunaOgrodowaZewnetrze from '@/assets/photos/sauna-ogrodowa-zewnetrze.jpeg';
-import saunaOgrodowaWnetrze from '@/assets/photos/sauna-ogrodowa-wnetrze.jpeg';
-import saunaOgrodowaBok from '@/assets/photos/sauna-ogrodowa-bok.jpeg';
-import saunaOgrodowaFront from '@/assets/photos/sauna-ogrodowa-front.jpeg';
+const quoteEnabled = await getQuoteCalculatorEnabled();
+
 
 const requestedCategory = Astro.params.category;
 if (!requestedCategory || !(requestedCategory in SERVICE_PAGES)) {
@@ -38,46 +25,16 @@ const category = requestedCategory as ServiceCategory;
 const content = SERVICE_PAGES[category];
 const meta = t.meta[category];
 
-const PHOTOS_BY_CATEGORY: Record<ServiceCategory, Array<{ src: ImageMetadata; alt: string }>> = {
-  domy: [
-    { src: domSzkieletowyElewacja, alt: 'Dom szkieletowy z drewnianą elewacją w trakcie prac wykończeniowych' },
-    { src: domStodolaPrzeszklona, alt: 'Dom w stylu stodoły z dużym przeszkleniem na szczycie' },
-    { src: domStodolaBoczna1, alt: 'Boczny widok domu w stylu stodoły z przeszkloną ścianą szczytową' },
-    { src: domSzkieletowyGable, alt: 'Szczytowa ściana domu szkieletowego z lukarną i kominem' },
-    { src: domStodolaWnetrzeSufit, alt: 'Wnętrze antresoli pod skosem dachu w domu w stylu stodoły' },
-  ],
-  sauny: [
-    { src: saunaOgrodowaZewnetrze, alt: 'Kabina sauny ogrodowej z antracytową zabudową zewnętrzną' },
-    { src: saunaOgrodowaWnetrze, alt: 'Wnętrze sauny z drewnianymi ławami' },
-    { src: saunaOgrodowaBok, alt: 'Sauna ogrodowa z przeszkloną ścianą' },
-    { src: saunaOgrodowaFront, alt: 'Zamknięta zabudowa zewnętrzna sauny ogrodowej' },
-  ],
-  tarasy: [
-    { src: tarasDomNowoczesny, alt: 'Taras z modrzewia syberyjskiego przy nowoczesnym domu' },
-    { src: tarasZloteSwiatlo, alt: 'Taras z olejowanej sosny w złotym świetle zachodzącego słońca' },
-    { src: tarasBalustrada, alt: 'Taras drewniany z balustradą listwową' },
-  ],
-  zadaszenia: [
-    { src: zadaszenieTarasMeble, alt: 'Zadaszenie tarasu z drewna klejonego z meblami ogrodowymi' },
-    { src: pergolaTarasSlup, alt: 'Pergola wsparta na drewnianym słupie przy elewacji domu' },
-  ],
-  wnetrza: [
-    { src: schodyWnetrze, alt: 'Drewniane schody wewnętrzne' },
-    { src: schodyTarasWejscie, alt: 'Taras wejściowy ze stopniami do domu' },
-    { src: montazDeskiPraca, alt: 'Montaż deski tarasowej przez rzemieślnika' },
-  ],
-};
-// Zgodne z placeholderNote w src/content/projects.json dla realizacji bez
-// dostarczonego zdjęcia (patrz "sauna-barrel-krosno" — jedyna pozostała).
-const PLACEHOLDER_DESCRIPTIONS: Record<ServiceCategory, string[]> = {
-  domy: [],
-  sauny: ['sauna beczka w ogrodzie'],
-  tarasy: [],
-  zadaszenia: [],
-  wnetrza: [],
-};
+// Zdjęcia i placeholdery pochodzą z kolekcji realizacji (src/content/projects.json),
+// żeby strona usługi pokazywała wszystko, co jest w galerii danej kategorii.
+const categoryProjects = (await getCollection('projects'))
+  .filter((project) => project.data.category === category)
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
 
-const photos = PHOTOS_BY_CATEGORY[category];
+const photos = categoryProjects.flatMap((project) => project.data.images);
+const placeholderDescriptions = categoryProjects.flatMap((project) =>
+  project.data.placeholderNote ? [project.data.placeholderNote] : []
+);
 
 const breadcrumbs = [
   { name: t.breadcrumbs.home, href: '/' },
@@ -186,7 +143,7 @@ const structuredData = {
         </div>
       ) : (
         <div class="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-3">
-          {PLACEHOLDER_DESCRIPTIONS[category].map((description) => (
+          {placeholderDescriptions.map((description) => (
             <PhotoPlaceholder description={description} ratio="aspect-[4/3]" />
           ))}
         </div>
@@ -220,7 +177,7 @@ const structuredData = {
         Masz podobny projekt na myśli?
       </p>
       <div class="flex flex-wrap gap-3">
-        <Button href="/wycena" variant="dark" size="lg">Wycena online →</Button>
+        {quoteEnabled && <Button href="/wycena" variant="dark" size="lg">Wycena online →</Button>}
         <Button href={`/realizacje?kategoria=${category}`} variant="neutral-outline" size="lg">
           Zobacz realizacje
         </Button>

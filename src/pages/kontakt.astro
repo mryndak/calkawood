@@ -2,6 +2,9 @@
 import PageLayout from '@/layouts/PageLayout.astro';
 import ServiceAreaMap from '@/components/sections/ServiceAreaMap.astro';
 import t from '@/i18n';
+import { getQuoteCalculatorEnabled } from '@/lib/db';
+
+const quoteEnabled = await getQuoteCalculatorEnabled();
 
 const companyInfo = [
   { label: 'Firma', value: 'MLC GROUP Wojciech Całka (marka CalkaWood)' },
@@ -50,10 +53,14 @@ const recaptchaSiteKey = import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY;
       <div class="py-10 lg:py-[52px] lg:pl-16">
         <h2 class="text-2xl leading-[1.1] text-text sm:text-4xl">Albo napisz</h2>
         <p class="mt-2 max-w-[52ch] text-[14.5px] leading-[1.7] text-text-secondary">
-          Trzy pola. Jeśli chcesz konkretną cenę, przejdź od razu do{' '}
-          <a href="/wycena" class="text-primary-dark underline decoration-1 underline-offset-[3px] hover:text-accent">
-            wyceny online
-          </a>.
+          Trzy pola.{quoteEnabled ? (
+            <>
+              {' '}Jeśli chcesz konkretną cenę, przejdź od razu do{' '}
+              <a href="/wycena" class="text-primary-dark underline decoration-1 underline-offset-[3px] hover:text-accent">
+                wyceny online
+              </a>.
+            </>
+          ) : ' Oddzwonimy lub odpiszemy w ciągu 24 godzin.'}
         </p>
 
         <form id="contact-form" class="mt-[30px] grid max-w-[520px] gap-5" action="/api/kontakt" method="POST" aria-label="Formularz kontaktowy">

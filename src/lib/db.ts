@@ -173,4 +173,30 @@ export async function getContactMessageById(
   return rows.length > 0 ? rows[0] : null;
 }
 
+/**
+ * Czy kalkulator wyceny jest włączony na stronie głównej.
+ * Przy braku wiersza lub błędzie bazy zwraca false (bezpieczny domyślny stan).
+ */
+export async function getQuoteCalculatorEnabled(): Promise<boolean> {
+  try {
+    const rows = await sql<{ value: string }[]>`
+      SELECT value FROM site_settings WHERE key = 'quote_calculator_enabled'
+    `;
+    return rows.length > 0 && rows[0].value === 'true';
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Włącza/wyłącza kalkulator wyceny na stronie głównej.
+ */
+export async function setQuoteCalculatorEnabled(enabled: boolean): Promise<void> {
+  await sql`
+    INSERT INTO site_settings (key, value)
+    VALUES ('quote_calculator_enabled', ${String(enabled)})
+    ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value, updated_at = NOW()
+  `;
+}
+
 export default sql;

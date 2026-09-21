@@ -1,4 +1,5 @@
 import type { APIRoute } from 'astro';
+import { getQuoteCalculatorEnabled } from '@/lib/db';
 
 const BASE_URL = 'https://calkawood.pl';
 
@@ -8,7 +9,7 @@ interface SitemapEntry {
   changefreq: 'daily' | 'weekly' | 'monthly' | 'yearly';
 }
 
-const pages: SitemapEntry[] = [
+const allPages: SitemapEntry[] = [
   { url: '/', priority: 1.0, changefreq: 'monthly' },
   { url: '/uslugi', priority: 0.8, changefreq: 'monthly' },
   { url: '/uslugi/domy', priority: 0.8, changefreq: 'monthly' },
@@ -44,7 +45,9 @@ ${urls}
 </urlset>`;
 }
 
-export const GET: APIRoute = () => {
+export const GET: APIRoute = async () => {
+  const quoteEnabled = await getQuoteCalculatorEnabled();
+  const pages = quoteEnabled ? allPages : allPages.filter((page) => page.url !== '/wycena');
   const body = buildSitemapXml(pages);
 
   return new Response(body, {

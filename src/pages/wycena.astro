@@ -3,6 +3,12 @@ import PageLayout from '@/layouts/PageLayout.astro';
 import QuoteForm from '@/components/islands/QuoteForm.tsx';
 import { MAX_FILES, MAX_FILE_SIZE } from '@/lib/upload';
 import t from '@/i18n';
+import { getQuoteCalculatorEnabled } from '@/lib/db';
+
+// Kalkulator wyłączony w panelu (/admin/ustawienia) — strona nie istnieje.
+if (!(await getQuoteCalculatorEnabled())) {
+  return new Response(null, { status: 404 });
+}
 ---
 
 <PageLayout

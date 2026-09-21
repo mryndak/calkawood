@@ -284,5 +284,401 @@
     ],
     "date": "2026-07-01",
     "featured": false
+  },
+  {
+    "id": "dom-stodola-czarna-front",
+    "title": "Dom w stylu stodoły — czarna elewacja, ujęcie z przodu",
+    "category": "domy",
+    "location": "Podkarpacie",
+    "images": [
+      { "src": "../assets/photos/dom-stodola-czarna-front.jpeg", "alt": "Dom w stylu stodoły z czarną blachą i przeszklonym szczytem, w trakcie budowy" }
+    ],
+    "date": "2026-08-30",
+    "featured": false
+  },
+  {
+    "id": "dom-stodola-czarna-szczyt",
+    "title": "Dom w stylu stodoły — czarna elewacja, szczyt",
+    "category": "domy",
+    "location": "Podkarpacie",
+    "images": [
+      { "src": "../assets/photos/dom-stodola-czarna-szczyt.jpeg", "alt": "Przeszklony szczyt domu w stylu stodoły z czarną blachą i drewnianymi wstawkami" }
+    ],
+    "date": "2026-08-30",
+    "featured": false
+  },
+  {
+    "id": "dom-stodola-czarna-bok",
+    "title": "Dom w stylu stodoły — czarna elewacja, widok z boku",
+    "category": "domy",
+    "location": "Podkarpacie",
+    "images": [
+      { "src": "../assets/photos/dom-stodola-czarna-bok.jpeg", "alt": "Bok domu w stylu stodoły, połączenie czarnej blachy i drewnianej elewacji" }
+    ],
+    "date": "2026-08-30",
+    "featured": false
+  },
+  {
+    "id": "dom-stodola-czarna-tyl",
+    "title": "Dom w stylu stodoły — elewacja drewniana z drzwiami",
+    "category": "domy",
+    "location": "Podkarpacie",
+    "images": [
+      { "src": "../assets/photos/dom-stodola-czarna-tyl.jpeg", "alt": "Drewniana elewacja domu w stylu stodoły z drzwiami wejściowymi i oknami" }
+    ],
+    "date": "2026-08-30",
+    "featured": false
+  },
+  {
+    "id": "dom-stodola-czarna-wnetrze-poddasze",
+    "title": "Dom w stylu stodoły — poddasze wewnątrz",
+    "category": "domy",
+    "location": "Podkarpacie",
+    "images": [
+      { "src": "../assets/photos/dom-stodola-czarna-wnetrze-poddasze.jpeg", "alt": "Wnętrze poddasza pod skosem dachu z drewnianą boazerią" }
+    ],
+    "date": "2026-08-30",
+    "featured": false
+  },
+  {
+    "id": "dom-stodola-czarna-wnetrze-schody",
+    "title": "Dom w stylu stodoły — drewniane schody",
+    "category": "domy",
+    "location": "Podkarpacie",
+    "images": [
+      { "src": "../assets/photos/dom-stodola-czarna-wnetrze-schody.jpeg", "alt": "Wnętrze domu z drewnianymi schodami na antresolę" }
+    ],
+    "date": "2026-08-30",
+    "featured": false
+  },
+  {
+    "id": "dom-stodola-czarna-wnetrze-komin",
+    "title": "Dom w stylu stodoły — kominek z ceglanym kominem",
+    "category": "domy",
+    "location": "Podkarpacie",
+    "images": [
+      { "src": "../assets/photos/dom-stodola-czarna-wnetrze-komin.jpeg", "alt": "Wnętrze z piecem kominkowym i ceglaną ścianą przy wysokim oknie" }
+    ],
+    "date": "2026-08-30",
+    "featured": false
+  },
+  {
+    "id": "dom-lesny-bok-1",
+    "title": "Dom drewniany w lesie — widok z boku",
+    "category": "domy",
+    "location": "Podkarpacie",
+    "images": [
+      { "src": "../assets/photos/dom-lesny-bok-1.jpeg", "alt": "Dom szkieletowy z drewnianą elewacją i blaszanym dachem w lesie" }
+    ],
+    "date": "2026-08-30",
+    "featured": false
+  },
+  {
+    "id": "dom-lesny-weranda-1",
+    "title": "Dom drewniany w lesie — weranda",
+    "category": "domy",
+    "location": "Podkarpacie",
+    "images": [
+      { "src": "../assets/photos/dom-lesny-weranda-1.jpeg", "alt": "Dom drewniany z balkonem i werandą na słupach, blaszany dach" }
+    ],
+    "date": "2026-08-30",
+    "featured": false
+  },
+  {
+    "id": "dom-lesny-weranda-2",
+    "title": "Dom drewniany w lesie — weranda, inne ujęcie",
+    "category": "domy",
+    "location": "Podkarpacie",
+    "images": [
+      { "src": "../assets/photos/dom-lesny-weranda-2.jpeg", "alt": "Weranda i drewniany balkon domu w lesie widziane z drugiej strony" }
+    ],
+    "date": "2026-08-30",
+    "featured": false
+  },
+  {
+    "id": "dom-lesny-balkon",
+    "title": "Dom drewniany w lesie — balkon",
+    "category": "domy",
+    "location": "Podkarpacie",
+    "images": [
+      { "src": "../assets/photos/dom-lesny-balkon.jpeg", "alt": "Dom drewniany z balkonem z poziomych desek, otoczony lasem" }
+    ],
+    "date": "2026-08-30",
+    "featured": false
+  },
+  {
+    "id": "dom-lesny-front",
+    "title": "Dom drewniany w lesie — front z wejściem",
+    "category": "domy",
+    "location": "Podkarpacie",
+    "images": [
+      { "src": "../assets/photos/dom-lesny-front.jpeg", "alt": "Front domu drewnianego z drzwiami wejściowymi i narożną werandą" }
+    ],
+    "date": "2026-08-30",
+    "featured": false
+  },
+  {
+    "id": "dom-lesny-front-2",
+    "title": "Dom drewniany w lesie — front, inne ujęcie",
+    "category": "domy",
+    "location": "Podkarpacie",
+    "images": [
+      { "src": "../assets/photos/dom-lesny-front-2.jpeg", "alt": "Dom drewniany z blaszanym dachem i wejściem, ujęcie z drugiej strony" }
+    ],
+    "date": "2026-08-30",
+    "featured": false
+  },
+  {
+    "id": "dom-lesny-tyl",
+    "title": "Dom drewniany w lesie — tylna elewacja",
+    "category": "domy",
+    "location": "Podkarpacie",
+    "images": [
+      { "src": "../assets/photos/dom-lesny-tyl.jpeg", "alt": "Tylna ściana domu drewnianego z małym oknem i blaszanym dachem" }
+    ],
+    "date": "2026-08-30",
+    "featured": false
+  },
+  {
+    "id": "dom-strzyzow-szczyt",
+    "title": "Dom drewniany w Strzyżowie — szczyt",
+    "category": "domy",
+    "location": "Strzyżów",
+    "images": [
+      { "src": "../assets/photos/dom-strzyzow-szczyt.jpeg", "alt": "Szczytowa ściana domu drewnianego z pionową elewacją z drewna, zimą" }
+    ],
+    "date": "2026-09-21",
+    "featured": false
+  },
+  {
+    "id": "dom-strzyzow-narozne",
+    "title": "Dom drewniany w Strzyżowie — narożnik z oknem",
+    "category": "domy",
+    "location": "Strzyżów",
+    "images": [
+      { "src": "../assets/photos/dom-strzyzow-narozne.jpeg", "alt": "Narożnik domu drewnianego z pionową elewacją, ciemnym oknem i rynną" }
+    ],
+    "date": "2026-09-21",
+    "featured": false
+  },
+  {
+    "id": "dom-strzyzow-weranda",
+    "title": "Dom drewniany w Strzyżowie — weranda",
+    "category": "domy",
+    "location": "Strzyżów",
+    "images": [
+      { "src": "../assets/photos/dom-strzyzow-weranda.jpeg", "alt": "Zadaszona weranda z drewnianą balustradą przy wejściu do domu" }
+    ],
+    "date": "2026-09-21",
+    "featured": false
+  },
+  {
+    "id": "dom-strzyzow-wejscie",
+    "title": "Dom drewniany w Strzyżowie — wejście",
+    "category": "domy",
+    "location": "Strzyżów",
+    "images": [
+      { "src": "../assets/photos/dom-strzyzow-wejscie.jpeg", "alt": "Wejście do domu z ciemnymi drzwiami i tarasem z szarych desek" }
+    ],
+    "date": "2026-09-21",
+    "featured": false
+  },
+  {
+    "id": "dom-strzyzow-front",
+    "title": "Dom drewniany w Strzyżowie — front",
+    "category": "domy",
+    "location": "Strzyżów",
+    "images": [
+      { "src": "../assets/photos/dom-strzyzow-front.jpeg", "alt": "Front domu drewnianego z oknem i werandą, ujęcie z przodu" }
+    ],
+    "date": "2026-09-21",
+    "featured": false
+  },
+  {
+    "id": "altana-lamele-slup",
+    "title": "Altana z drewnianymi lamelami — słup",
+    "category": "zadaszenia",
+    "location": "Podkarpacie",
+    "images": [
+      { "src": "../assets/photos/altana-lamele-slup.jpeg", "alt": "Drewniana altana z pionowymi lamelami i zadaszeniem, posadzka z kostki" }
+    ],
+    "date": "2026-09-21",
+    "featured": false
+  },
+  {
+    "id": "altana-lamele-front",
+    "title": "Altana z drewnianymi lamelami — widok od frontu",
+    "category": "zadaszenia",
+    "location": "Podkarpacie",
+    "images": [
+      { "src": "../assets/photos/altana-lamele-front.jpeg", "alt": "Altana przy domu z pionowymi drewnianymi lamelami i ścianką osłonową" }
+    ],
+    "date": "2026-09-21",
+    "featured": false
+  },
+  {
+    "id": "altana-lamele-narozne",
+    "title": "Altana z drewnianymi lamelami — z boku",
+    "category": "zadaszenia",
+    "location": "Podkarpacie",
+    "images": [
+      { "src": "../assets/photos/altana-lamele-narozne.jpeg", "alt": "Altana z lamelami przy ścianie domu, taras z szarej kostki" }
+    ],
+    "date": "2026-09-21",
+    "featured": false
+  },
+  {
+    "id": "altana-lamele-poliweglan",
+    "title": "Altana z lamelami i zadaszeniem z poliwęglanu",
+    "category": "zadaszenia",
+    "location": "Podkarpacie",
+    "images": [
+      { "src": "../assets/photos/altana-lamele-poliweglan.jpeg", "alt": "Konstrukcja z drewna z przezroczystym zadaszeniem i osłoną z lameli" }
+    ],
+    "date": "2026-09-21",
+    "featured": false
+  },
+  {
+    "id": "altana-lamele-zabudowa",
+    "title": "Altana z drewnianymi lamelami — osłona boczna",
+    "category": "zadaszenia",
+    "location": "Podkarpacie",
+    "images": [
+      { "src": "../assets/photos/altana-lamele-zabudowa.jpeg", "alt": "Boczna osłona z drewnianych lameli przy tarasie domu" }
+    ],
+    "date": "2026-09-21",
+    "featured": false
+  },
+  {
+    "id": "pergola-ciemna-dom",
+    "title": "Pergola przy domu — ciemne drewno",
+    "category": "zadaszenia",
+    "location": "Podkarpacie",
+    "images": [
+      { "src": "../assets/photos/pergola-ciemna-dom.jpeg", "alt": "Zadaszenie tarasu z ciemnego drewna przy nowoczesnym domu, sztuczna trawa" }
+    ],
+    "date": "2026-09-21",
+    "featured": false
+  },
+  {
+    "id": "pergola-ciemna-taras",
+    "title": "Pergola przy domu — widok na taras",
+    "category": "zadaszenia",
+    "location": "Podkarpacie",
+    "images": [
+      { "src": "../assets/photos/pergola-ciemna-taras.jpeg", "alt": "Pergola z belkami z ciemnego drewna nad tarasem z meblami ogrodowymi" }
+    ],
+    "date": "2026-09-21",
+    "featured": false
+  },
+  {
+    "id": "zadaszenie-szklane-belki",
+    "title": "Zadaszenie szklane na drewnianych belkach",
+    "category": "zadaszenia",
+    "location": "Podkarpacie",
+    "images": [
+      { "src": "../assets/photos/zadaszenie-szklane-belki.jpeg", "alt": "Drewniane belki zadaszenia ze szkłem, widok na okolicę" }
+    ],
+    "date": "2026-09-21",
+    "featured": false
+  },
+  {
+    "id": "zadaszenie-szklane-gora",
+    "title": "Zadaszenie szklane — widok z góry",
+    "category": "zadaszenia",
+    "location": "Podkarpacie",
+    "images": [
+      { "src": "../assets/photos/zadaszenie-szklane-gora.jpeg", "alt": "Konstrukcja zadaszenia z belek drewnianych ze szklaną taflą z góry" }
+    ],
+    "date": "2026-09-21",
+    "featured": false
+  },
+  {
+    "id": "schody-drewniane-cegla",
+    "title": "Schody drewniane przy ścianie z cegły",
+    "category": "wnetrza",
+    "location": "Podkarpacie",
+    "images": [
+      { "src": "../assets/photos/schody-drewniane-cegla.jpeg", "alt": "Drewniane schody z balustradą przy ceglanej ścianie i boazerii" }
+    ],
+    "date": "2026-09-21",
+    "featured": false
+  },
+  {
+    "id": "schody-drewniane-lina",
+    "title": "Schody drewniane z balustradą z liny",
+    "category": "wnetrza",
+    "location": "Podkarpacie",
+    "images": [
+      { "src": "../assets/photos/schody-drewniane-lina.jpeg", "alt": "Schody z drewnianą balustradą i linowym wypełnieniem, widok z góry" }
+    ],
+    "date": "2026-09-21",
+    "featured": false
+  },
+  {
+    "id": "wiata-drewniana-wnetrze-1",
+    "title": "Wiata drewniana przy domu — wnętrze",
+    "category": "zadaszenia",
+    "location": "Podkarpacie",
+    "images": [
+      { "src": "../assets/photos/wiata-drewniana-wnetrze-1.jpeg", "alt": "Wnętrze wiaty przy domu z drewnianym stropem i osłoną z poziomych desek" }
+    ],
+    "date": "2026-09-21",
+    "featured": false
+  },
+  {
+    "id": "wiata-drewniana-wnetrze-2",
+    "title": "Wiata drewniana przy domu — widok wzdłuż",
+    "category": "zadaszenia",
+    "location": "Podkarpacie",
+    "images": [
+      { "src": "../assets/photos/wiata-drewniana-wnetrze-2.jpeg", "alt": "Wiata przy ścianie domu, widok wzdłuż zadaszenia z drewnianą konstrukcją" }
+    ],
+    "date": "2026-09-21",
+    "featured": false
+  },
+  {
+    "id": "wiata-drewniana-naroznik",
+    "title": "Wiata drewniana — narożnik konstrukcji",
+    "category": "zadaszenia",
+    "location": "Podkarpacie",
+    "images": [
+      { "src": "../assets/photos/wiata-drewniana-naroznik.jpeg", "alt": "Narożnik wiaty z drewnianymi słupami, zastrzałami i osłoną z desek" }
+    ],
+    "date": "2026-09-21",
+    "featured": false
+  },
+  {
+    "id": "wiata-drewniana-oslona",
+    "title": "Wiata drewniana — osłona z poziomych desek",
+    "category": "zadaszenia",
+    "location": "Podkarpacie",
+    "images": [
+      { "src": "../assets/photos/wiata-drewniana-oslona.jpeg", "alt": "Ściana wiaty z poziomych desek ze szczelinami, pod dachem domu" }
+    ],
+    "date": "2026-09-21",
+    "featured": false
+  },
+  {
+    "id": "wiata-drewniana-ogrod",
+    "title": "Wiata drewniana w ogrodzie",
+    "category": "zadaszenia",
+    "location": "Podkarpacie",
+    "images": [
+      { "src": "../assets/photos/wiata-drewniana-ogrod.jpeg", "alt": "Wiata drewniana z osłoną z desek od strony ogrodu" }
+    ],
+    "date": "2026-09-21",
+    "featured": false
+  },
+  {
+    "id": "wiata-drewniana-bok",
+    "title": "Wiata drewniana — widok z boku",
+    "category": "zadaszenia",
+    "location": "Podkarpacie",
+    "images": [
+      { "src": "../assets/photos/wiata-drewniana-bok.jpeg", "alt": "Boczna ściana wiaty z poziomych desek, wsparta na podmurówce" }
+    ],
+    "date": "2026-09-21",
+    "featured": false
   }
 ]

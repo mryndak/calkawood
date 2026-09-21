@@ -14,6 +14,9 @@ import { getCollection } from 'astro:content';
 import { getImage } from 'astro:assets';
 import schemaImageSource from '@/assets/photos/taras-dom-nowoczesny.jpeg';
 import t from '@/i18n';
+import { getQuoteCalculatorEnabled } from '@/lib/db';
+
+const quoteEnabled = await getQuoteCalculatorEnabled();
 
 const schemaImage = await getImage({ src: schemaImageSource, width: 1200, format: 'jpg' });
 const schemaImageUrl = new URL(schemaImage.src, Astro.site).href;
@@ -94,7 +97,7 @@ const structuredData = {
   description={t.meta.home.description}
   structuredData={structuredData}
 >
-  <Hero />
+  <Hero showQuote={quoteEnabled} />
   <StatsBar />
   <ServicesOverview />
   <CraftSection />

@@ -120,7 +120,8 @@
     },
     "nav": {
       "quotes": "Wyceny",
-      "messages": "Wiadomości"
+      "messages": "Wiadomości",
+      "settings": "Ustawienia"
     },
     "panel": {
       "title": "Zapytania wycenowe",

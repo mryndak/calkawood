@@ -5,6 +5,9 @@ import PageLayout from '@/layouts/PageLayout.astro';
 import Button from '@/components/ui/Button.astro';
 import GalleryLightbox from '@/components/islands/GalleryLightbox.tsx';
 import t from '@/i18n';
+import { getQuoteCalculatorEnabled } from '@/lib/db';
+
+const quoteEnabled = await getQuoteCalculatorEnabled();
 
 const allProjects = await getCollection('projects');
 
@@ -81,6 +84,7 @@ const initialCategory = categories.includes(requestedCategory ?? '') ? requested
     </div>
   </section>
 
+  {quoteEnabled && (
   <section class="mt-10 border-t border-hairline bg-surface sm:mt-20">
     <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-8 px-4 py-16 sm:px-10 sm:py-20">
       <h2 class="max-w-[34ch] text-3xl leading-[1.05] text-text sm:text-4xl">
@@ -89,4 +93,5 @@ const initialCategory = categories.includes(requestedCategory ?? '') ? requested
       <Button href="/wycena" variant="dark" size="lg">Wycena online →</Button>
     </div>
   </section>
+  )}
 </PageLayout>

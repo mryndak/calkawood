@@ -3,13 +3,20 @@ import { quoteRequestSchema } from '@/lib/quote-validation';
 import { checkRateLimit } from '@/lib/rate-limit';
 import { isHoneypotFilled } from '@/lib/security';
 import { verifyRecaptcha } from '@/lib/recaptcha';
-import { saveQuoteRequest } from '@/lib/db';
+import { saveQuoteRequest, getQuoteCalculatorEnabled } from '@/lib/db';
 import { sendQuoteNotification } from '@/lib/email';
 import { validateFile, saveUploadedFile, MAX_FILES } from '@/lib/upload';
 import { handleApiError } from '@/lib/errors';
 
 export const POST: APIRoute = async ({ request, clientAddress }) => {
   try {
+    if (!(await getQuoteCalculatorEnabled())) {
+      return new Response(JSON.stringify({ error: 'Wycena online jest wyłączona.' }), {
+        status: 404,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
     // 1. Rate limiting
     const rateCheck = checkRateLimit(clientAddress, 5, 15 * 60 * 1000);
     if (!rateCheck.allowed) {
